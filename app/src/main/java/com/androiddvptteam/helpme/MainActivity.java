@@ -20,10 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d("Main", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d("Main", "1");
         bindView();
         mapFragment = new MapFragment();
         setFragment(mapFragment);
