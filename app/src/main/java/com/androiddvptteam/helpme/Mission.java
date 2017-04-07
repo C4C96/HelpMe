@@ -2,10 +2,6 @@ package com.androiddvptteam.helpme;
 
 import java.util.GregorianCalendar;
 
-/**
- * Created by 13759 on 2017/4/7.
- */
-
 public class Mission
 {
     //任务标题
@@ -26,17 +22,14 @@ public class Mission
 
     //任务是否已经开始，false代表没有开始
     public  boolean hasStarted=false;
-
     //任务是否已经完成，false代表没有完成
     public boolean hasFinished=false;
-
     //若任务正在进行中，则hasStarted=true，hasFinished=false
-
     //任务是否进入了草稿箱，false代表没有存入草稿
     public boolean draft=false;
-
     //任务是否被取消，false代表没有被取消
     public boolean hasCanceled=false;
+
 
     //读取任务的标题和内容
     public Mission(String title,String content)
