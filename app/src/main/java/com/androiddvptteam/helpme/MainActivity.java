@@ -17,6 +17,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     private MessageFragment messageFragment = null;
     private ProfileFragment profileFragment = null;
 
+    public MapFragment getMapFragment()
+    {
+        if (mapFragment == null)
+            mapFragment = new MapFragment();
+        return mapFragment;
+    }
+
+    public ListFragment getListFragment()
+    {
+        if (listFragment == null)
+            listFragment = new ListFragment();
+        return listFragment;
+    }
+
+    public ReleaseFragment getReleaseFragment()
+    {
+        if (releaseFragment == null)
+            releaseFragment = new ReleaseFragment();
+        return releaseFragment;
+    }
+
+    public MessageFragment getMessageFragment()
+    {
+        if (messageFragment == null)
+            messageFragment = new MessageFragment();
+        return messageFragment;
+    }
+
+    public ProfileFragment getProfileFragment()
+    {
+        if (profileFragment == null)
+            profileFragment = new ProfileFragment();
+        return profileFragment;
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -82,7 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
      * @param  fragment
      *                  新的活动fragment
      * */
-    private void setFragment(Fragment fragment)
+    public void setFragment(Fragment fragment)
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
