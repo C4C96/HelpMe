@@ -2,11 +2,116 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:orientation="vertical"
 			  android:layout_width="match_parent"
-			  android:layout_height="match_parent">
+			  android:layout_height="match_parent"
+			  android:weightSum="1">
+
+	<!-- UI记得改输入框样式 -->
+	<!-- 标题、内容输入框 -->
+	<EditText
+		android:id="@+id/titleEditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:hint="标题"
+		android:gravity="top|left"
+		android:layout_weight="0.03"/>
+
+	<EditText
+		android:id="@+id/contentEditText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp"
+		android:hint="在这儿输入内容吧"
+		android:gravity="top|left"
+		android:layout_weight="0.30"/>
 
 	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="为你的任务附加一些属性吧"
+		android:textSize="25dp"/>
+
+	<!-- 性别下拉选择框 -->
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:text="这里是发布界面"/>
+		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp">
+		<TextView
+			android:id="@+id/genderTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="性别"
+			android:textSize="25dp"/>
+
+		<Spinner
+			android:id="@+id/genderSpinner"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="70dp"/>
+	</LinearLayout>
+
+	<!-- 类型下拉框 -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp">
+		<TextView
+			android:id="@+id/attributeTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="类型"
+			android:textSize="25dp"/>
+
+		<Spinner
+			android:id="@+id/attributeSpinner"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="70dp"/>
+	</LinearLayout>
+
+	<!-- 范围下拉框 -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp">
+		<TextView
+			android:id="@+id/rangeTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="范围"
+			android:textSize="25dp"/>
+
+		<Spinner
+			android:id="@+id/rangeSpinner"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="70dp"/>
+	</LinearLayout>
+
+	<!-- 发布、取消按钮 -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp">
+		<Button
+			android:id="@+id/releaseButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="60dp"
+			android:text="发布"
+			android:textSize="25dp"
+			android:background="#258402"
+			android:textColor="#ffffff"/>
+
+		<Button
+			android:id="@+id/cancelButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="60dp"
+			android:text="取消"
+			android:textSize="25dp"
+			android:background="#c2150f"
+			android:textColor="#ffffff"/>
+	</LinearLayout>
 
 </LinearLayout>

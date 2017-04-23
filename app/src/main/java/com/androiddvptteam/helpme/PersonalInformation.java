@@ -17,9 +17,6 @@ public class PersonalInformation
         this.gender=gender;
         this.departmentName=department;
         this.introduction=introduction;
-
-        //向数据库写入用户信息
-        //代码放这里
     }
 
     public String getUserName()

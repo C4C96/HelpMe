@@ -11,11 +11,11 @@ public class Mission
 
     //任务的属性，前端下拉列表获取到用户选择的值以后，把值分别传给这三个属性
     //性别
-    private String gender="";
+    private int gender=0;
     //标签
-    private String attribute="";
+    private int attribute=0;
     //范围
-    private String range="";
+    private int range=0;
 
     //任务时限（用户设置年、月、日、时、分）
     private GregorianCalendar endTime=new GregorianCalendar();
@@ -31,7 +31,7 @@ public class Mission
     public boolean hasCanceled=false;
 
 
-    //读取任务的标题和内容
+    //设置任务的标题和内容
     public Mission(String title,String content)
     {
         this.title=title;
@@ -39,8 +39,8 @@ public class Mission
         //将标题和内容写进数据库
     }
 
-    //读取任务的属性
-    public void setAttribute(String gender,String attribute,String range)
+    //设置任务的三个属性
+    public void setMissionAttribute(int gender,int attribute,int range)
     {
         this.gender=gender;
         this.attribute=attribute;
@@ -48,21 +48,18 @@ public class Mission
         //将属性写进数据库
     }
 
-    public String getGender()
+    public int getGender()
     {
-        //从数据库中读取数据
         return this.gender;
     }
 
-    public String getAttribute()
+    public int getAttribute()
     {
-        //从数据库中读取数据
         return this.attribute;
     }
 
-    public String getRange()
+    public int getRange()
     {
-        //从数据库中读取数据
         return this.range;
     }
 
