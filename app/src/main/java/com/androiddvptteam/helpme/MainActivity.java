@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
+public class MainActivity extends BaseActivity implements View.OnClickListener
 {
     private MapFragment mapFragment = null;
     private ListFragment listFragment = null;

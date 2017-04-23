@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/options_toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+				android:text="设置"/>
+	</android.support.v7.widget.Toolbar>
+
+	<Switch
+		android:id="@+id/options_message_remind_switch"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="新消息提醒"/>
+	<Button
+		android:id="@+id/options_about_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="关于我们"/>
+	<Button
+		android:id="@+id/options_check_update_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="检查更新"/>
+	<Button
+		android:id="@+id/options_logout_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="#ff0000"
+		android:text="退出登录"/>
+
+</LinearLayout>

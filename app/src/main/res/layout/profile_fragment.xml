@@ -1,12 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  android:orientation="vertical"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent">
 
-	<TextView
+	<android.support.v7.widget.Toolbar
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:text="这里是个人界面"/>
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+			android:text="个人信息"/>
+		<TextView
+			android:id="@+id/profile_options_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:paddingRight="15dp"
+			android:text="设置"/>
+	</android.support.v7.widget.Toolbar>
 
+	<!--头像-->
+	<ImageView
+		android:id="@+id/profile_photo_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@mipmap/ic_launcher"/>
+	<!--名字-->
+	<TextView
+		android:id="@+id/profile_name_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+	<!--性别-->
+	<ImageView
+		android:id="@+id/profile_gender_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@mipmap/ic_launcher"/>
+	<!--个人简介-->
+	<TextView
+		android:id="@+id/profile_introduction_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+
+	<Button
+		android:id="@+id/profile_released_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="发布过的"/>
+	<Button
+		android:id="@+id/profile_accepted_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="接受过的"/>
+	<Button
+		android:id="@+id/profile_doing_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="正在进行的"/>
+	<Button
+		android:id="@+id/profile_edit_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="编辑个人资料"/>
 </LinearLayout>
