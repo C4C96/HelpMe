@@ -2,15 +2,15 @@ package com.androiddvptteam.helpme;
 public class PersonalInformation
 {
     //只读的四个信息，只得在注册的时候填写，后期不允许修改。！不考虑改名变性转系等情况 ！
-    private String userName="";//姓名
-    private String schooleNumber="";//学号
-    private String gender="";//性别
-    private String departmentName="";//所在院系
+    private String userName;//姓名
+    private String schooleNumber;//学号
+    private int gender;//性别
+    private String departmentName;//所在院系
 
     //允许后期用户自己修改
-    public String introduction="";//个人简介
+    public String introduction;//个人简介
 
-    public PersonalInformation(String name,String number,String gender,String department,String introduction)
+    public PersonalInformation(String name,String number,int gender,String department,String introduction)
     {
         this.userName=name;
         this.schooleNumber=number;
@@ -29,7 +29,7 @@ public class PersonalInformation
         return this.schooleNumber;
     }
 
-    public String getGender()
+    public int getGender()
     {
         return this.gender;
     }

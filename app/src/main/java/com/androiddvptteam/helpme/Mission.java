@@ -1,21 +1,23 @@
 package com.androiddvptteam.helpme;
 
+import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
+
 import java.util.GregorianCalendar;
 
 public class Mission
 {
     //任务标题
-    public String title="";
+    public String title;
     //任务内容
-    public String content="";
+    public String content;
 
     //任务的属性，前端下拉列表获取到用户选择的值以后，把值分别传给这三个属性
     //性别
-    private int gender=0;
+    private int gender;
     //标签
-    private int attribute=0;
+    private int attribute;
     //范围
-    private int range=0;
+    private int range;
 
     //任务时限（用户设置年、月、日、时、分）
     private GregorianCalendar endTime=new GregorianCalendar();
