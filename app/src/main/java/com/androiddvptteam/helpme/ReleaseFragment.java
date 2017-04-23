@@ -207,7 +207,7 @@ public class ReleaseFragment extends BaseFragment
 		builder.setTitle("系统提示");//设置Title的内容
 		builder.setMessage("要保存草稿么…？");//设置Content来显示一个信息
 
-		//设置一个Button
+		//设置两个Button
 		builder.setPositiveButton("保存", new DialogInterface.OnClickListener()
 		{
 			@Override
