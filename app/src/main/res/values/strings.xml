@@ -1,18 +1,19 @@
 <resources>
-    <string name="app_name">HelpMe</string>
+	<string name="app_name">HelpMe</string>
 
-    <string name="genderMale">男</string>
-    <string name="genderFemale">女</string>
-    <string name="genderOther">其他</string>
-    <string name="genderIDontCare">无所谓</string>
+	<string name="genderMale">男</string>
+	<string name="genderFemale">女</string>
+	<string name="genderOther">其他</string>
+	<string name="genderIDontCare">无所谓</string>
 
-    <string name="attributeBring">送东西给我</string>
-    <string name="attributeTake">帮我取东西</string>
-    <string name="attributeBuy">代购</string>
-    <string name="attributeOther">其他</string>
+	<string name="attributeBring">送东西给我</string>
+	<string name="attributeTake">帮我取东西</string>
+	<string name="attributeBuy">代购</string>
+	<string name="attributeOther">其他</string>
 
-    <string name="range0">100米以内</string>
-    <string name="range1">100-300米</string>
-    <string name="range2">300-700米</string>
-    <string name="range3">700米以上</string>
+	<string name="range0">100米以内</string>
+	<string name="range1">100-300米</string>
+	<string name="range2">300-700米</string>
+	<string name="range3">700米以上</string>
+	<string name="title_activity_main2">Main2Activity</string>
 </resources>

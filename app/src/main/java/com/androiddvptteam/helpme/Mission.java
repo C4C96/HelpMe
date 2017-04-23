@@ -21,7 +21,7 @@ public class Mission
     private GregorianCalendar endTime=new GregorianCalendar();
 
     //任务是否已经开始，false代表没有开始
-    public  boolean hasStarted=false;
+    public boolean hasStarted=false;
     //任务是否已经完成，false代表没有完成
     public boolean hasFinished=false;
     //若任务正在进行中，则hasStarted=true，hasFinished=false

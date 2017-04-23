@@ -16,19 +16,19 @@ public class Log
 
 	public static void v(String tag, String msg)
 	{
-		if (level < VERBOSE)
+		if (level <= VERBOSE)
 			android.util.Log.v(tag, msg);
 	}
 
 	public static void d(String tag, String msg)
 	{
-		if (level < VERBOSE)
+		if (level <= VERBOSE)
 			android.util.Log.d(tag, msg);
 	}
 
 	public static void i(String tag, String msg)
 	{
-		if (level < INFO)
+		if (level <= INFO)
 			android.util.Log.i(tag, msg);
 	}
 
@@ -40,7 +40,7 @@ public class Log
 
 	public static void e(String tag, String msg)
 	{
-		if (level < ERROR)
+		if (level <= ERROR)
 			android.util.Log.e(tag, msg);
 	}
 }
