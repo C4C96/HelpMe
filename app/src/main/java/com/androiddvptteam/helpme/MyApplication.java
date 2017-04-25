@@ -2,6 +2,8 @@ package com.androiddvptteam.helpme;
 
 import android.app.Application;
 
+import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class MyApplication extends Application
 	{
 		super.onCreate();
 		//添加测试用数据
-		//personalInformation = new PersonalInformation()
+		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
 		//config = new Config()
 		//myMissions = new ArrayList<>();
 		//myMissions.add()

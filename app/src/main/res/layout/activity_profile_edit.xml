@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:layout_height="match_parent"
+			  android:layout_width="match_parent"
+			  android:focusable="true"
+			  android:focusableInTouchMode="true">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/options_toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+			android:text="编辑个人信息"/>
+	</android.support.v7.widget.Toolbar>
+
+	<ImageView
+		android:id="@+id/profile_edit_photo_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@mipmap/ic_launcher"/>
+	<EditText
+		android:id="@+id/profile_edit_name_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:enabled="false"/>
+	<ImageView
+		android:id="@+id/profile_edit_gender_image"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@mipmap/ic_launcher"/>
+	<EditText
+		android:id="@+id/profile_edit_department_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:enabled="false"/>
+	<EditText
+		android:id="@+id/profile_edit_introduce_editText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:selectAllOnFocus="true"/>
+	<Button
+		android:id="@+id/profile_edit_confirm_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="确认"/>
+
+</LinearLayout>
