@@ -52,10 +52,10 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	 * */
 	private void initInfo()
 	{
-		PersonalInformation personalInformation = ((MyApplication)getApplication()).personalInformation;
-		introduceTextView.setText(personalInformation.getIntroduction());
-		nameTextView.setText(personalInformation.getUserName());
-		departmentTextView.setText(personalInformation.getDepartmentName());
+		MyApplication myApplication = (MyApplication) getApplication();
+		introduceTextView.setText(myApplication.getUserIntroduction());
+		nameTextView.setText(myApplication.getUserName());
+		departmentTextView.setText(myApplication.getUserDepartmentName());
 		//设置头像、性别图片
 	}
 
@@ -68,8 +68,8 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				//改图片
 				break;
 			case R.id.profile_edit_confirm_button:
-				PersonalInformation personalInformation = ((MyApplication)getApplication()).personalInformation;
-				personalInformation.setIntroduction(introduceTextView.getText().toString());
+				MyApplication myApplication = (MyApplication) getApplication();
+				myApplication.setUserIntroduction(introduceTextView.getText().toString());
 				break;
 		}
 	}

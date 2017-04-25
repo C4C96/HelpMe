@@ -62,9 +62,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	 * */
 	private void initInfo()
 	{
-		PersonalInformation personalInformation = ((MyApplication) getActivity().getApplication()).personalInformation;
-		nameTextView.setText(personalInformation.getUserName());
-		introductionTextView.setText(personalInformation.getIntroduction());
+		MyApplication myApplication = (MyApplication) getActivity().getApplication();
+		nameTextView.setText(myApplication.getUserName());
+		introductionTextView.setText(myApplication.getUserIntroduction());
 		//初始化头像、性别图片
 	}
 

@@ -3,7 +3,7 @@ public class PersonalInformation
 {
     //只读的四个信息，只得在注册的时候填写，后期不允许修改。！不考虑改名变性转系等情况 ！
     private String userName;//姓名
-    private String schooleNumber;//学号
+    private String schoolNumber;//学号
     private int gender;//性别
     private String departmentName;//所在院系
 
@@ -13,7 +13,7 @@ public class PersonalInformation
     public PersonalInformation(String name,String number,int gender,String department,String introduction)
     {
         this.userName=name;
-        this.schooleNumber=number;
+        this.schoolNumber=number;
         this.gender=gender;
         this.departmentName=department;
         this.introduction=introduction;
@@ -24,9 +24,9 @@ public class PersonalInformation
         return this.userName;
     }
 
-    public String getSchooleNumber()
+    public String getSchoolNumber()
     {
-        return this.schooleNumber;
+        return this.schoolNumber;
     }
 
     public int getGender()

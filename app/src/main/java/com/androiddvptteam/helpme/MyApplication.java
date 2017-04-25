@@ -12,7 +12,7 @@ import java.util.List;
  * */
 public class MyApplication extends Application
 {
-	public PersonalInformation personalInformation;		//当前的用户信息
+	private PersonalInformation personalInformation;		//当前的用户信息
 	public Config config;								//当前设置
 	public List<Mission> myMissions;					//我的任务（全部种类）
 	public List<Mission> foundMissions;					//发现的任务
@@ -28,5 +28,35 @@ public class MyApplication extends Application
 		//myMissions.add()
 		//foundMissions = new ArrayList<>();
 		//foundMissions.add()
+	}
+
+	public String getUserName()
+	{
+		return personalInformation.getUserName();
+	}
+
+	public String getUserIntroduction()
+	{
+		return personalInformation.getIntroduction();
+	}
+
+	public String getUserDepartmentName()
+	{
+		return personalInformation.getDepartmentName();
+	}
+
+	public int getUserGender()
+	{
+		return personalInformation.getGender();
+	}
+
+	public String getUserSchoolNumber()
+	{
+		return personalInformation.getSchoolNumber();
+	}
+
+	public void setUserIntroduction(String introduction)
+	{
+		personalInformation.setIntroduction(introduction);
 	}
 }
