@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/upline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_purple" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="无题。"
+            android:textAllCaps="false"
+            android:maxLines="1"
+            android:textColor="?android:attr/colorPrimaryDark"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/midline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="?attr/colorButtonNormal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.02"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/gender_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="性别:" />
+
+        <TextView
+            android:id="@+id/genderContent_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="无所谓" />
+
+        <TextView
+            android:id="@+id/attribute_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="标签:" />
+
+        <TextView
+            android:id="@+id/attributeContent_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="其他" />
+
+        <TextView
+            android:id="@+id/range_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="范围:" />
+
+        <TextView
+            android:id="@+id/rangeContent_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="100米以内" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/underline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_purple" />
+
+</LinearLayout>

@@ -1,20 +1,18 @@
 package com.androiddvptteam.helpme;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import static java.security.AccessController.getContext;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListFragment extends BaseFragment
 {
@@ -33,14 +31,27 @@ public class ListFragment extends BaseFragment
 	public int range;
 
 	public View view;
+
+	private List<Mission> missionList=new ArrayList<>();
+	private List<String> schoolnumList=new ArrayList<>();
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		view = inflater.inflate(R.layout.list_fragment, container, false);
+
+		//加载筛选数据
 		loadGenderData();
 		loadAttributeData();
 		loadRangeData();
 		getSpinner();
+
+		initMissions();
+		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
+		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
+		recyclerView.setLayoutManager(layoutManager);
+		MissionAdapter adapter=new MissionAdapter(missionList,schoolnumList,this.getActivity());
+		recyclerView.setAdapter(adapter);
+
 		return view;
 	}
 
@@ -146,5 +157,28 @@ public class ListFragment extends BaseFragment
 					}
 				}
 		);
+	}
+
+	private void initMissions()//从数据库读取任务信息，放到missionList中
+	{
+		Mission m1=new Mission("give me some water","...");
+		m1.setMissionAttribute(1,2,1);
+		missionList.add(m1);
+
+		Mission m2=new Mission("give me some shit","...");
+		m2.setMissionAttribute(2,3,1);
+		missionList.add(m2);
+
+		Mission m3=new Mission("give me some food","...");
+		m3.setMissionAttribute(3,1,1);
+		missionList.add(m3);
+
+		Mission m4=new Mission("give me some paper","...");
+		m4.setMissionAttribute(1,2,3);
+		missionList.add(m4);
+
+		Mission m5=new Mission("give me some money","...");
+		m5.setMissionAttribute(2,2,2);
+		missionList.add(m5);
 	}
 }
