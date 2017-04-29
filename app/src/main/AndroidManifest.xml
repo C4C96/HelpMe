@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.androiddvptteam.helpme">
 
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -18,8 +21,9 @@
         </activity>
         <activity android:name=".MyTaskActivity" />
         <activity android:name=".OptionsActivity" />
-        <activity android:name=".ProfileEditActivity"></activity>
-        <activity android:name=".MissionDetail"></activity>
+        <activity android:name=".ProfileEditActivity"/>
+        <activity android:name=".MissionDetail"/>
+
     </application>
 
 </manifest>

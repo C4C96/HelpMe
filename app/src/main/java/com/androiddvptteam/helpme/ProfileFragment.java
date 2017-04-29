@@ -1,7 +1,9 @@
 package com.androiddvptteam.helpme;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,29 +13,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
+
 import org.w3c.dom.Text;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener
 {
 	private View view;
-	private ImageView photoImageView, genderImageView;
+	private ImageView avatarImageView;
 	private TextView nameTextView, introductionTextView;
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		view = inflater.inflate(R.layout.profile_fragment, container, false);
 		bind();
-		initInfo();
+		//refreshInfo();
 		return view;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		initInfo();
+		refreshInfo();
 	}
 
 	/**
@@ -51,21 +57,29 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 		accepted_button.setOnClickListener(this);
 		doing_button.setOnClickListener(this);
 		edit_button.setOnClickListener(this);
-		photoImageView = (ImageView) view.findViewById(R.id.profile_photo_image);
-		genderImageView = (ImageView) view.findViewById(R.id.profile_gender_image);
+		avatarImageView = (ImageView) view.findViewById(R.id.profile_avatar_image);
 		nameTextView = (TextView) view.findViewById(R.id.profile_name_text);
 		introductionTextView = (TextView) view.findViewById(R.id.profile_introduction_text);
 	}
 
 	/**
-	 * 初始化信息
+	 * 刷新信息
 	 * */
-	private void initInfo()
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+	private void refreshInfo()
 	{
 		MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		nameTextView.setText(myApplication.getUserName());
+		nameTextView.setCompoundDrawablesWithIntrinsicBounds(null,
+				getResources().getDrawable(myApplication.getUserGender() == MissionAttribute.GENDER_MALE?
+						R.drawable.gender_male:
+						R.drawable.gender_female, null),
+				null, null);
 		introductionTextView.setText(myApplication.getUserIntroduction());
-		//初始化头像、性别图片
+		if (myApplication.getUserAvatar() != null)
+			avatarImageView.setImageBitmap(myApplication.getUserAvatar());
+		else
+			avatarImageView.setImageResource(R.drawable.default_avatar);
 	}
 
 	@Override
