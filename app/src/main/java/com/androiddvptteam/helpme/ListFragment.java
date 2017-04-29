@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ListFragment extends BaseFragment
@@ -34,6 +36,8 @@ public class ListFragment extends BaseFragment
 
 	private List<Mission> missionList=new ArrayList<>();
 	private List<String> schoolnumList=new ArrayList<>();
+    private SwipeRefreshLayout swipeRefresh;
+	private MissionAdapter adapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
@@ -46,11 +50,28 @@ public class ListFragment extends BaseFragment
 		getSpinner();
 
 		initMissions();
+
+		//任务列表
 		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
 		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		MissionAdapter adapter=new MissionAdapter(missionList,schoolnumList,this.getActivity());
+		adapter=new MissionAdapter(missionList,schoolnumList,this.getActivity());
 		recyclerView.setAdapter(adapter);
+
+		//下拉刷新
+        swipeRefresh=(SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        swipeRefresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+		swipeRefresh.setOnRefreshListener(new
+				SwipeRefreshLayout.OnRefreshListener()
+				{
+					@Override
+					public void onRefresh() {
+						refreshMissions();
+						Log.d("ListSize:",String.valueOf(adapter.getItemCount()));
+					}
+				});
+
+
 
 		return view;
 	}
@@ -161,6 +182,14 @@ public class ListFragment extends BaseFragment
 
 	private void initMissions()//从数据库读取任务信息，放到missionList中
 	{
+		//删除missionList中的数据
+		Iterator<Mission> it = missionList.iterator();
+		while(it.hasNext())
+		{
+			Mission x = it.next();
+				it.remove();
+		}
+
 		Mission m1=new Mission("give me some water","...");
 		m1.setMissionAttribute(1,2,1);
 		missionList.add(m1);
@@ -180,5 +209,33 @@ public class ListFragment extends BaseFragment
 		Mission m5=new Mission("give me some money","...");
 		m5.setMissionAttribute(2,2,2);
 		missionList.add(m5);
+	}
+
+	private void refreshMissions()
+	{
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try
+				{
+					Thread.sleep(2000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+
+				getActivity().runOnUiThread(new
+						Runnable() {
+							@Override
+							public void run() {
+								initMissions();
+								adapter.notifyDataSetChanged();
+								swipeRefresh.setRefreshing(false);
+							}
+						});
+
+			}
+		}).start();
 	}
 }
