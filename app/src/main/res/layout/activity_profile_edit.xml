@@ -21,31 +21,39 @@
 			android:text="编辑个人信息"/>
 	</android.support.v7.widget.Toolbar>
 
-	<ImageView
-		android:id="@+id/profile_edit_photo_image"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@mipmap/ic_launcher"/>
+	<com.androiddvptteam.helpme.CircleImageView
+		android:id="@+id/profile_edit_avatar_image"
+		android:layout_width="120dp"
+		android:layout_height="120dp"
+		android:src="@drawable/default_avatar"/>
 	<EditText
 		android:id="@+id/profile_edit_name_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:enabled="false"/>
-	<ImageView
-		android:id="@+id/profile_edit_gender_image"
+		android:enabled="false"
+		android:text="default name"
+		android:drawableRight="@drawable/gender_male"
+		android:drawableEnd="@drawable/gender_male"/>
+
+	<EditText
+		android:id="@+id/profile_edit_schoolNum_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:src="@mipmap/ic_launcher"/>
+		android:enabled="false"
+		android:text="default school number"/>
 	<EditText
 		android:id="@+id/profile_edit_department_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:enabled="false"/>
+		android:enabled="false"
+		android:text="default department"/>
 	<EditText
 		android:id="@+id/profile_edit_introduce_editText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:selectAllOnFocus="true"/>
+		android:selectAllOnFocus="true"
+		android:maxLines="1"
+		android:text="default introduce"/>
 	<Button
 		android:id="@+id/profile_edit_confirm_button"
 		android:layout_width="wrap_content"
