@@ -70,9 +70,40 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mission mission=myMissionList.get(position);
         holder.titleText.setText(mission.title);
-        holder.genderText.setText(String.valueOf(mission.getGender()));
-        holder.attributeText.setText(String.valueOf(mission.getAttribute()));
-        holder.rangeText.setText(String.valueOf(mission.getRange()));
+        String gender="",attribute="",range="";
+        switch(mission.getGender())
+        {
+            case 0:gender="男";
+                break;
+            case 1:gender="女";
+                break;
+            case 2:gender="其他";
+                break;
+            case 3:gender="无所谓";
+        }
+        switch(mission.getAttribute())
+        {
+            case 0:attribute="送东西";
+                break;
+            case 1:attribute="取东西";
+                break;
+            case 2:attribute="代购";
+                break;
+            case 3:attribute="其他";
+        }
+        switch(mission.getRange())
+        {
+            case 0:range="100米以内";
+                break;
+            case 1:range="100-300米";
+                break;
+            case 2:range="300-700米";
+                break;
+            case 3:range="700米以上";
+        }
+        holder.genderText.setText(gender);
+        holder.attributeText.setText(attribute);
+        holder.rangeText.setText(range);
     }
 
     @Override

@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="30dp"
-            android:text="确定"
+            android:text="接受"
             android:textSize="24sp" />
 
         <Button
