@@ -47,8 +47,8 @@ public class MapFragment extends BaseFragment {
 		// super.onCreateView(inflater,container,savedInstanceState);
 		View view = inflater.inflate(R.layout.map_fragment, container, false);
 
-		MapApplication mapApplication = new MapApplication();
-		mapApplication.onCreate();
+		//MapApplication mapApplication = new MapApplication();
+		//mapApplication.onCreate();
 
         mLocationClient = new LocationClient(getContext().getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
@@ -56,7 +56,7 @@ public class MapFragment extends BaseFragment {
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapview.getMap();
         baiduMap.setMyLocationEnabled(true);
-        getActivity().setContentView(R.layout.map_fragment);
+        //getActivity().setContentView(R.layout.map_fragment);
         positionText = (TextView)getActivity().findViewById(R.id.position_text_view);
         List<String> permissionList=new ArrayList<>();
         if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
