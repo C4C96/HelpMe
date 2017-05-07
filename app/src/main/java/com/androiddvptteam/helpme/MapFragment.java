@@ -49,7 +49,7 @@ public class MapFragment extends BaseFragment {
         mLocationClient.registerLocationListener(new MyLocationListener());
         SDKInitializer.initialize(getContext().getApplicationContext());
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
-        baiduMap = mapview.getMap();//得到地图实例
+        baiduMap = mapview.getMap();//获得地图实例
         baiduMap.setMyLocationEnabled(true);
         //getActivity().setContentView(R.layout.map_fragment);
         positionText = (TextView)getActivity().findViewById(R.id.position_text_view);
