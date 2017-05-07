@@ -31,12 +31,17 @@ import java.io.File;
 
 public class ProfileEditActivity extends BaseActivity implements View.OnClickListener
 {
-	private ImageView avatarImageView;
-	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
 	private static final int CHOOSE_PICTURE = 0;
 	private static final int TAKE_PICTURE = 1;
 	private static final int CROP_SMALL_PICTURE = 2;
+
 	private static Uri tempUri;//修改头像选择拍照时临时图片的UI
+
+	private ImageView avatarImageView;
+	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
+
+	private PersonalInformation personalInformation;//对于存储的用户信息的引用
+	private Bitmap avatar;//对于用户头像的引用
 
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Override
@@ -51,8 +56,11 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+		MyApplication myApplication = (MyApplication)getApplication();
+		personalInformation = myApplication.getPersonalInformation();
+		avatar = myApplication.getAvatar();
+
 		bind();
-		//refreshInfo();
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -84,18 +92,17 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void refreshInfo()
 	{
-		MyApplication myApplication = (MyApplication) getApplication();
-		introduceTextView.setText(myApplication.getUserIntroduction());
-		nameTextView.setText(myApplication.getUserName());
+		introduceTextView.setText(personalInformation.getIntroduction());
+		nameTextView.setText(personalInformation.getUserName());
 		nameTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-				getResources().getDrawable(myApplication.getUserGender() == MissionAttribute.GENDER_MALE?
+				getResources().getDrawable(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
 						R.drawable.gender_male:
 						R.drawable.gender_female, null),
 				null, null);
-		schoolNumView.setText(myApplication.getUserSchoolNumber());
-		departmentTextView.setText(myApplication.getUserDepartmentName());
-		if (myApplication.getUserAvatar() != null)
-			avatarImageView.setImageBitmap(myApplication.getUserAvatar());
+		schoolNumView.setText(personalInformation.getSchoolNumber());
+		departmentTextView.setText(personalInformation.getDepartmentName());
+		if (avatar != null)
+			avatarImageView.setImageBitmap(avatar);
 		else
 			avatarImageView.setImageResource(R.drawable.default_avatar);
 	}
@@ -109,8 +116,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				showChoosePicDialog();
 				break;
 			case R.id.profile_edit_confirm_button:
-				MyApplication myApplication = (MyApplication) getApplication();
-				myApplication.setUserIntroduction(introduceTextView.getText().toString());
+				personalInformation.setIntroduction(introduceTextView.getText().toString());
 				break;
 		}
 	}
@@ -202,7 +208,8 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 					break;
 				case CROP_SMALL_PICTURE:
 					if (data != null)
-						setImage(data); // 让刚才选择裁剪得到的图片显示在界面上
+						setImage(data); //让刚才选择裁剪得到的图片显示在界面上
+					//getContentResolver().delete(tempUri, null, null); //将临时图片删除
 					break;
 			}
 		}
@@ -236,7 +243,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		if (extras != null)
 		{
 			Bitmap photo = extras.getParcelable("data");
-			((MyApplication)getApplication()).setUserAvatar(photo);
+			((MyApplication)getApplication()).setAvatar(photo);
 		}
 	}
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ public class MyTaskActivity extends BaseActivity
 	public static final int ACCEPTED_TAB = 2;
 	public static final int DOING_TAB = 3;
 
+	private MyTaskListFragment allList, releasedList, acceptedList, doingList;
 	private TabLayout tabLayout;
+	private SwipeRefreshLayout swipeRefreshLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -28,7 +31,7 @@ public class MyTaskActivity extends BaseActivity
 		setContentView(R.layout.activity_my_task);
 
 		//设置返回按钮
-		Toolbar toolbar = (Toolbar)findViewById(R.id.options_toolbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.options_toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -39,7 +42,19 @@ public class MyTaskActivity extends BaseActivity
 		Intent intent = getIntent();
 		int tabType = intent.getIntExtra("tabType", ALL_TAB);
 		tabLayout.getTabAt(tabType).select();
+
+		//下拉刷新
+		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.myTask_swipeRefresh);
+		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+		{
+			@Override
+			public void onRefresh()
+			{
+				refresh();
+			}
+		});
 	}
+
 
 	/**
 	 * 初始化TabLayout
@@ -47,7 +62,6 @@ public class MyTaskActivity extends BaseActivity
 	private void initTabLayout()
 	{
 		ViewPager viewPager = (ViewPager) findViewById(R.id.myTask_viewPager);
-		MyTaskListFragment allList, releasedList, acceptedList, doingList;
 		List<Fragment> list_fragment = new ArrayList<>();
 		List<String> list_title = new ArrayList<>();
 		MyTaskTabAdapter adapter;
@@ -79,6 +93,29 @@ public class MyTaskActivity extends BaseActivity
 		adapter = new MyTaskTabAdapter(getSupportFragmentManager(), list_fragment, list_title);
 		viewPager.setAdapter(adapter);
 		tabLayout.setupWithViewPager(viewPager);
+	}
+
+	/**
+	 * 刷新内容
+	 * */
+	public void refresh()
+	{
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				MyApplication myApplication = (MyApplication) getApplication();
+				//刷新myApplication.myMissions
+				//
+				allList.refreshMissionList();
+				releasedList.refreshMissionList();
+				acceptedList.refreshMissionList();
+				doingList.refreshMissionList();
+				swipeRefreshLayout.setRefreshing(false);
+				Log.d(TAG, "Refresh my list over.");
+			}
+		}).start();
 	}
 
 	public static void actionStart(Context context, int tabType)

@@ -17,7 +17,10 @@ import static com.androiddvptteam.helpme.MyTaskActivity.*;
 
 public class MyTaskListFragment extends BaseFragment
 {
-	private List<Mission> missionList = new ArrayList<>();
+	private List<Mission> myMissions;//对于MyApplication中myMissions的引用
+	private PersonalInformation personalInformation;//当前用户信息
+
+	private List<Mission> missionList;//列表内容
 
 	//google不让搞Fragment的构造函数，我能怎么办，我也很无奈啊
 	private int tabType = -1;
@@ -33,6 +36,9 @@ public class MyTaskListFragment extends BaseFragment
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		MyApplication myApplication = (MyApplication)getActivity().getApplication();
+		myMissions = myApplication.myMissions;
+		personalInformation = myApplication.getPersonalInformation();
 		refreshMissionList();
 	}
 
@@ -49,25 +55,36 @@ public class MyTaskListFragment extends BaseFragment
 		return view;
 	}
 
-	private void refreshMissionList()
+	/**
+	 * 刷新列表
+	 * */
+	public void refreshMissionList()
 	{
 		MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		switch (tabType)
 		{
 			case ALL_TAB:
-				missionList = new ArrayList<>(myApplication.myMissions);
+				missionList = new ArrayList<>(myMissions);
 				break;
 			case ACCEPTED_TAB:
-				missionList.clear();
-				missionList.add(new Mission("A Accepted Mission", "..."));
-				break;
+				missionList = new ArrayList<>();
+				for(Mission mission : myMissions)
+					if (mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
+						&& (mission.getState() == Mission.STATE_FINISHED || mission.getState() == Mission.STATE_CANCELED))
+						missionList.add(mission);
+			break;
 			case RELEASED_TAB:
-				missionList.clear();
-				missionList.add(new Mission("A Released Mission", "..."));
+				missionList = new ArrayList<>();
+				for(Mission mission : myMissions)
+					if (mission.getPublisher().getSchoolNumber().equals(personalInformation.getSchoolNumber()))
+						missionList.add(mission);
 				break;
 			case DOING_TAB:
-				missionList.clear();
-				missionList.add(new Mission("A Doing Mission", "..."));
+				missionList = new ArrayList<>();
+				for(Mission mission : myMissions)
+					if (mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
+						&& mission.getState() == Mission.STATE_DOING)
+						missionList.add(mission);
 				break;
 		}
 	}
