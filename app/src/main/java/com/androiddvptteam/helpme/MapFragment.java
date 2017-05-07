@@ -44,17 +44,12 @@ public class MapFragment extends BaseFragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		// super.onCreateView(inflater,container,savedInstanceState);
 		View view = inflater.inflate(R.layout.map_fragment, container, false);
-
-		//MapApplication mapApplication = new MapApplication();
-		//mapApplication.onCreate();
-
-        mLocationClient = new LocationClient(getContext().getApplicationContext());
+        mLocationClient = new LocationClient(getContext().getApplicationContext());//获取全进程有效的context
         mLocationClient.registerLocationListener(new MyLocationListener());
         SDKInitializer.initialize(getContext().getApplicationContext());
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
-        baiduMap = mapview.getMap();
+        baiduMap = mapview.getMap();//得到地图实例
         baiduMap.setMyLocationEnabled(true);
         //getActivity().setContentView(R.layout.map_fragment);
         positionText = (TextView)getActivity().findViewById(R.id.position_text_view);
@@ -76,22 +71,24 @@ public class MapFragment extends BaseFragment {
         }
 		return view;
 	}
-    private void requestLocation(){
-        initLocation();
+    private void requestLocation(){//获取当前定位
+        setLocation();
         mLocationClient.start();
     }
     private void stopRequestLocation(){
         mLocationClient.stop();
     }
-    private void initLocation(){
+    private void setLocation(){
         LocationClientOption option = new LocationClientOption();
-        option.setScanSpan(5000);
+        option.setCoorType("gcj02");//返回定位结果是百度经纬度
+        option.setScanSpan(5000);//多长时间进行一次请求
+        option.setOpenGps(true);//打开GPS
         option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
-        option.setIsNeedAddress(true);
-        mLocationClient.setLocOption(option);
+        option.setIsNeedAddress(true);//位置
+        mLocationClient.setLocOption(option);//使用设置
     }
     private void navigateTo(BDLocation location){
-        if(isFirstLocate){
+        if(isFirstLocate){//判断是否第一次定位，是就执行以下代码
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
             baiduMap.animateMapStatus(update);
