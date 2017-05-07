@@ -69,15 +69,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	private void refreshInfo()
 	{
 		MyApplication myApplication = (MyApplication) getActivity().getApplication();
-		nameTextView.setText(myApplication.getUserName());
+		PersonalInformation personalInformation = myApplication.getPersonalInformation();
+		nameTextView.setText(personalInformation.getUserName());
 		nameTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-				getResources().getDrawable(myApplication.getUserGender() == MissionAttribute.GENDER_MALE?
+				getResources().getDrawable(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
 						R.drawable.gender_male:
 						R.drawable.gender_female, null),
 				null, null);
-		introductionTextView.setText(myApplication.getUserIntroduction());
-		if (myApplication.getUserAvatar() != null)
-			avatarImageView.setImageBitmap(myApplication.getUserAvatar());
+		introductionTextView.setText(personalInformation.getIntroduction());
+		if (myApplication.getAvatar() != null)
+			avatarImageView.setImageBitmap(myApplication.getAvatar());
 		else
 			avatarImageView.setImageResource(R.drawable.default_avatar);
 	}
