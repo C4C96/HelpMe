@@ -46,10 +46,6 @@ public class MyApplication extends Application
 
 		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
 		//config = new Config()
-		//myMissions = new ArrayList<>();
-		//myMissions.add()
-		//foundMissions = new ArrayList<>();
-		//foundMissions.add()
 	}
 
 	/**
@@ -71,6 +67,24 @@ public class MyApplication extends Application
 		{
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 刷新mMissions，可以先写一些测试信息
+	 * */
+	public void refreshMyMissions()
+	{
+		//myMissions = new ArrayList<>();
+		//myMissions.add()
+	}
+
+	/**
+	 * 刷新foundMissions，可以先写一些测试信息
+	 * */
+	public void refreshFoundMissions()
+	{
+		//foundMissions = new ArrayList<>();
+		//foundMissions.add()
 	}
 
 	/**
