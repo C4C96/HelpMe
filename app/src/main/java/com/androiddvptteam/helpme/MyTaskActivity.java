@@ -100,19 +100,19 @@ public class MyTaskActivity extends BaseActivity
 	 * */
 	public void refresh()
 	{
+		//异步刷新
 		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				MyApplication myApplication = (MyApplication) getApplication();
-				//刷新myApplication.myMissions
-				//
+				myApplication.refreshMyMissions();
 				allList.refreshMissionList();
 				releasedList.refreshMissionList();
 				acceptedList.refreshMissionList();
 				doingList.refreshMissionList();
-				swipeRefreshLayout.setRefreshing(false);
+				swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
 				Log.d(TAG, "Refresh my list over.");
 			}
 		}).start();

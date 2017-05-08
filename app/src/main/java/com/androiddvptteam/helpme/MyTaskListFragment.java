@@ -17,7 +17,6 @@ import static com.androiddvptteam.helpme.MyTaskActivity.*;
 
 public class MyTaskListFragment extends BaseFragment
 {
-	private List<Mission> myMissions;//对于MyApplication中myMissions的引用
 	private PersonalInformation personalInformation;//当前用户信息
 
 	private List<Mission> missionList;//列表内容
@@ -37,7 +36,6 @@ public class MyTaskListFragment extends BaseFragment
 	{
 		super.onCreate(savedInstanceState);
 		MyApplication myApplication = (MyApplication)getActivity().getApplication();
-		myMissions = myApplication.myMissions;
 		personalInformation = myApplication.getPersonalInformation();
 		refreshMissionList();
 	}
@@ -56,11 +54,12 @@ public class MyTaskListFragment extends BaseFragment
 	}
 
 	/**
-	 * 刷新列表
+	 * 刷新列表，基于已刷新的myApplication.myMissions
 	 * */
 	public void refreshMissionList()
 	{
-		MyApplication myApplication = (MyApplication) getActivity().getApplication();
+		MyApplication myApplication = (MyApplication)getActivity().getApplication();
+		List<Mission> myMissions = myApplication.myMissions;
 		switch (tabType)
 		{
 			case ALL_TAB:

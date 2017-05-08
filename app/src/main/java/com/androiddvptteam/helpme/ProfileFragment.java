@@ -20,10 +20,9 @@ import org.w3c.dom.Text;
 public class ProfileFragment extends BaseFragment implements View.OnClickListener
 {
 	private View view;
-	private ImageView avatarImageView;
+	private ImageView avatarImageView, genderImageView;
 	private TextView nameTextView, introductionTextView;
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -34,7 +33,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 		return view;
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	public void onResume()
 	{
@@ -58,6 +56,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 		doing_button.setOnClickListener(this);
 		edit_button.setOnClickListener(this);
 		avatarImageView = (ImageView) view.findViewById(R.id.profile_avatar_image);
+		genderImageView = (ImageView) view.findViewById(R.id.profile_gender_image);
 		nameTextView = (TextView) view.findViewById(R.id.profile_name_text);
 		introductionTextView = (TextView) view.findViewById(R.id.profile_introduction_text);
 	}
@@ -65,17 +64,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	/**
 	 * 刷新信息
 	 * */
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void refreshInfo()
 	{
 		MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
 		nameTextView.setText(personalInformation.getUserName());
-		nameTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-				getResources().getDrawable(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
-						R.drawable.gender_male:
-						R.drawable.gender_female, null),
-				null, null);
+		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
+											R.drawable.gender_male:
+											R.drawable.gender_female);
 		introductionTextView.setText(personalInformation.getIntroduction());
 		if (myApplication.getAvatar() != null)
 			avatarImageView.setImageBitmap(myApplication.getAvatar());

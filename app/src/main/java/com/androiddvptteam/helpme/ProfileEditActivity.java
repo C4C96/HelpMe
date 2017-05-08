@@ -37,13 +37,12 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 
 	private static Uri tempUri;//修改头像选择拍照时临时图片的UI
 
-	private ImageView avatarImageView;
+	private ImageView avatarImageView, genderImageView;
 	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
 
 	private PersonalInformation personalInformation;//对于存储的用户信息的引用
 	private Bitmap avatar;//对于用户头像的引用
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -63,7 +62,6 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		bind();
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Override
 	public void onResume()
 	{
@@ -81,6 +79,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		nameTextView = (TextView) findViewById(R.id.profile_edit_name_text);
 		avatarImageView = (ImageView) findViewById(R.id.profile_edit_avatar_image);
 		avatarImageView.setOnClickListener(this);
+		genderImageView = (ImageView) findViewById(R.id.profile_edit_gender_image);
 		schoolNumView = (TextView) findViewById(R.id.profile_edit_schoolNum_text);
 		introduceTextView = (TextView) findViewById(R.id.profile_edit_introduce_editText);
 		departmentTextView = (TextView) findViewById(R.id.profile_edit_department_text);
@@ -89,16 +88,13 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	/**
 	 * 刷新信息
 	 * */
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void refreshInfo()
 	{
 		introduceTextView.setText(personalInformation.getIntroduction());
 		nameTextView.setText(personalInformation.getUserName());
-		nameTextView.setCompoundDrawablesWithIntrinsicBounds(null,
-				getResources().getDrawable(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
-						R.drawable.gender_male:
-						R.drawable.gender_female, null),
-				null, null);
+		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
+											R.drawable.gender_male:
+											R.drawable.gender_female);
 		schoolNumView.setText(personalInformation.getSchoolNumber());
 		departmentTextView.setText(personalInformation.getDepartmentName());
 		if (avatar != null)
