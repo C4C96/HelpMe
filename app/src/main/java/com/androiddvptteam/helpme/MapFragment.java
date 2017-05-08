@@ -88,7 +88,7 @@ public class MapFragment extends BaseFragment {
         mLocationClient.setLocOption(option);//使用设置
     }
     private void navigateTo(BDLocation location){
-        if(isFirstLocate){//判断是否第一次定位，是就执行以下代码
+        if(isFirstLocate){//判断是否第一次定位，若是就执行以下代码
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
             baiduMap.animateMapStatus(update);
