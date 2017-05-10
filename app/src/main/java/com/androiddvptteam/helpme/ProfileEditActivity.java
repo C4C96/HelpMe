@@ -40,9 +40,6 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	private ImageView avatarImageView, genderImageView;
 	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
 
-	private PersonalInformation personalInformation;//对于存储的用户信息的引用
-	private Bitmap avatar;//对于用户头像的引用
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -54,10 +51,6 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-		MyApplication myApplication = (MyApplication)getApplication();
-		personalInformation = myApplication.getPersonalInformation();
-		avatar = myApplication.getAvatar();
 
 		bind();
 	}
@@ -90,6 +83,9 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	 * */
 	private void refreshInfo()
 	{
+		MyApplication myApplication = (MyApplication) getApplication();
+		PersonalInformation personalInformation = myApplication.getPersonalInformation();
+		Bitmap avatar = myApplication.getAvatar();
 		if (personalInformation == null) return;
 		introduceTextView.setText(personalInformation.getIntroduction());
 		nameTextView.setText(personalInformation.getUserName());
@@ -113,6 +109,8 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				showChoosePicDialog();
 				break;
 			case R.id.profile_edit_confirm_button:
+				MyApplication myApplication = (MyApplication) getApplication();
+				PersonalInformation personalInformation = myApplication.getPersonalInformation();
 				personalInformation.setIntroduction(introduceTextView.getText().toString());
 				break;
 		}
