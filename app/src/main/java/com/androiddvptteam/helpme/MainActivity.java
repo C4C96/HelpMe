@@ -32,29 +32,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         setFragment(mapFragment);
     }
 
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
-		final MyApplication myApplication = (MyApplication)getApplication();
-		if (myApplication.getPersonalInformation() != null) return;//已登录则无需操作
-
-		final String userId, password;
-		final boolean isRemember;
-		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-		userId = preference.getString("userId", null);
-		password = Tools.decrypt(preference.getString("password", null));
-		isRemember = preference.getBoolean("isRemember", false);
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (!isRemember && !myApplication.login(userId, password))//用上次登录的用户名密码后台自动登录
-					LoginActivity.actionStart(MainActivity.this, userId, isRemember);//若失败，则打开登录界面
-			}
-		}).start();
-	}
+//	@Override
+//	protected void onResume()
+//	{
+//		super.onResume();
+//		final MyApplication myApplication = (MyApplication)getApplication();
+//		if (myApplication.getPersonalInformation() != null) return;//已登录则无需操作
+//
+//		final String userId, password;
+//		final boolean isRemember;
+//		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+//		userId = preference.getString("userId", null);
+//		password = Tools.decrypt(preference.getString("password", null));
+//		isRemember = preference.getBoolean("isRemember", false);
+//		new Thread(new Runnable()
+//		{
+//			@Override
+//			public void run()
+//			{
+//				if (!isRemember && !myApplication.login(userId, password))//用上次登录的用户名密码后台自动登录
+//					LoginActivity.actionStart(MainActivity.this, userId, isRemember);//若失败，则打开登录界面
+//			}
+//		}).start();
+//	}
 
 	/**
      * 绑定监听

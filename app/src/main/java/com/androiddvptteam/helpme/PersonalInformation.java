@@ -1,6 +1,7 @@
 package com.androiddvptteam.helpme;
+import java.io.Serializable;
 
-public class PersonalInformation
+public class PersonalInformation implements Serializable
 {
     private String userName;        //姓名
     private String schoolNumber;    //学号

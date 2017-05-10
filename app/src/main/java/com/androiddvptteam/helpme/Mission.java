@@ -8,8 +8,9 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.io.Serializable;
 
-public class Mission
+public class Mission implements Serializable
 {
     //任务的状态枚举
     public static int STATE_UNRECEIVED = 0; //未接收
