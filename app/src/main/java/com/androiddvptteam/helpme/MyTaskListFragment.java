@@ -48,7 +48,7 @@ public class MyTaskListFragment extends BaseFragment
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myTask_recyclerView);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		MissionAdapter adapter = new MissionAdapter(missionList, null, this.getActivity());
+		MissionAdapter adapter = new MissionAdapter(missionList, this.getActivity());
 		recyclerView.setAdapter(adapter);
 		return view;
 	}

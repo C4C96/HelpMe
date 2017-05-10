@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -119,14 +120,12 @@ public class MyApplication extends Application
 	 * */
 	public void refreshFoundMissions()
 	{
-		//模拟延迟
-		try
-		{
-			Thread.sleep(1000);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		PersonalInformation p=new PersonalInformation("Jiang nin kang","1111111111",1,"Ruan jian gong chen","wo shi kawaii jiang nin kang.");
+		Calendar c=Calendar.getInstance();
+		Mission m1=new Mission("Fuck me","Come to fuck fuck me",p,c);
+		m1.setMissionAttribute(1,2,1);
+		foundMissions=new ArrayList<>();
+		foundMissions.add(m1);
 		//foundMissions = new ArrayList<>();
 		//foundMissions.add()
 	}

@@ -35,7 +35,7 @@ public class ListFragment extends BaseFragment
 	public View view;
 
 	private List<Mission> missionList=new ArrayList<>();
-	private List<String> schoolnumList=new ArrayList<>();
+
     private SwipeRefreshLayout swipeRefresh;
 	private MissionAdapter adapter;
 	@Override
@@ -51,11 +51,25 @@ public class ListFragment extends BaseFragment
 
 		initMissions();
 
+        //        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try
+//                {
+//                   initMissions();
+//                }
+//                catch (Exception e)
+//                {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
 		//任务列表
 		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
 		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		adapter=new MissionAdapter(missionList,schoolnumList,this.getActivity());
+		adapter=new MissionAdapter(missionList,this.getActivity());
 		recyclerView.setAdapter(adapter);
 
 		//下拉刷新
@@ -182,33 +196,19 @@ public class ListFragment extends BaseFragment
 
 	private void initMissions()//从数据库读取任务信息，放到missionList中
 	{
-		//删除missionList中的数据
-		Iterator<Mission> it = missionList.iterator();
-		while(it.hasNext())
-		{
-			Mission x = it.next();
-				it.remove();
-		}
+        MyApplication myApplication = (MyApplication)
+                getActivity().getApplication();
+        myApplication.refreshFoundMissions();
+        missionList = new ArrayList<>(myApplication.foundMissions);
 
-	//	Mission m1=new Mission("give me some water","...");
-	//	m1.setMissionAttribute(1,2,1);
-	//	missionList.add(m1);
-
-	//	Mission m2=new Mission("give me some shit","...");
-	//	m2.setMissionAttribute(2,3,1);
-	//	missionList.add(m2);
-
-	//	Mission m3=new Mission("give me some food","...");
-	//	m3.setMissionAttribute(3,1,1);
-	//	missionList.add(m3);
-
-	//	Mission m4=new Mission("give me some paper","...");
-	//	m4.setMissionAttribute(1,2,3);
-	//	missionList.add(m4);
-
-	//	Mission m5=new Mission("give me some money","...");
-	//	m5.setMissionAttribute(2,2,2);
-	//	missionList.add(m5);
+        //删除missionList中的数据
+//		Iterator<Mission> it =
+        missionList.iterator();
+//		while(it.hasNext())
+//		{
+//			Mission x = it.next();
+//				it.remove();
+//		}
 	}
 
 	private void refreshMissions()
