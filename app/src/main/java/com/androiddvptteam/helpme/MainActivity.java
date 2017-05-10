@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void run()
 			{
-				if (!isRemember && !myApplication.login(userId, password))//用上次登录的用户名密码后台自动登录
+				if (!isRemember || !myApplication.login(userId, password))//用上次登录的用户名密码后台自动登录
 					LoginActivity.actionStart(MainActivity.this, userId, isRemember);//若失败，则打开登录界面
 			}
 		}).start();

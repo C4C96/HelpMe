@@ -90,6 +90,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	 * */
 	private void refreshInfo()
 	{
+		if (personalInformation == null) return;
 		introduceTextView.setText(personalInformation.getIntroduction());
 		nameTextView.setText(personalInformation.getUserName());
 		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?

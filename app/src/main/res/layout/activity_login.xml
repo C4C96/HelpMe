@@ -25,7 +25,8 @@
 		android:id="@+id/login_user_id_text"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="学号"/>
+		android:hint="学号"
+		android:inputType="number"/>
 	<EditText
 		android:id="@+id/login_password_text"
 		android:layout_width="match_parent"

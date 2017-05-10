@@ -60,6 +60,11 @@ public class MyTaskListFragment extends BaseFragment
 	{
 		MyApplication myApplication = (MyApplication)getActivity().getApplication();
 		List<Mission> myMissions = myApplication.myMissions;
+		if (myMissions == null)
+		{
+			missionList = null;
+			return;
+		}
 		switch (tabType)
 		{
 			case ALL_TAB:

@@ -3,6 +3,7 @@ package com.androiddvptteam.helpme;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener
+public class LoginActivity extends BaseActivity implements View.OnClickListener
 {
 	EditText userIdEditText, passwordEditText;
 	CheckBox rememberCheckBox;
@@ -53,18 +54,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 		switch (v.getId())
 		{
 			case R.id.login_login_button:
+				Log.d(TAG, "Click Login Button.");
 				final MyApplication myApplication = (MyApplication) getApplication();
 				final String userId = userIdEditText.getText().toString(),
 					   password = passwordEditText.getText().toString();
 				final Boolean isRemember = rememberCheckBox.isChecked();
+				progressBar.setVisibility(ProgressBar.VISIBLE);
 				new Thread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						progressBar.setVisibility(ProgressBar.VISIBLE);
-						if (myApplication.login(userId, password))
+						final boolean success;
+						if (success = myApplication.login(userId, password))
 						{//登录成功
+							Log.d(TAG, "Login success.");
 							SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 							SharedPreferences.Editor editor = preference.edit();
 							editor.putString("userId", userId);
@@ -74,11 +78,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 						}
 						else
 						{//登陆失败
-							Toast.makeText(LoginActivity.this, "网络/学号/密码/手机/项目负责人出错（大概", Toast.LENGTH_SHORT).show();
+							Log.d(TAG, "Login failed.");
 						}
-						progressBar.setVisibility(ProgressBar.INVISIBLE);
+						//对于UI的操作必须回到主线程
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Log.d(TAG, "ProgressBar runOnUiThread has been called.");
+								progressBar.setVisibility(ProgressBar.INVISIBLE);
+								if (success)
+								{
+									Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+									LoginActivity.this.finish();
+								}
+								else
+									Toast.makeText(LoginActivity.this, "网络/学号/密码/手机/项目负责人出错（大概", Toast.LENGTH_SHORT).show();
+							}
+						});
 					}
-				});
+				}).start();
 
 				break;
 		}

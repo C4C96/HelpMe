@@ -153,7 +153,7 @@ public class MyApplication extends Application
 	}
 
 	/**
-	 * 登出，改删的都删了
+	 * 登出，该删的都删了
 	 * */
 	public void logout()
 	{
@@ -162,6 +162,7 @@ public class MyApplication extends Application
 		config = null;
 		myMissions = null;
 		foundMissions = null;
+		deleteLocalAvatar();
 	}
 
 	//get方法
