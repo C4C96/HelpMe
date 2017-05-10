@@ -1,9 +1,12 @@
 package com.androiddvptteam.helpme;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,8 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import static java.security.AccessController.getContext;
+import com.androiddvptteam.helpme.Connection.ReleaseConnection;
+import java.net.URL;
 
 public class ReleaseFragment extends BaseFragment
 {
@@ -35,14 +38,14 @@ public class ReleaseFragment extends BaseFragment
 	private ArrayAdapter<String> arr_adapter;
 	private View view;
 
+	private EditText titleEditText;
+	private EditText contentEditText;
+
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		view = inflater.inflate(R.layout.release_fragment, container, false);
-		loadGenderData();
-		loadAttributeData();
-		loadRangeData();
-		getTitleAndContent();
-		getSpinner();
+		loadEverything();
+		buttonListener();
 		return view;
 	}
 
@@ -99,45 +102,20 @@ public class ReleaseFragment extends BaseFragment
 		spinnerRange.setAdapter(arr_adapter);
 	}
 
-	public void getTitleAndContent()//得到输入的标题和内容，然后点确认、取消按钮的监听器
+	private void loadEverything()//把三个下拉列表的值都加载进来
 	{
-		//确认按钮
-		Button releaseButton=(Button) view.findViewById(R.id.releaseButton);
-		releaseButton.setOnClickListener(
-				new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						//获取输入的标题
-						EditText titleEditText =(EditText)view.findViewById(R.id.titleEditText);
-						title=titleEditText.getText().toString();
-
-						//获取输入的内容
-						EditText contentEditText =(EditText)view.findViewById(R.id.contentEditText);
-						content=contentEditText.getText().toString();
-
-						Toast.makeText(getContext(),title,Toast.LENGTH_SHORT).show();
-
-						releaseDialog();
-					}
-				}
-		);
-
-		//取消按钮
-		Button cancelButton=(Button) view.findViewById(R.id.cancelButton);
-		cancelButton.setOnClickListener(
-				new View.OnClickListener()
-				{
-					public void onClick(View v)
-					{
-						cancelDialog();
-					}
-				}
-		);
+		loadGenderData();
+		loadAttributeData();
+		loadRangeData();
 	}
 
-	public void getSpinner()//得到3个下拉框选择的值
+	public void getEverything()//得到输入的标题、内容、三个下拉框的值
 	{
+		titleEditText =(EditText)view.findViewById(R.id.titleEditText);
+		contentEditText =(EditText)view.findViewById(R.id.contentEditText);
+		title=titleEditText.getText().toString();//获取输入的标题
+		content=contentEditText.getText().toString();//获取输入的内容
+
 		spinnerGender.setOnItemSelectedListener(
 				new AdapterView.OnItemSelectedListener()
 				{
@@ -179,6 +157,51 @@ public class ReleaseFragment extends BaseFragment
 					}
 				}
 		);
+
+
+	}
+
+	private void buttonListener()//处理两个按钮的事件
+	{
+		//确认按钮
+		Button releaseButton=(Button) view.findViewById(R.id.releaseButton);
+		releaseButton.setOnClickListener(
+				new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						getEverything();
+						try
+						{
+							ReleaseConnection connection=new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
+							//ReleaseConnection connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+							connection.getTitleAndContent(title,content);
+							connection.connect();
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+						Toast.makeText(getContext(),title,Toast.LENGTH_SHORT).show();
+						releaseDialog();
+					}
+				}
+		);
+
+		//取消按钮
+		Button cancelButton=(Button) view.findViewById(R.id.cancelButton);
+		cancelButton.setOnClickListener(
+				new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						title=titleEditText.getText().toString();//获取输入的标题
+						content=contentEditText.getText().toString();//获取输入的内容
+
+						cancelDialog();
+					}
+				}
+		);
 	}
 
 	private void releaseDialog()//点击发布后的提示框
@@ -193,6 +216,9 @@ public class ReleaseFragment extends BaseFragment
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
+				titleEditText.setText("");
+				contentEditText.setText("");
+
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片
 				MyTaskActivity.actionStart(mainActivity, MyTaskActivity.RELEASED_TAB);//启动一个新的活动，跳转到已发布过的界面
@@ -205,24 +231,22 @@ public class ReleaseFragment extends BaseFragment
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());//通过AlertDialog.Builder这个类来实例化我们的一个AlertDialog的对象
 		builder.setTitle("系统提示");//设置Title的内容
-		builder.setMessage("要保存草稿么…？");//设置Content来显示一个信息
+		builder.setMessage("真的要退出么…？");//设置Content来显示一个信息
 
 		//设置两个Button
-		builder.setPositiveButton("保存", new DialogInterface.OnClickListener()
+		builder.setPositiveButton("是", new DialogInterface.OnClickListener()
 		{
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				//
+				MainActivity mainActivity = (MainActivity)getActivity();
+				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片
 			}
 		});
-		builder.setNegativeButton("不保存", new DialogInterface.OnClickListener()
+		builder.setNegativeButton("否", new DialogInterface.OnClickListener()
 		{
 			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				//
-			}
+			public void onClick(DialogInterface dialog, int which) {}
 		});
 		builder.create().show();
 	}
