@@ -1,6 +1,9 @@
 package com.androiddvptteam.helpme;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,53 +20,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
     private MessageFragment messageFragment = null;
     private ProfileFragment profileFragment = null;
 
-    public MapFragment getMapFragment()
-    {
-        if (mapFragment == null)
-            mapFragment = new MapFragment();
-        return mapFragment;
-    }
-
-    public ListFragment getListFragment()
-    {
-        if (listFragment == null)
-            listFragment = new ListFragment();
-        return listFragment;
-    }
-
-    public ReleaseFragment getReleaseFragment()
-    {
-        if (releaseFragment == null)
-            releaseFragment = new ReleaseFragment();
-        return releaseFragment;
-    }
-
-    public MessageFragment getMessageFragment()
-    {
-        if (messageFragment == null)
-            messageFragment = new MessageFragment();
-        return messageFragment;
-    }
-
-    public ProfileFragment getProfileFragment()
-    {
-        if (profileFragment == null)
-            profileFragment = new ProfileFragment();
-        return profileFragment;
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+		//初始化
         bindView();
         mapFragment = new MapFragment();
         setFragment(mapFragment);
     }
 
-    /**
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		final MyApplication myApplication = (MyApplication)getApplication();
+		if (myApplication.getPersonalInformation() != null) return;//已登录则无需操作
+
+		final String userId, password;
+		final boolean isRemember;
+		SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+		userId = preference.getString("userId", null);
+		password = Tools.decrypt(preference.getString("password", null));
+		isRemember = preference.getBoolean("isRemember", false);
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (!isRemember && !myApplication.login(userId, password))//用上次登录的用户名密码后台自动登录
+					LoginActivity.actionStart(MainActivity.this, userId, isRemember);//若失败，则打开登录界面
+			}
+		}).start();
+	}
+
+	/**
      * 绑定监听
      * */
     private void bindView()
@@ -112,6 +105,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
+
+
+	//get方法
+
+	public MapFragment getMapFragment()
+	{
+		if (mapFragment == null)
+			mapFragment = new MapFragment();
+		return mapFragment;
+	}
+
+	public ListFragment getListFragment()
+	{
+		if (listFragment == null)
+			listFragment = new ListFragment();
+		return listFragment;
+	}
+
+	public ReleaseFragment getReleaseFragment()
+	{
+		if (releaseFragment == null)
+			releaseFragment = new ReleaseFragment();
+		return releaseFragment;
+	}
+
+	public MessageFragment getMessageFragment()
+	{
+		if (messageFragment == null)
+			messageFragment = new MessageFragment();
+		return messageFragment;
+	}
+
+	public ProfileFragment getProfileFragment()
+	{
+		if (profileFragment == null)
+			profileFragment = new ProfileFragment();
+		return profileFragment;
+	}
 
     /**
      * 改变当前活动的fragment

@@ -190,25 +190,25 @@ public class ListFragment extends BaseFragment
 				it.remove();
 		}
 
-		Mission m1=new Mission("give me some water","...");
-		m1.setMissionAttribute(1,2,1);
-		missionList.add(m1);
+	//	Mission m1=new Mission("give me some water","...");
+	//	m1.setMissionAttribute(1,2,1);
+	//	missionList.add(m1);
 
-		Mission m2=new Mission("give me some shit","...");
-		m2.setMissionAttribute(2,3,1);
-		missionList.add(m2);
+	//	Mission m2=new Mission("give me some shit","...");
+	//	m2.setMissionAttribute(2,3,1);
+	//	missionList.add(m2);
 
-		Mission m3=new Mission("give me some food","...");
-		m3.setMissionAttribute(3,1,1);
-		missionList.add(m3);
+	//	Mission m3=new Mission("give me some food","...");
+	//	m3.setMissionAttribute(3,1,1);
+	//	missionList.add(m3);
 
-		Mission m4=new Mission("give me some paper","...");
-		m4.setMissionAttribute(1,2,3);
-		missionList.add(m4);
+	//	Mission m4=new Mission("give me some paper","...");
+	//	m4.setMissionAttribute(1,2,3);
+	//	missionList.add(m4);
 
-		Mission m5=new Mission("give me some money","...");
-		m5.setMissionAttribute(2,2,2);
-		missionList.add(m5);
+	//	Mission m5=new Mission("give me some money","...");
+	//	m5.setMissionAttribute(2,2,2);
+	//	missionList.add(m5);
 	}
 
 	private void refreshMissions()

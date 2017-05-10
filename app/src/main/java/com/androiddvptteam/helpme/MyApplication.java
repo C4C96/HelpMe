@@ -4,8 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 
 import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
+import com.baidu.mapapi.CoordType;
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapView;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,21 +35,32 @@ public class MyApplication extends Application
 	public List<Mission> myMissions;					//我的任务（全部种类）
 	public List<Mission> foundMissions;					//发现的任务
 
+	//百度地图需要
+	private MapView mapview;
+	private BaiduMap baiduMap;
+
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
+
+		//百度地图需要
+		// 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
+		SDKInitializer.initialize(this);
+		//自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
+		//包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
+		SDKInitializer.setCoordType(CoordType.BD09LL);
+
 		init();
 	}
 
 	/**
-	 * 初始化信息，可以先在这里加入测试需要数据
+	 * 初始化信息
 	 * */
 	private void init()
 	{
+		personalInformation = null;
 		loadLocalAvatar();
-
-		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
 		//config = new Config()
 	}
 
@@ -70,10 +86,30 @@ public class MyApplication extends Application
 	}
 
 	/**
+	 * 删除本地的用户头像信息
+	 * */
+	private void deleteLocalAvatar()
+	{
+		File f = new File(getFilesDir(), "avatar.jpg");
+		if (f.exists())
+		{
+			f.delete();
+		}
+	}
+
+	/**
 	 * 刷新mMissions，可以先写一些测试信息
 	 * */
 	public void refreshMyMissions()
 	{
+		//模拟延迟
+		try
+		{
+			Thread.sleep(1000);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		//myMissions = new ArrayList<>();
 		//myMissions.add()
 	}
@@ -83,26 +119,50 @@ public class MyApplication extends Application
 	 * */
 	public void refreshFoundMissions()
 	{
+		//模拟延迟
+		try
+		{
+			Thread.sleep(1000);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		//foundMissions = new ArrayList<>();
 		//foundMissions.add()
 	}
 
 	/**
-	 * 加密函数
+	 * 登录，若登录成功，则会对personalInformation赋值
+	 * @param id			用户ID
+	 * @param password  	密码
+	 * @return 是否登录成功
 	 * */
-	private void encrypt(String str)
+	public boolean login(String id, String password)
 	{
-
+		if (id == null || id.equals("") || password == null || password.equals("")) return false;
+		//模拟延迟
+		try
+		{
+			Thread.sleep(1000);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
+		return true;
 	}
 
 	/**
-	 * 解密函数
+	 * 登出，改删的都删了
 	 * */
-	private void decrypt(String str)
+	public void logout()
 	{
-
+		personalInformation = null;
+		avatar = null;
+		config = null;
+		myMissions = null;
+		foundMissions = null;
 	}
-
 
 	//get方法
 

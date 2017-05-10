@@ -69,7 +69,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mission mission=myMissionList.get(position);
-        holder.titleText.setText(mission.title);
+        holder.titleText.setText(mission.getTitle());
         String gender="",attribute="",range="";
         switch(mission.getGender())
         {
