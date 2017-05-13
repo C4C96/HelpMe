@@ -41,6 +41,8 @@ public class ReleaseFragment extends BaseFragment
 	private EditText titleEditText;
 	private EditText contentEditText;
 
+	private ReleaseConnection connection;
+
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		view = inflater.inflate(R.layout.release_fragment, container, false);
@@ -173,10 +175,11 @@ public class ReleaseFragment extends BaseFragment
 						getEverything();
 						try
 						{
-							ReleaseConnection connection=new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
-							//ReleaseConnection connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
-							connection.getTitleAndContent(title,content);
+							connection=new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
+							//connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+							connection.setTitleAndContent(title,content);
 							connection.connect();
+							//Log.d("ReturnResult",connection.getResult());
 						}
 						catch (Exception e)
 						{
@@ -218,6 +221,8 @@ public class ReleaseFragment extends BaseFragment
 			{
 				titleEditText.setText("");
 				contentEditText.setText("");
+
+				Toast.makeText(getContext(),connection.getResult(),Toast.LENGTH_SHORT).show();
 
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片
