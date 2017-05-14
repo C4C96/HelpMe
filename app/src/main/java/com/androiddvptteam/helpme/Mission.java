@@ -1,6 +1,8 @@
 package com.androiddvptteam.helpme;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
 
@@ -9,6 +11,7 @@ import java.util.Calendar;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.io.Serializable;
+import static com.androiddvptteam.helpme.Tools.netDelay;
 
 public class Mission implements Serializable
 {
@@ -87,87 +90,32 @@ public class Mission implements Serializable
 
     /**
      * 生成唯一的ID（正常情况下不会冲突）
-     * 由发布者学号+发布时间(距1970年1月1日0时的毫秒数)组成
-     *    (11位)+(MAX_LONG = 9223372036854775807，最多19位，若小于19位，无前导零)
-     * （你同一毫秒发两个任务算我输，好吧）
+     * 由发布者学号+发布时间(年月日时分秒)组成
+     *     (11位)     +     (4+2+2+2+2+2位) = 25位
+     * （你同一秒发两个任务算我输，好吧，嗯……还是有可能的，但算发布失败吧）
      * */
     private String generateID()
     {
         StringBuilder sb = new StringBuilder();
+		int 	year = createTime.get(Calendar.YEAR),
+				month = createTime.get(Calendar.MONTH) + 1,//Calendar表示月份从0开始
+				day = createTime.get(Calendar.DATE),
+				hour = createTime.get(Calendar.HOUR),
+				minute = createTime.get(Calendar.MINUTE),
+				second = createTime.get(Calendar.SECOND);
         sb.append(publisher.getSchoolNumber());
-        sb.append(createTime.getTime().getTime());
+        sb.append(year);
+        if (month < 10) sb.append(0);
+		sb.append(month);
+		if (day < 10) sb.append(0);
+		sb.append(day);
+		if (hour < 10) sb.append(0);
+		sb.append(hour);
+		if (minute < 10) sb.append(10);
+		sb.append(minute);
+		if (second < 10) sb.append(second);
+		sb.append(second);
         return sb.toString();
-    }
-
-    /**
-     * 接收该任务
-     * @param recipient     接收者的信息
-     * @param receivedTime  接收的时间
-     * @return              是否成功,若失败，则表明该任务已被接收或已完成或已取消
-     * */
-    public boolean receive(@NonNull PersonalInformation recipient,
-                           @NonNull Calendar            receivedTime)
-    {
-        if (state == STATE_UNRECEIVED)
-        {
-            state = STATE_DOING;
-            this.recipient = recipient;
-            this.receiveTime = receivedTime;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    /**
-     * 完成该任务
-     * @param finishTime    完成的时间
-     * @return              是否成功,若失败，则表明该任务未被接受或已完成或已取消
-     * */
-    public boolean finish(@NonNull Calendar finishTime)
-    {
-        if (state == STATE_DOING)
-        {
-            state = STATE_FINISHED;
-            this.finishTime = finishTime;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    /**
-     * 发布者取消任务
-     * @param cancelTime    取消的时间
-     * @return              是否成功，若失败则表明该任务已完成或已取消
-     * */
-    public boolean cancel(@NonNull Calendar cancelTime)
-    {
-        if (state == STATE_UNRECEIVED || state == STATE_DOING )
-        {
-            state = STATE_CANCELED;
-            this.cancelTime = cancelTime;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    /**
-     * 接收者放弃接收任务
-     * @return      是否成功，若失败则表明该任务未被接收或已完成或已取消
-     * */
-    public boolean abandon()
-    {
-        if (state == STATE_DOING)
-        {
-            state = STATE_UNRECEIVED;
-            this.recipient = null;
-            this.receiveTime = null;
-            return true;
-        }
-        else
-            return false;
     }
 
 
@@ -206,4 +154,168 @@ public class Mission implements Serializable
         this.attribute=attribute;
         this.range=range;
     }
+
+	/**
+	 * 一个用于Mission发布，接收等操作的内部静态类
+	 * */
+	public static class MissionManager
+	{
+		/**
+		 * 发布者发布任务
+		 * @param 	context		调用该函数的context，用于Toast
+		 * @param 	mission		发布的任务
+		 * @return				是否成功
+		 * */
+		public static boolean releaseMission(@NonNull Context context,
+											 @NonNull Mission mission)
+		{
+			netDelay(1000);
+			//如果ID撞了（按发布按钮了会关掉窗口的吧，一秒发出两个也蛮厉害的），如下操作：
+			//Toast.makeText(context, "发布失败", Toast.LENGTH_SHORT).show();
+			//return false;
+			//如果因为网络原因连不到后端，如上操作，后面几个函数同理
+			return true;
+		}
+
+		/**
+		 * 接收者接收任务
+		 * @param context		调用该函数的context，用于Toast
+		 * @param mission		被接收的任务
+		 * @param recipient     接收者的信息
+		 * @param receivedTime  接收的时间
+		 * @return              是否成功,若失败，则表明该任务已被接收或已完成或已取消
+		 * */
+		public boolean receive(@NonNull Context 			context,
+							   @NonNull Mission 			mission,
+							   @NonNull PersonalInformation recipient,
+							   @NonNull Calendar            receivedTime)
+		{
+			//只有未被接收的任务才能被接收
+			if (mission.state == STATE_UNRECEIVED)
+			{
+				mission.state = STATE_DOING;
+				mission.recipient = recipient;
+				mission.receiveTime = receivedTime;
+				netDelay(1000);
+				//if (网络原因失败了)
+				//{
+				//	对本地信息回滚
+				//	mission.state = STATE_UNRECEIVED;
+				//	mission.recipient = null;
+				//	mission.receiveTime = null;
+				//	Toast.***
+				//	return false;
+				//}
+				return true;
+			}
+			else
+			{
+				Toast.makeText(context, "该任务已被接收", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+
+		/**
+		 * 发布者完成任务
+		 * @param context		调用该函数的context，用于Toast
+		 * @param mission		被完成的任务
+		 * @param finishTime    完成的时间
+		 * @return              是否成功,若失败，则表明该任务未被接受或已完成或已取消
+		 * */
+		public boolean finish(@NonNull Context context,
+							  @NonNull Mission mission,
+							  @NonNull Calendar finishTime)
+		{
+			if (mission.state == STATE_DOING)
+			{
+				mission.state = STATE_FINISHED;
+				mission.finishTime = finishTime;
+				netDelay(1000);
+				//if (网络原因失败了)
+				//{
+				//	对本地信息回滚
+				//	mission.state = STATE_DOING;
+				//	mission.finishTime = null;
+				//	Toast.***
+				//	return false;
+				//}
+				return true;
+			}
+			else
+			{
+				Toast.makeText(context, "该任务尚未被接受或已完成或已取消", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+
+		/**
+		 * 发布者取消任务
+		 * @param context		调用该函数的context，用于Toast
+		 * @param mission		被取消的任务
+		 * @param cancelTime    取消的时间
+		 * @return              是否成功，若失败则表明该任务已完成或已取消
+		 * */
+		public boolean cancel(@NonNull Context  context,
+							  @NonNull Mission  mission,
+							  @NonNull Calendar cancelTime)
+		{
+			int ori_state = mission.state;
+			if (mission.state == STATE_UNRECEIVED || mission.state == STATE_DOING )
+			{
+				mission.state = STATE_CANCELED;
+				mission.cancelTime = cancelTime;
+				netDelay(1000);
+				//if (网络原因失败了)
+				//{
+				//	对本地信息回滚
+				//	mission.state = ori_state;
+				//	mission.cancelTime = null;
+				//	Toast.***
+				//	return false;
+				//}
+				return true;
+			}
+			else
+			{
+				Toast.makeText(context, "任务已完成或已取消", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+
+		/**
+		 * 接收者放弃接收任务
+		 * @param context		调用该函数的context，用于Toast
+		 * @param mission		被放弃的任务
+		 * @return      是否成功，若失败则表明该任务未被接收或已完成或已取消
+		 * */
+		public boolean abandon(@NonNull Context context,
+							   @NonNull Mission mission)
+		{
+			PersonalInformation ori_recipient = mission.recipient;
+			Calendar ori_receiveTime = mission.receiveTime;
+			if (mission.state == STATE_DOING)
+			{
+				mission.state = STATE_UNRECEIVED;
+				mission.recipient = null;
+				mission.receiveTime = null;
+				netDelay(1000);
+				//if (网络原因失败了)
+				//{
+				//	对本地信息回滚
+				//	mission.state = STATE_DOING;
+				//	mission.recipient = ori_recipient;
+				//  mission.receiveTime = ori_receiveTime;
+				//	Toast.***
+				//	return false;
+				//}
+				return true;
+			}
+			else
+			{
+				Toast.makeText(context, "放弃该任务失败", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+
+	}
 }

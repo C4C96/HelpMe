@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.androiddvptteam.helpme.Tools.netDelay;
 
 /**
  * 存储全局信息的类
@@ -63,6 +64,8 @@ public class MyApplication extends Application
 		personalInformation = null;
 		loadLocalAvatar();
 		//config = new Config()
+		myMissions = new ArrayList<>();
+		foundMissions = new ArrayList<>();
 	}
 
 	/**
@@ -99,35 +102,35 @@ public class MyApplication extends Application
 	}
 
 	/**
-	 * 刷新mMissions，可以先写一些测试信息
+	 * 刷新myMissions，可以先写一些测试信息
+	 * 执行之后对myMissions重新复制，使其内容为最新的与我有关的任务（我发布的，接收的，正在做的）
+	 * 若失败则保持myMissions不变，但不能是null，若是null则给一个空集合
+	 * @return 是否成功
 	 * */
-	public void refreshMyMissions()
+	public boolean refreshMyMissions()
 	{
-		//模拟延迟
-		try
-		{
-			Thread.sleep(1000);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		netDelay(1000);
 		//myMissions = new ArrayList<>();
 		//myMissions.add()
+		return true;
 	}
 
 	/**
 	 * 刷新foundMissions，可以先写一些测试信息
+	 * 执行之后对foundMissions重新赋值，使其内容为最新的找到可以接的任务
+	 * 若失败则保持foundMissions不变，但不能是null，若是null则给一个空集合
+	 * @return 是否成功
 	 * */
-	public void refreshFoundMissions()
+	public boolean refreshFoundMissions()
 	{
-		PersonalInformation p=new PersonalInformation("Jiang nin kang","1111111111",1,"Ruan jian gong chen","wo shi kawaii jiang nin kang.");
-		Calendar c=Calendar.getInstance();
-		Mission m1=new Mission("Fuck me","Come to fuck fuck me",p,c);
-		m1.setMissionAttribute(1,2,1);
-		foundMissions=new ArrayList<>();
-		foundMissions.add(m1);
-		//foundMissions = new ArrayList<>();
-		//foundMissions.add()
+		netDelay(1000);
+		//PersonalInformation p=new PersonalInformation("Jiang nin kang","1111111111",1,"Ruan jian gong chen","wo shi kawaii jiang nin kang.");
+		//Calendar c=Calendar.getInstance();
+		//Mission m1=new Mission("Fuck me","Come to fuck fuck me",p,c);
+		//m1.setMissionAttribute(1,2,1);
+		//foundMissions=new ArrayList<>();
+		//foundMissions.add(m1);
+		return true;
 	}
 
 	/**
@@ -138,15 +141,9 @@ public class MyApplication extends Application
 	 * */
 	public boolean login(String id, String password)
 	{
-		if (id == null || id.equals("") || password == null || password.equals("")) return false;
-		//模拟延迟
-		try
-		{
-			Thread.sleep(1000);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		if (id == null || id.equals("") || password == null || password.equals(""))
+			return false;
+		netDelay(1000);
 		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
 		return true;
 	}
@@ -163,6 +160,8 @@ public class MyApplication extends Application
 		foundMissions = null;
 		deleteLocalAvatar();
 	}
+
+
 
 	//get方法
 
