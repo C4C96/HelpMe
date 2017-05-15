@@ -2,6 +2,8 @@ package com.androiddvptteam.helpme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +54,7 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 	@Override
 	public void onClick(View v)
 	{
+		MyApplication myApplication = (MyApplication) getApplication();
 		switch (v.getId())
 		{
 			case R.id.options_about_button:
@@ -61,7 +64,10 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 				Toast.makeText(this, "检查更新", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.options_logout_button:
-				Toast.makeText(this, "登出", Toast.LENGTH_SHORT).show();
+				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+				preference.edit().putString("password", null).apply();//退出的时候只将首选项中的密码置空，保留用户名
+				myApplication.logout();
+				finish();
 				break;
 		}
 	}

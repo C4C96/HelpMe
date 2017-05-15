@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import java.util.List;
 public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHolder> {
 
     private List<Mission> myMissionList;
-    private List<String> mySchoolNumList;
 
     public Activity activity;
 
@@ -40,10 +40,9 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         }
     }
 
-    public MissionAdapter(List<Mission> missionList,List<String> schoolNumList,Activity a)
+    public MissionAdapter(List<Mission> missionList,Activity a)
     {
         myMissionList=missionList;
-        mySchoolNumList=schoolNumList;
         activity=a;
     }
 
@@ -59,6 +58,9 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
                 Mission mission =myMissionList.get(position);
 
                 Intent intent=new Intent(activity,MissionDetail.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("thisMission", mission);
+                intent.putExtras(bundle);
                 activity.startActivity(intent);
 
             }
@@ -69,7 +71,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Mission mission=myMissionList.get(position);
-        holder.titleText.setText(mission.title);
+        holder.titleText.setText(mission.getTitle());
         String gender="",attribute="",range="";
         switch(mission.getGender())
         {

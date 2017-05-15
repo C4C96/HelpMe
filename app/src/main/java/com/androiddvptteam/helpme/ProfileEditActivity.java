@@ -1,19 +1,25 @@
 package com.androiddvptteam.helpme;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +34,8 @@ import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ProfileEditActivity extends BaseActivity implements View.OnClickListener
 {
@@ -35,13 +43,10 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	private static final int TAKE_PICTURE = 1;
 	private static final int CROP_SMALL_PICTURE = 2;
 
-	private static Uri tempUri;//修改头像选择拍照时临时图片的UI
+	private Uri tempUri;//修改头像选择拍照时临时图片的UI
 
 	private ImageView avatarImageView, genderImageView;
 	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
-
-	private PersonalInformation personalInformation;//对于存储的用户信息的引用
-	private Bitmap avatar;//对于用户头像的引用
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -55,10 +60,6 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		MyApplication myApplication = (MyApplication)getApplication();
-		personalInformation = myApplication.getPersonalInformation();
-		avatar = myApplication.getAvatar();
-
 		bind();
 	}
 
@@ -67,7 +68,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	{
 		super.onResume();
 		refreshInfo();
-	}
+	} 
 
 	/**
 	 * 绑定控件
@@ -90,6 +91,10 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	 * */
 	private void refreshInfo()
 	{
+		MyApplication myApplication = (MyApplication) getApplication();
+		PersonalInformation personalInformation = myApplication.getPersonalInformation();
+		Bitmap avatar = myApplication.getAvatar();
+		if (personalInformation == null) return;
 		introduceTextView.setText(personalInformation.getIntroduction());
 		nameTextView.setText(personalInformation.getUserName());
 		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
@@ -112,6 +117,8 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				showChoosePicDialog();
 				break;
 			case R.id.profile_edit_confirm_button:
+				MyApplication myApplication = (MyApplication) getApplication();
+				PersonalInformation personalInformation = myApplication.getPersonalInformation();
 				personalInformation.setIntroduction(introduceTextView.getText().toString());
 				break;
 		}
@@ -134,12 +141,19 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				switch (which)
 				{
 					case CHOOSE_PICTURE: // 选择本地照片
-						Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+						/* Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
 						openAlbumIntent.setType("image/*");
-						startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
+						startActivityForResult(openAlbumIntent, CHOOSE_PICTURE); */
+						if (ContextCompat.checkSelfPermission(ProfileEditActivity.this,
+									Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+									PackageManager.PERMISSION_GRANTED)
+							ActivityCompat.requestPermissions(ProfileEditActivity.this, 
+									new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+						else
+							openAlbum();									
 						break;
 					case TAKE_PICTURE: // 拍照
-						if (ContextCompat.checkSelfPermission(ProfileEditActivity.this, Manifest.permission.CAMERA)
+					/* 	if (ContextCompat.checkSelfPermission(ProfileEditActivity.this, Manifest.permission.CAMERA)
 								!= PackageManager.PERMISSION_GRANTED)
 						{
 							    //请求权限
@@ -160,7 +174,18 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 							{
 								Log.e(TAG, "Camera Security Exception.");
 							}
-						}
+						} */
+						File outputImage = new File(getExternalCacheDir(), "image.jpg");
+						if (outputImage.exists())
+							outputImage.delete();
+						if (Build.VERSION.SDK_INT >= 24)
+							tempUri = FileProvider.getUriForFile(ProfileEditActivity.this,
+											"com.androiddvptteam.helpme", outputImage);
+						else
+							tempUri = Uri.fromFile(outputImage);
+						Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
+						startActivityForResult(intent, TAKE_PICTURE);
 						break;
 				}
 			}
@@ -168,6 +193,16 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		builder.create().show();
 	}
 
+	/**
+	 * 打开相册
+	 * */
+	private void openAlbum()
+	{
+		Intent intent = new Intent("android.intent.action.GET_CONTENT");
+		intent.setType("image/*");
+		startActivityForResult(intent, CHOOSE_PICTURE);
+	}
+	
 	/**
 	 * 申请权限的回调函数
 	 * */
@@ -179,9 +214,9 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		{
 			case 1:
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-					Log.d(TAG, "Camera request permission has been granted.");
+					openAlbum();
 				else
-					Toast.makeText(this, "使用相机的请求遭到了拒绝", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "使用相册的请求遭到了拒绝", Toast.LENGTH_SHORT).show();
 				break;
 		}
 	}
@@ -197,20 +232,100 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		{
 			switch (requestCode) {
 				case TAKE_PICTURE:
-					startPhotoZoom(tempUri); // 开始对图片进行裁剪处理
+					//startPhotoZoom(tempUri); // 开始对图片进行裁剪处理
+					try
+					{
+						Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(tempUri));
+						avatarImageView.setImageBitmap(bitmap);
+					}
+					catch (FileNotFoundException e)
+					{
+						e.printStackTrace();
+					}
 					break;
 				case CHOOSE_PICTURE:
 					startPhotoZoom(data.getData()); // 开始对图片进行裁剪处理
+					/*if (Build.VERSION.SDK_INT >= 19)
+						handleImageOnKitKat(data);
+					else
+						handleImageBeforeKitKat(data);*/
 					break;
 				case CROP_SMALL_PICTURE:
 					if (data != null)
 						setImage(data); //让刚才选择裁剪得到的图片显示在界面上
-					//getContentResolver().delete(tempUri, null, null); //将临时图片删除
 					break;
 			}
 		}
 	}
 
+	/**
+	 * 4.4及以上系统使用这个方法处理图片
+	 * */
+	@TargetApi(19)
+	private void handleImageOnKitKat(Intent data)
+	{
+		String imagePath = null;
+		Uri uri = data.getData();
+		if (DocumentsContract.isDocumentUri(this, uri))
+		{
+			//如果是document类型的uri，则通过document id处理
+			String docId = DocumentsContract.getDocumentId(uri);
+			if ("com.android.providers.media.documents".equals(uri.getAuthority()))
+			{
+				String id = docId.split(":")[1];//解析出数字格式的id
+				String selection = MediaStore.Images.Media._ID + "=" + id;
+				imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+			}
+			else if ("com.android.providers.downloads.documents".equals(uri.getAuthority()))
+			{
+				Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+				imagePath = getImagePath(contentUri, null);
+			}
+		}
+		else if ("content".equalsIgnoreCase(uri.getScheme()))
+			//如果是content类型的Uri，则使用普通方式处理
+			imagePath = getImagePath(uri, null);
+		else if ("file".equalsIgnoreCase(uri.getScheme()))
+			//如果是file类型的Uri，直接获取图片路径即可
+			imagePath = uri.getPath();
+		displayImage(imagePath);
+	}
+	
+	/**
+	 * 4.4以下系统使用这个方法处理图片
+	 * */
+	private void handleImageBeforeKitKat(Intent data)
+	{
+		Uri uri = data.getData();
+		String imagePath = getImagePath(uri, null);
+		displayImage(imagePath);
+	}
+	
+	private String getImagePath(Uri uri, String selection)
+	{
+		String path = null;
+		//通过Uri和selection来获取真实的图片路径
+		Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+		if (cursor != null)
+		{
+			if (cursor.moveToFirst())
+				path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+			cursor.close();
+		}
+		return path;
+	}
+	
+	private void displayImage(String imagePath)
+	{
+		if (imagePath != null)
+		{
+			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+			avatarImageView.setImageBitmap(bitmap);
+		}
+		else
+			Toast.makeText(this, "Fail to get image", Toast.LENGTH_SHORT).show();
+	}
+	
 	/**
 	 * 裁剪图片
 	 * */

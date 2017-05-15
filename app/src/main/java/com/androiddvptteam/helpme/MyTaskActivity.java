@@ -112,7 +112,14 @@ public class MyTaskActivity extends BaseActivity
 				releasedList.refreshMissionList();
 				acceptedList.refreshMissionList();
 				doingList.refreshMissionList();
-				swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
+				runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
+					}
+				});
 				Log.d(TAG, "Refresh my list over.");
 			}
 		}).start();

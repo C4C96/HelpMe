@@ -17,8 +17,6 @@ import static com.androiddvptteam.helpme.MyTaskActivity.*;
 
 public class MyTaskListFragment extends BaseFragment
 {
-	private PersonalInformation personalInformation;//当前用户信息
-
 	private List<Mission> missionList;//列表内容
 
 	//google不让搞Fragment的构造函数，我能怎么办，我也很无奈啊
@@ -35,8 +33,6 @@ public class MyTaskListFragment extends BaseFragment
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		MyApplication myApplication = (MyApplication)getActivity().getApplication();
-		personalInformation = myApplication.getPersonalInformation();
 		refreshMissionList();
 	}
 
@@ -48,7 +44,7 @@ public class MyTaskListFragment extends BaseFragment
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myTask_recyclerView);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		MissionAdapter adapter = new MissionAdapter(missionList, null, this.getActivity());
+		MissionAdapter adapter = new MissionAdapter(missionList, this.getActivity());
 		recyclerView.setAdapter(adapter);
 		return view;
 	}
@@ -58,8 +54,15 @@ public class MyTaskListFragment extends BaseFragment
 	 * */
 	public void refreshMissionList()
 	{
+		Log.d(TAG, "refreshMissionList");
 		MyApplication myApplication = (MyApplication)getActivity().getApplication();
+		PersonalInformation personalInformation = myApplication.getPersonalInformation();
 		List<Mission> myMissions = myApplication.myMissions;
+		if (myMissions == null || personalInformation == null)
+		{
+			missionList = new ArrayList<>();
+			return;
+		}
 		switch (tabType)
 		{
 			case ALL_TAB:

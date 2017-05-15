@@ -68,6 +68,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	{
 		MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
+		if (personalInformation == null) return;
 		nameTextView.setText(personalInformation.getUserName());
 		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
 											R.drawable.gender_male:
