@@ -1,5 +1,6 @@
 package com.androiddvptteam.helpme;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -46,11 +47,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	private void bind()
 	{
 		View options_text = view.findViewById(R.id.profile_options_text),
+				myTast_button = view.findViewById(R.id.profile_my_task_button),
 				released_button = view.findViewById(R.id.profile_released_button),
 				accepted_button = view.findViewById(R.id.profile_accepted_button),
 				doing_button = view.findViewById(R.id.profile_doing_button),
 				edit_button = view.findViewById(R.id.profile_edit_button);
 		options_text.setOnClickListener(this);
+		myTast_button.setOnClickListener(this);
 		released_button.setOnClickListener(this);
 		accepted_button.setOnClickListener(this);
 		doing_button.setOnClickListener(this);
@@ -66,7 +69,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	 * */
 	private void refreshInfo()
 	{
-		MyApplication myApplication = (MyApplication) getActivity().getApplication();
+		final MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
 		if (personalInformation == null) return;
 		nameTextView.setText(personalInformation.getUserName());
@@ -74,10 +77,35 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 											R.drawable.gender_male:
 											R.drawable.gender_female);
 		introductionTextView.setText(personalInformation.getIntroduction());
+		//先拿缓存的图片凑上去
 		if (myApplication.getAvatar() != null)
 			avatarImageView.setImageBitmap(myApplication.getAvatar());
 		else
 			avatarImageView.setImageResource(R.drawable.default_avatar);
+		//再尝试联网更新用户头像
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Bitmap avatar = Bitmap.createBitmap(1,1, Bitmap.Config.RGB_565);
+				if (Tools.getUserAvatarFromWeb(myApplication.getPersonalInformation().getSchoolNumber(), avatar))
+				{
+					myApplication.setAvatar(avatar);
+					getActivity().runOnUiThread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							if (myApplication.getAvatar() != null)
+								avatarImageView.setImageBitmap(myApplication.getAvatar());
+							else
+								avatarImageView.setImageResource(R.drawable.default_avatar);
+						}
+					});
+				}
+			}
+		}).start();
 	}
 
 	@Override
@@ -87,6 +115,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 		{
 			case R.id.profile_options_text:
 				OptionsActivity.actionStart(getActivity());
+				break;
+			case R.id.profile_my_task_button:
+				MyTaskActivity.actionStart(getActivity(), MyTaskActivity.ALL_TAB);
 				break;
 			case R.id.profile_released_button:
 				MyTaskActivity.actionStart(getActivity(), MyTaskActivity.RELEASED_TAB);

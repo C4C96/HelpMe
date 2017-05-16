@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
@@ -33,7 +34,9 @@ public class MyApplication extends Application
 {
 	private PersonalInformation personalInformation;	//当前的用户信息
 	private Bitmap avatar;								//当前用户头像
-	public Config config;								//当前设置
+
+	private SharedPreferences preferences;				//默认的SharedPreferences
+
 	public List<Mission> myMissions;					//我的任务（全部种类）
 	public List<Mission> foundMissions;					//发现的任务
 
@@ -61,9 +64,10 @@ public class MyApplication extends Application
 	 * */
 	private void init()
 	{
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Config.init(preferences);
 		personalInformation = null;
 		loadLocalAvatar();
-		//config = new Config()
 		myMissions = new ArrayList<>();
 		foundMissions = new ArrayList<>();
 	}
@@ -155,7 +159,6 @@ public class MyApplication extends Application
 	{
 		personalInformation = null;
 		avatar = null;
-		config = null;
 		myMissions = null;
 		foundMissions = null;
 		deleteLocalAvatar();

@@ -68,6 +68,12 @@
 		android:layout_gravity="center"
 		android:layout_marginBottom="20dp"/>
 
+	<Button
+		android:id="@+id/profile_my_task_button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="我的任务"
+		android:gravity="left"/>
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

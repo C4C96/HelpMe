@@ -21,10 +21,20 @@
 	</android.support.v7.widget.Toolbar>
 
 	<Switch
-		android:id="@+id/options_message_remind_switch"
+		android:id="@+id/options_notification_switch"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="新消息提醒"/>
+		android:text="推送"/>
+	<Switch
+		android:id="@+id/options_sound_switch"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="声音"/>
+	<Switch
+		android:id="@+id/options_vibration_switch"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="震动"/>
 	<Button
 		android:id="@+id/options_about_button"
 		android:layout_width="match_parent"

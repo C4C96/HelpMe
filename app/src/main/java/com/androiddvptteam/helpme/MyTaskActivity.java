@@ -43,7 +43,7 @@ public class MyTaskActivity extends BaseActivity
 		int tabType = intent.getIntExtra("tabType", ALL_TAB);
 		tabLayout.getTabAt(tabType).select();
 
-		//下拉刷新
+		//设置下拉刷新
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.myTask_swipeRefresh);
 		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
 		{
@@ -53,6 +53,10 @@ public class MyTaskActivity extends BaseActivity
 				refresh();
 			}
 		});
+
+		//初次刷新
+		swipeRefreshLayout.setRefreshing(true);
+		refresh();
 	}
 
 
@@ -65,6 +69,8 @@ public class MyTaskActivity extends BaseActivity
 		List<Fragment> list_fragment = new ArrayList<>();
 		List<String> list_title = new ArrayList<>();
 		MyTaskTabAdapter adapter;
+
+		MyTaskListFragment.myApplication = (MyApplication) getApplication();
 
 		allList = new MyTaskListFragment();
 		allList.setTabType(ALL_TAB);

@@ -16,18 +16,31 @@ import android.widget.Toast;
 
 public class OptionsActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener
 {
+	private Switch notificationSwitch, soundSwitch, vibrationSwitch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_options);
+
 		//设置返回按钮
 		Toolbar toolbar = (Toolbar)findViewById(R.id.options_toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		bindView();
+		init();
+	}
+
+	/**
+	 * 初始化信息
+	 * */
+	private void init()
+	{
+		notificationSwitch.setChecked(Config.getNotificationConfig());
+		soundSwitch.setChecked(Config.getSoundConfig());
+		vibrationSwitch.setChecked(Config.getVibrationConfig());
 	}
 
 	/**
@@ -38,11 +51,15 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 		View aboutButton = findViewById(R.id.options_about_button),
 			 logoutButton = findViewById(R.id.options_logout_button),
 			 checkUpdateButton = findViewById(R.id.options_check_update_button);
-		Switch messageRemindSwitch = (Switch) findViewById(R.id.options_message_remind_switch);
+		notificationSwitch = (Switch) findViewById(R.id.options_notification_switch);
+	    soundSwitch = (Switch) findViewById(R.id.options_sound_switch);
+	    vibrationSwitch = (Switch) findViewById(R.id.options_vibration_switch);
 		aboutButton.setOnClickListener(this);
 		checkUpdateButton.setOnClickListener(this);
 		logoutButton.setOnClickListener(this);
-		messageRemindSwitch.setOnCheckedChangeListener(this);
+		notificationSwitch.setOnCheckedChangeListener(this);
+		soundSwitch.setOnCheckedChangeListener(this);
+		vibrationSwitch.setOnCheckedChangeListener(this);
 	}
 
 	public static void actionStart(Context context)
@@ -61,7 +78,30 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 				Toast.makeText(this, "关于", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.options_check_update_button:
-				Toast.makeText(this, "检查更新", Toast.LENGTH_SHORT).show();
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							//延迟个500毫秒，假装在联网
+							Thread.sleep(500);
+						} catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								//反正这破玩意也不会更新的，直接说最新就行了
+								Toast.makeText(OptionsActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+				}).start();
 				break;
 			case R.id.options_logout_button:
 				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -77,11 +117,14 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 	{
 		switch(buttonView.getId())
 		{
-			case R.id.options_message_remind_switch:
-				if(isChecked)
-					Toast.makeText(this, "新消息提醒开启", Toast.LENGTH_SHORT).show();
-				else
-					Toast.makeText(this, "新消息提醒关闭", Toast.LENGTH_SHORT).show();
+			case R.id.options_notification_switch:
+				Config.setNotificationConfig(isChecked);
+				break;
+			case R.id.options_sound_switch:
+				Config.setSoundConfig(isChecked);
+				break;
+			case R.id.options_vibration_switch:
+				Config.setVibrationConfig(isChecked);
 				break;
 		}
 	}

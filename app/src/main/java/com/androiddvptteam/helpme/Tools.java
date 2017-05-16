@@ -1,6 +1,8 @@
 package com.androiddvptteam.helpme;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 /**
  * 工具类，放各种静态工具函数
@@ -18,7 +20,7 @@ public class Tools
 		netDelay(1000);
 		//avatar = XXX		←不要这样赋值
 		//avatar.set****	←这样赋值
-		return true;
+		return false;
 	}
 
 	/**
