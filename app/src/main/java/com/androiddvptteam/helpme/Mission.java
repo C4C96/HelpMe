@@ -4,8 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.androiddvptteam.helpme.Connection.AbandonConnection;
+import com.androiddvptteam.helpme.Connection.CancelConnection;
+import com.androiddvptteam.helpme.Connection.FinishConnection;
+import com.androiddvptteam.helpme.Connection.ReceiveConnection;
+import com.androiddvptteam.helpme.Connection.ReleaseConnection;
 import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
 
+import java.net.URL;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Calendar;
@@ -45,11 +51,17 @@ public class Mission implements Serializable
      * */
     public Mission(@NonNull String              title,
                    @NonNull String              content,
+				   @NonNull int                 gender,
+				   @NonNull int                 attribute,
+				   @NonNull int                 range,
                    @NonNull PersonalInformation publisher,
                    @NonNull Calendar            createTime)
     {
         this.title = title;
         this.content = content;
+		this.gender = gender;
+		this.attribute = attribute;
+		this.range = range;
         this.publisher = publisher;
         this.createTime = createTime;
         this.ID = generateID();
@@ -169,12 +181,29 @@ public class Mission implements Serializable
 		public static boolean releaseMission(@NonNull Context context,
 											 @NonNull Mission mission)
 		{
-			netDelay(1000);
-			//如果ID撞了（按发布按钮了会关掉窗口的吧，一秒发出两个也蛮厉害的），如下操作：
-			//Toast.makeText(context, "发布失败", Toast.LENGTH_SHORT).show();
-			//return false;
-			//如果因为网络原因连不到后端，如上操作，后面几个函数同理
-			return true;
+			ReleaseConnection connection;
+			boolean result=true;
+			try
+			{
+				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+				connection.setAttributes(mission);
+				connection.connect();
+				if(connection.connectionResult)
+					result=true;
+				else
+				{
+					result = false;
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+//			//如果ID撞了（按发布按钮了会关掉窗口的吧，一秒发出两个也蛮厉害的），如下操作：
+//			//Toast.makeText(context, "发布失败", Toast.LENGTH_SHORT).show();
+//			//return false;
+//			//如果因为网络原因连不到后端，如上操作，后面几个函数同理
+			return result;
 		}
 
 		/**
@@ -196,17 +225,36 @@ public class Mission implements Serializable
 				mission.state = STATE_DOING;
 				mission.recipient = recipient;
 				mission.receiveTime = receivedTime;
-				netDelay(1000);
-				//if (网络原因失败了)
-				//{
-				//	对本地信息回滚
-				//	mission.state = STATE_UNRECEIVED;
-				//	mission.recipient = null;
-				//	mission.receiveTime = null;
-				//	Toast.***
-				//	return false;
-				//}
-				return true;
+
+				ReceiveConnection connection;
+				boolean result=true;
+				try
+				{
+					connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
+					connection.setAttributes(mission,recipient,receivedTime);
+					connection.connect();
+					if(connection.connectionResult)
+						result=true;
+					else
+					{
+						result = false;
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				if (!result)
+				{
+					//对本地信息回滚
+					mission.state = STATE_UNRECEIVED;
+					mission.recipient = null;
+					mission.receiveTime = null;
+					//Toast.***
+					return false;
+				}
+				else
+					return true;
 			}
 			else
 			{
@@ -230,16 +278,35 @@ public class Mission implements Serializable
 			{
 				mission.state = STATE_FINISHED;
 				mission.finishTime = finishTime;
-				netDelay(1000);
-				//if (网络原因失败了)
-				//{
-				//	对本地信息回滚
-				//	mission.state = STATE_DOING;
-				//	mission.finishTime = null;
-				//	Toast.***
-				//	return false;
-				//}
-				return true;
+
+				FinishConnection connection;
+				boolean result=true;
+				try
+				{
+					connection=new FinishConnection(new URL("http://123.206.125.166:8080/AndroidServlet/FinishServlet"));
+					connection.setAttributes(mission,finishTime);
+					connection.connect();
+					if(connection.connectionResult)
+						result=true;
+					else
+					{
+						result = false;
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				if (!result)
+				{
+					//对本地信息回滚
+					mission.state = STATE_DOING;
+					mission.finishTime = null;
+					//Toast.***
+					return false;
+				}
+				else
+					return true;
 			}
 			else
 			{
@@ -264,16 +331,35 @@ public class Mission implements Serializable
 			{
 				mission.state = STATE_CANCELED;
 				mission.cancelTime = cancelTime;
-				netDelay(1000);
-				//if (网络原因失败了)
-				//{
-				//	对本地信息回滚
-				//	mission.state = ori_state;
-				//	mission.cancelTime = null;
-				//	Toast.***
-				//	return false;
-				//}
-				return true;
+
+				CancelConnection connection;
+				boolean result=true;
+				try
+				{
+					connection=new CancelConnection(new URL("http://123.206.125.166:8080/AndroidServlet/CancelServlet"));
+					connection.setAttributes(mission,cancelTime);
+					connection.connect();
+					if(connection.connectionResult)
+						result=true;
+					else
+					{
+						result = false;
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				if (!result)
+				{
+					//对本地信息回滚
+					mission.state = ori_state;
+					mission.cancelTime = null;
+					//Toast.***
+					return false;
+				}
+				else
+					return true;
 			}
 			else
 			{
@@ -289,7 +375,8 @@ public class Mission implements Serializable
 		 * @return      是否成功，若失败则表明该任务未被接收或已完成或已取消
 		 * */
 		public boolean abandon(@NonNull Context context,
-							   @NonNull Mission mission)
+							   @NonNull Mission mission,
+							   @NonNull Calendar abandonTime)
 		{
 			PersonalInformation ori_recipient = mission.recipient;
 			Calendar ori_receiveTime = mission.receiveTime;
@@ -298,17 +385,36 @@ public class Mission implements Serializable
 				mission.state = STATE_UNRECEIVED;
 				mission.recipient = null;
 				mission.receiveTime = null;
-				netDelay(1000);
-				//if (网络原因失败了)
-				//{
-				//	对本地信息回滚
-				//	mission.state = STATE_DOING;
-				//	mission.recipient = ori_recipient;
-				//  mission.receiveTime = ori_receiveTime;
-				//	Toast.***
-				//	return false;
-				//}
-				return true;
+
+				AbandonConnection connection;
+				boolean result=true;
+				try
+				{
+					connection=new AbandonConnection(new URL("http://123.206.125.166:8080/AndroidServlet/AbandonServlet"));
+					connection.setAttributes(mission,abandonTime);
+					connection.connect();
+					if(connection.connectionResult)
+						result=true;
+					else
+					{
+						result = false;
+					}
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				if (!result)
+				{
+					//对本地信息回滚
+					mission.state = STATE_DOING;
+					mission.recipient = ori_recipient;
+					mission.receiveTime = ori_receiveTime;
+					//Toast.***
+					return false;
+				}
+				else
+					return true;
 			}
 			else
 			{
@@ -316,6 +422,5 @@ public class Mission implements Serializable
 				return false;
 			}
 		}
-
 	}
 }

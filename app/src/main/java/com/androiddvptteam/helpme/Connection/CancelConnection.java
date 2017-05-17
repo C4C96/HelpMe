@@ -7,54 +7,41 @@ import java.net.*;
 import java.util.Calendar;
 
 /*
-* 发布者发布任务
+* 发布者取消任务
 * */
 
-public class ReleaseConnection extends URLConnection
+public class CancelConnection extends URLConnection
 {
     public HttpURLConnection urlConnection = null;
     public URL url = null;
 
-    private String ID;
-    private String title;
-    private String content;
-    private String publisherSchoolNumber;  //发布者的学号
-    private int gender;       //性别
-    private int attribute;    //标签
-    private int range;       //范围
-    private Calendar createTime;//任务创建时间
-    private int year;//任务创建时间——年份
-    private int month;//任务创建时间——月份
-    private int day;//任务创建时间——日期
-    private int hour;//任务创建时间——时
-    private int minute;//任务创建时间——分
-    private int second;//任务创建时间——秒
+    private String ID;//任务ID
+    private String schoolNumber;//发布者的学号
+    private int year;//任务完成时间——年份
+    private int month;//任务完成时间——月份
+    private int day;//任务完成时间——日期
+    private int hour;//任务完成时间——时
+    private int minute;//任务完成时间——分
+    private int second;//任务完成时间——秒
 
     public  boolean connectionResult;//判断连接结果是否正常
 
-    public ReleaseConnection(URL url)
+    public CancelConnection(URL url)
     {
         super(url);
         this.url=url;
     }
 
-    public void setAttributes(Mission mission)
+    public void setAttributes(Mission mission,Calendar time)
     {
         this.ID=mission.getID();
-        this.title=mission.getTitle();
-        this.content=mission.getContent();
-        this.publisherSchoolNumber=mission.getPublisher().getSchoolNumber();
-        this.gender=mission.getGender();
-        this.attribute=mission.getAttribute();
-        this.range=mission.getRange();
-
-        createTime=mission.getCreateTime();
-        this.year=createTime.get(Calendar.YEAR);
-        this.month=createTime.get(Calendar.MONTH);
-        this.day=createTime.get(Calendar.DATE);
-        this.hour=createTime.get(Calendar.HOUR_OF_DAY);
-        this.minute=createTime.get(Calendar.MINUTE);
-        this.second=createTime.get(Calendar.SECOND);
+        this.schoolNumber=mission.getPublisher().getSchoolNumber();//发布者的学号
+        this.year=time.get(Calendar.YEAR);
+        this.month=time.get(Calendar.MONTH);
+        this.day=time.get(Calendar.DATE);
+        this.hour=time.get(Calendar.HOUR_OF_DAY);
+        this.minute=time.get(Calendar.MINUTE);
+        this.second=time.get(Calendar.SECOND);
     }
 
     public void connect() throws IOException
@@ -75,13 +62,8 @@ public class ReleaseConnection extends URLConnection
             JSONObject json = new JSONObject();//创建json对象
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
-            json.put("ID", this.ID);
-            json.put("title", URLEncoder.encode(this.title, "UTF-8"));
-            json.put("content", URLEncoder.encode(this.content, "UTF-8"));
-            json.put("publisherSchoolNumber",URLEncoder.encode(this.publisherSchoolNumber, "UTF-8"));
-            json.put("gender", this.gender);
-            json.put("attribute", this.attribute);
-            json.put("range", this.range);
+            json.put("ID", URLEncoder.encode(this.ID, "UTF-8"));
+            json.put("schoolNumber", URLEncoder.encode(this.schoolNumber, "UTF-8"));
             json.put("year",  this.year);
             json.put("month", this.month);
             json.put("day", this.day);
@@ -101,26 +83,7 @@ public class ReleaseConnection extends URLConnection
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-            {
                 connectionResult=true;
-//                //字符流读取服务端返回的数据
-//                InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
-//                BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
-//                String str = null;
-//                StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
-//
-//                while ((str = br.readLine()) != null)
-//                {
-//                    //BufferedReader特有功能，一次读取一行数据
-//                    buffer.append(str);
-//                }
-//                in.close();
-//                br.close();
-//                JSONObject rjson = new JSONObject(buffer.toString());
-//
-//                result = rjson.getString("test");//从json对象中得到相应key的值
-//                setResult(result);
-            }
             else
                 connectionResult=false;
         }

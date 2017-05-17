@@ -6,7 +6,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+import com.androiddvptteam.helpme.Connection.LoginConnection;
+import com.androiddvptteam.helpme.Connection.MyMissionConnection;
+import com.androiddvptteam.helpme.Connection.ReceiveConnection;
+import com.androiddvptteam.helpme.Connection.ReleaseConnection;
 import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
@@ -20,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -113,13 +119,34 @@ public class MyApplication extends Application
 	 * */
 	public boolean refreshMyMissions()
 	{
-		netDelay(1000);
-		//myMissions = new ArrayList<>();
-		//myMissions.add()
-		return true;
+		MyMissionConnection connection;
+		boolean result=true;
+		try
+		{
+			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
+			connection.setPublisher(personalInformation);
+			connection.connect();
+
+			myMissions=connection.getList();
+
+			if(connection.connectionResult)
+				result=true;
+			else//链接服务器失败
+			{
+				result = false;
+			}
+			if(!connection.listResult)
+				result=false;//此时没有找到这个人发布的信息
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**
+	 * 可以接收的任务
 	 * 刷新foundMissions，可以先写一些测试信息
 	 * 执行之后对foundMissions重新赋值，使其内容为最新的找到可以接的任务
 	 * 若失败则保持foundMissions不变，但不能是null，若是null则给一个空集合
@@ -127,14 +154,30 @@ public class MyApplication extends Application
 	 * */
 	public boolean refreshFoundMissions()
 	{
-		netDelay(1000);
-		//PersonalInformation p=new PersonalInformation("Jiang nin kang","1111111111",1,"Ruan jian gong chen","wo shi kawaii jiang nin kang.");
-		//Calendar c=Calendar.getInstance();
-		//Mission m1=new Mission("Fuck me","Come to fuck fuck me",p,c);
-		//m1.setMissionAttribute(1,2,1);
-		//foundMissions=new ArrayList<>();
-		//foundMissions.add(m1);
-		return true;
+		MyMissionConnection connection;
+		boolean result=true;
+		try
+		{
+			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
+			connection.setPublisher(personalInformation);
+			connection.connect();
+
+			myMissions=connection.getList();
+
+			if(connection.connectionResult)
+				result=true;
+			else//链接服务器失败
+			{
+				result = false;
+			}
+			if(!connection.listResult)
+				result=false;//此时没有任何可以接收的任务
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**
@@ -147,9 +190,31 @@ public class MyApplication extends Application
 	{
 		if (id == null || id.equals("") || password == null || password.equals(""))
 			return false;
-		netDelay(1000);
-		personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
-		return true;
+		LoginConnection connection;
+		boolean result=true;
+		try
+		{
+			connection=new LoginConnection(new URL("http://123.206.125.166:8080/AndroidServlet/LoginServlet"));
+			connection.setAttributes(id,password);
+			connection.connect();
+			if(connection.connectionResult)
+				result=true;
+			else
+			{
+				result = false;
+			}
+			//这句话还没写完。。。写不动了。。。改天写。。。——YB
+			if(connection.getResult().equals("success"))//连接成功
+				personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
+			else
+				return  false;
+		}
+		catch (Exception e)
+		{
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**
