@@ -3,6 +3,7 @@ package com.androiddvptteam.helpme;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,8 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class ProfileEditActivity extends BaseActivity implements View.OnClickListener
 {
@@ -43,7 +46,8 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	private static final int TAKE_PICTURE = 1;
 	private static final int CROP_SMALL_PICTURE = 2;
 
-	private Uri tempUri;//修改头像选择拍照时临时图片的UI
+	private Uri tempUri;//修改头像选择拍照时临时图片的URI
+	File outputImage;//修改头像选择拍照时临时图片
 
 	private ImageView avatarImageView, genderImageView;
 	private TextView nameTextView, schoolNumView, introduceTextView, departmentTextView;
@@ -141,9 +145,6 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				switch (which)
 				{
 					case CHOOSE_PICTURE: // 选择本地照片
-						/* Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
-						openAlbumIntent.setType("image/*");
-						startActivityForResult(openAlbumIntent, CHOOSE_PICTURE); */
 						if (ContextCompat.checkSelfPermission(ProfileEditActivity.this,
 									Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
 									PackageManager.PERMISSION_GRANTED)
@@ -153,34 +154,12 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 							openAlbum();									
 						break;
 					case TAKE_PICTURE: // 拍照
-					/* 	if (ContextCompat.checkSelfPermission(ProfileEditActivity.this, Manifest.permission.CAMERA)
-								!= PackageManager.PERMISSION_GRANTED)
-						{
-							    //请求权限
-							    ActivityCompat.requestPermissions(ProfileEditActivity.this,
-								            new String[]{Manifest.permission.CAMERA}, 1);
-						}
-						else
-						{
-							try
-							{
-								Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-								tempUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.jpg"));
-								// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
-								openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
-								startActivityForResult(openCameraIntent, TAKE_PICTURE);
-							}
-							catch (SecurityException e)
-							{
-								Log.e(TAG, "Camera Security Exception.");
-							}
-						} */
-						File outputImage = new File(getExternalCacheDir(), "image.jpg");
+						outputImage = new File(getExternalCacheDir(), "image.jpg");
 						if (outputImage.exists())
 							outputImage.delete();
 						if (Build.VERSION.SDK_INT >= 24)
 							tempUri = FileProvider.getUriForFile(ProfileEditActivity.this,
-											"com.androiddvptteam.helpme", outputImage);
+											"com.androiddvptteam.helpme.fileprovider", outputImage);
 						else
 							tempUri = Uri.fromFile(outputImage);
 						Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -232,30 +211,26 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		{
 			switch (requestCode) {
 				case TAKE_PICTURE:
-					//startPhotoZoom(tempUri); // 开始对图片进行裁剪处理
-					try
-					{
-						Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(tempUri));
-						avatarImageView.setImageBitmap(bitmap);
-					}
-					catch (FileNotFoundException e)
-					{
-						e.printStackTrace();
-					}
+					Log.d(TAG, "ActivityResult: TAKE_PICTURE");
+					startPhotoZoom(); // 开始对图片进行裁剪处理
 					break;
 				case CHOOSE_PICTURE:
-					startPhotoZoom(data.getData()); // 开始对图片进行裁剪处理
-					/*if (Build.VERSION.SDK_INT >= 19)
+					Log.d(TAG, "ActivityResult: CHOOSE_PICTURE");
+					if (Build.VERSION.SDK_INT >= 19)
 						handleImageOnKitKat(data);
 					else
-						handleImageBeforeKitKat(data);*/
+						handleImageBeforeKitKat(data);
+					startPhotoZoom();
 					break;
 				case CROP_SMALL_PICTURE:
+					Log.d(TAG, "ActivityResult: CROP_SMALL_PICTURE");
 					if (data != null)
 						setImage(data); //让刚才选择裁剪得到的图片显示在界面上
 					break;
 			}
 		}
+		else
+			Log.d(TAG, "Result:"+resultCode+" ,Request:"+requestCode);
 	}
 
 	/**
@@ -319,8 +294,7 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	{
 		if (imagePath != null)
 		{
-			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-			avatarImageView.setImageBitmap(bitmap);
+			outputImage = new File(imagePath);
 		}
 		else
 			Toast.makeText(this, "Fail to get image", Toast.LENGTH_SHORT).show();
@@ -329,13 +303,11 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 	/**
 	 * 裁剪图片
 	 * */
-	protected void startPhotoZoom(Uri uri)
+	protected void startPhotoZoom()
 	{
-		if (uri == null)
-			Log.e(TAG, "The uri is not exist.");
-		tempUri = uri;
+		Log.d(TAG, "startPhotoZoom");
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
+		intent.setDataAndType(getImageContentUri(this, outputImage), "image/*");
 		// 设置裁剪
 		intent.putExtra("crop", "true");
 		// aspectX aspectY 是宽高的比例
@@ -348,13 +320,62 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 		startActivityForResult(intent, CROP_SMALL_PICTURE);
 	}
 
-	//设置图片
+	/**
+	 * 将多媒体相关文件的File Uri转换成Content Uri
+	 * */
+	private Uri getImageContentUri(Context context, File imageFile)
+	{
+		String filePath = imageFile.getAbsolutePath();
+		Cursor cursor = context.getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				new String[] { MediaStore.Images.Media._ID },
+				MediaStore.Images.Media.DATA + "=? ",
+				new String[] { filePath }, null);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			int id = cursor.getInt(cursor
+					.getColumnIndex(MediaStore.MediaColumns._ID));
+			Uri baseUri = Uri.parse("content://media/external/images/media");
+			return Uri.withAppendedPath(baseUri, "" + id);
+		} else {
+			if (imageFile.exists()) {
+				ContentValues values = new ContentValues();
+				values.put(MediaStore.Images.Media.DATA, filePath);
+				return context.getContentResolver().insert(
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+			} else {
+				return null;
+			}
+		}
+	}
+
+	/**
+	 * 裁剪完设置图片
+	 * */
 	protected void setImage(Intent data) {
 		Bundle extras = data.getExtras();
 		if (extras != null)
 		{
-			Bitmap photo = extras.getParcelable("data");
-			((MyApplication)getApplication()).setAvatar(photo);
+			final Bitmap photo = extras.getParcelable("data");
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (!((MyApplication)getApplication()).setAvatar(photo))
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Toast.makeText(ProfileEditActivity.this, "更新头像失败", Toast.LENGTH_SHORT).show();
+							}
+						});
+					else
+						avatarImageView.setImageBitmap(((MyApplication)getApplication()).getAvatar());
+				}
+			}).start();
+
 		}
 	}
 

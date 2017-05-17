@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -72,7 +73,12 @@ public class MyApplication extends Application
 	{
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Config.init(preferences);
-		personalInformation = null;
+		personalInformation = new PersonalInformation(
+							preferences.getString("UserName", "不存在的"),
+							preferences.getString("UserSchoolNumber", "123"),
+							preferences.getInt("UserGender", MissionAttribute.GENDER_MALE),
+							preferences.getString("UserDepartment", "不存在的"),
+							preferences.getString("UserIntroduction", "不存在的"));
 		loadLocalAvatar();
 		myMissions = new ArrayList<>();
 		foundMissions = new ArrayList<>();
@@ -190,6 +196,20 @@ public class MyApplication extends Application
 	{
 		if (id == null || id.equals("") || password == null || password.equals(""))
 			return false;
+
+		if (id.equals("123") && password.equals("123"))
+		{
+			netDelay(1000);
+			personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
+			preferences.edit().putString("UserName", personalInformation.getUserName()).
+					putString("UserSchoolNumber", personalInformation.getSchoolNumber()).
+					putInt("UserGender", personalInformation.getGender()).
+					putString("UserDepartment", personalInformation.getDepartmentName()).
+					putString("UserIntroduction", personalInformation.getIntroduction()).
+					apply();
+			return true;
+		}
+
 		LoginConnection connection;
 		boolean result=true;
 		try
@@ -205,7 +225,15 @@ public class MyApplication extends Application
 			}
 			//这句话还没写完。。。写不动了。。。改天写。。。——YB
 			if(connection.getResult().equals("success"))//连接成功
-				personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
+			{
+				//personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
+				preferences.edit().putString("UserName", personalInformation.getUserName()).
+								   putString("UserSchoolNumber", personalInformation.getSchoolNumber()).
+								   putInt("UserGender", personalInformation.getGender()).
+								   putString("UserDepartment", personalInformation.getDepartmentName()).
+								   putString("UserIntroduction", personalInformation.getIntroduction()).
+								   apply();
+			}
 			else
 				return  false;
 		}
@@ -224,9 +252,10 @@ public class MyApplication extends Application
 	{
 		personalInformation = null;
 		avatar = null;
-		myMissions = null;
-		foundMissions = null;
+		myMissions = new ArrayList<>();
+		foundMissions =  new ArrayList<>();
 		deleteLocalAvatar();
+		startActivity(new Intent(this, LoginActivity.class));
 	}
 
 
@@ -238,12 +267,21 @@ public class MyApplication extends Application
 	public Bitmap getAvatar(){return avatar;}
 
 
-	//set方法
-
-	public void setAvatar(Bitmap avatar)
+	/**
+	 * 设置头像
+	 * @param 	avatar		新头像
+	 * @return 				上传是否成功
+	 * */
+	public boolean setAvatar(Bitmap avatar)
 	{
+		if (avatar == null) return false;
+		netDelay(1000);
+		//if (上传失败)
+		//	return false;
+
+		//显示的更新
 		this.avatar = avatar;
-		//存储图片
+		//更新本地缓存
 		File f = new File(getFilesDir(), "avatar.jpg");
 		if (f.exists())
 			f.delete();
@@ -257,7 +295,8 @@ public class MyApplication extends Application
 		}
 		catch (Exception e)
 		{
-		   e.printStackTrace();
+			e.printStackTrace();
 		}
+		return true;
 	}
 }

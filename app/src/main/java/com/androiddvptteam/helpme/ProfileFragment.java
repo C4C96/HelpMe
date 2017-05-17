@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androiddvptteam.helpme.MissionAttribute.MissionAttribute;
 
@@ -30,7 +31,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	{
 		view = inflater.inflate(R.layout.profile_fragment, container, false);
 		bind();
-		//refreshInfo();
 		return view;
 	}
 
@@ -71,7 +71,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 	{
 		final MyApplication myApplication = (MyApplication) getActivity().getApplication();
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
-		if (personalInformation == null) return;
+		if (personalInformation == null) {
+			Toast.makeText(myApplication, "null Profile", Toast.LENGTH_SHORT).show(); return;}
 		nameTextView.setText(personalInformation.getUserName());
 		genderImageView.setImageResource(personalInformation.getGender() == MissionAttribute.GENDER_MALE?
 											R.drawable.gender_male:

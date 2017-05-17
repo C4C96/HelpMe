@@ -107,7 +107,6 @@ public class OptionsActivity extends BaseActivity implements View.OnClickListene
 				SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
 				preference.edit().putString("password", null).apply();//退出的时候只将首选项中的密码置空，保留用户名
 				myApplication.logout();
-				finish();
 				break;
 		}
 	}
