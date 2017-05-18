@@ -3,6 +3,7 @@ package com.androiddvptteam.helpme;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +29,9 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.GroundOverlayOptions;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -39,6 +43,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +66,7 @@ public class MapFragment extends BaseFragment
     private TextView positionText;
     private BitmapDescriptor mIconLocation;
     private MyLocationConfiguration.LocationMode locationMode;
-    private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.coordinate);//图标
+    private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.dingwei);//图标
     @Nullable
     @Override
 
@@ -237,51 +242,193 @@ public class MapFragment extends BaseFragment
         baiduMap.setMyLocationEnabled(false);
     }
 
-    public void addInfosOverlay(final List<Info> infos)
-    {//加载覆盖物
-        baiduMap.clear();
-        LatLng latLng = null;
-        OverlayOptions overlayOptions = null;
-        Marker marker = null;//地图覆盖物
-        for (Info info : infos)
-        {//循环的将模拟数据标记
-            latLng = new LatLng(info.getLatitude(), info.getLongitude());//获取经纬度
-            overlayOptions = new MarkerOptions().position(latLng).icon(mbitmap).zIndex(5);//设置maker位置，图标，层级
-            marker = (Marker) (baiduMap.addOverlay(overlayOptions));
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("info", (Serializable) info);
-            marker.setExtraInfo(bundle);
-        }
-        // 将地图移到到最后一个经纬度位置
-        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
-        baiduMap.setMapStatus(update);
-    }
+//    public void addInfosOverlay(final List<Info> infos)
+//    {//加载覆盖物
+//        baiduMap.clear();
+//        LatLng latLng = null;
+//        OverlayOptions overlayOptions = null;
+//        Marker marker = null;//地图覆盖物
+//        for (Info info : infos)
+//        {//循环的将模拟数据标记
+//            latLng = new LatLng(info.getLatitude(), info.getLongitude());//获取经纬度
+//            overlayOptions = new MarkerOptions().position(latLng).icon(mbitmap).zIndex(5);//设置maker位置，图标，层级
+//            marker = (Marker) (baiduMap.addOverlay(overlayOptions));
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("info", (Serializable) info);
+//            marker.setExtraInfo(bundle);
+//        }
+//        // 将地图移到到最后一个经纬度位置
+//        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
+//        baiduMap.setMapStatus(update);
+//    }
+//
+//    public void initmapEvent()
+//    {//地图长按事件监听回调函数
+//        //baiduMap.setOnMapLongClickListener(mlongclicklistener);
+//        BaiduMap.OnMarkerClickListener mMarkerlis=new BaiduMap.OnMarkerClickListener()
+//        {
+//            @Override
+//            public boolean onMarkerClick(Marker marker)
+//            {
+//                Info Info=(Info) marker.getExtraInfo().get("info");
+//                InfoWindow mInfoWindow;//生成一个TextView用户在地图中显示InfoWindow
+//                TextView location = new TextView(getActivity().getApplicationContext());
+//                location.setBackgroundResource(R.drawable.coordinate);
+//                location.setPadding(30, 20, 30, 50);
+//                location.setText(Info.getName());//将marker所在的经纬度的信息转化成屏幕上的坐标
+//                final LatLng ll = marker.getPosition();
+//                Point p = baiduMap.getProjection().toScreenLocation(ll);
+//                p.y -= 50;
+//                LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
+//                //为弹出的InfoWindow添加点击事件
+//                mInfoWindow = new InfoWindow(location, llInfo, -47);
+//                //显示InfoWindow
+//                baiduMap.showInfoWindow(mInfoWindow);
+//                return true;
+//            }
+//        };
+//        baiduMap.setOnMarkerClickListener(mMarkerlis);
+//    }
+    private Marker mMarkerA;
+    private Marker mMarkerB;
+    private Marker mMarkerC;
+    private Marker mMarkerD;
+    private InfoWindow mInfoWindow;
+    private BitmapDescriptor bdA;
+    private BitmapDescriptor bdB;
+    private BitmapDescriptor bdC;
+    private BitmapDescriptor bdD;
+    private BitmapDescriptor bd;
+    private BitmapDescriptor bdGround;
+    public void initOverlay() {
+        //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
+        LatLng llA = new LatLng(39.963175, 116.400244);
+        LatLng llB = new LatLng(39.942821, 116.369199);
+        LatLng llC = new LatLng(39.939723, 116.425541);
+        LatLng llD = new LatLng(39.906965, 116.401394);
+        //LatLng llText = new LatLng(39.86923, 116.397428);
 
-    public void initmapEvent()
-    {//地图长按事件监听回调函数
-        //baiduMap.setOnMapLongClickListener(mlongclicklistener);
-        BaiduMap.OnMarkerClickListener mMarkerlis=new BaiduMap.OnMarkerClickListener()
-        {
-            @Override
-            public boolean onMarkerClick(Marker marker)
-            {
-                Info Info=(Info) marker.getExtraInfo().get("info");
-                InfoWindow mInfoWindow;//生成一个TextView用户在地图中显示InfoWindow
-                TextView location = new TextView(getActivity().getApplicationContext());
-                location.setBackgroundResource(R.drawable.coordinate);
-                location.setPadding(30, 20, 30, 50);
-                location.setText(Info.getName());//将marker所在的经纬度的信息转化成屏幕上的坐标
-                final LatLng ll = marker.getPosition();
-                Point p = baiduMap.getProjection().toScreenLocation(ll);
-                p.y -= 50;
-                LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
-                //为弹出的InfoWindow添加点击事件
-                mInfoWindow = new InfoWindow(location, llInfo, -47);
-                //显示InfoWindow
-                baiduMap.showInfoWindow(mInfoWindow);
+        //这里是将图标转化为对象
+        bdA = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+        bdB = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+        bdC = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+        bdD = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+        bd = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+        bdGround = BitmapDescriptorFactory
+                .fromResource(R.drawable.dingwei);
+
+        //定义四种不同类型的覆盖物
+        OverlayOptions ooA = new MarkerOptions().position(llA).icon(bdA)
+                .zIndex(9).draggable(true);//OverlayOptions 地图覆盖物选型
+
+        mMarkerA = (Marker) (baiduMap.addOverlay(ooA));//addOverlay在当前图层添加覆盖物对象
+        OverlayOptions ooB = new MarkerOptions().position(llB).icon(bdB)
+                .zIndex(5);
+        mMarkerB = (Marker) (baiduMap.addOverlay(ooB));
+        OverlayOptions ooC = new MarkerOptions().position(llC).icon(bdC)
+                .perspective(false).anchor(0.5f, 0.5f).rotate(30).zIndex(7);
+        mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
+        //将A,B,C三种坐标添加到list中
+        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
+        giflist.add(bdA);
+        giflist.add(bdB);
+        giflist.add(bdC);
+        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
+                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
+        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
+
+        //构建文字Option对象，用于在地图上添加文字
+//          OverlayOptions textOption = new TextOptions()
+//              .bgColor(0xAAFFFF00)
+//              .fontSize(24)
+//              .fontColor(0xFFFF00FF)
+//              .text("百度地图SDK")
+//              .rotate(-30)
+//              .position(llText);
+//          //在地图上添加该文字对象并显示
+//          mMarkerE = (Marker) (mBaiduMap.addOverlay(textOption));
+
+        // add ground overlay
+        LatLng southwest = new LatLng(39.92235, 116.380338);
+        LatLng northeast = new LatLng(39.947246, 116.414977);
+        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
+                .include(southwest).build();
+
+        OverlayOptions ooGround = new GroundOverlayOptions()
+                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
+        baiduMap.addOverlay(ooGround);
+
+        //生成变化地图状态
+        MapStatusUpdate u = MapStatusUpdateFactory
+                .newLatLng(bounds.getCenter());//newLatLng设置地图新中心点
+        //设置地图状态
+        baiduMap.setMapStatus(u);
+    }
+    private void initOverlayListener() {
+        //设置坐标点击事件
+        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+            public boolean onMarkerClick(final Marker marker) {
+                Button button = new Button(getContext());
+                button.setBackgroundResource(R.drawable.dingwei);
+                InfoWindow.OnInfoWindowClickListener listener = null;
+                if (marker == mMarkerA || marker == mMarkerD) {
+                    button.setText("更改位置");
+                    listener = new InfoWindow.OnInfoWindowClickListener() {
+                        public void onInfoWindowClick() {
+                            LatLng ll = marker.getPosition();
+                            LatLng llNew = new LatLng(ll.latitude + 0.005,
+                                    ll.longitude + 0.005);//改变坐标的维度和经度
+                            marker.setPosition(llNew);//设置坐标的位置
+                            baiduMap.hideInfoWindow();//隐藏消息窗
+                        }
+                    };
+                    LatLng ll = marker.getPosition();
+                    mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
+                   baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+                } else if (marker == mMarkerB) {
+                    button.setText("更改图标");
+                    button.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            marker.setIcon(bd);//改变坐标的图标
+                            baiduMap.hideInfoWindow();//隐藏消息窗
+                        }
+                    });
+                    LatLng ll = marker.getPosition();
+                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
+                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+                } else if (marker == mMarkerC) {
+                    button.setText("删除");
+                    button.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            marker.remove();//删除坐标
+                            baiduMap.hideInfoWindow();//隐藏消息窗
+                        }
+                    });
+                    LatLng ll = marker.getPosition();
+                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
+                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+                }
                 return true;
             }
-        };
-        baiduMap.setOnMarkerClickListener(mMarkerlis);
+        });
+
+        //地图点击事件
+        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+
+            @Override
+            public boolean onMapPoiClick(MapPoi arg0) {
+                return false;
+            }
+
+            @Override
+            public void onMapClick(LatLng arg0) {
+                baiduMap.hideInfoWindow();
+            }
+        });
     }
 }
