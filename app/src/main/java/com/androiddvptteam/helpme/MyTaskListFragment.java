@@ -17,6 +17,7 @@ import static com.androiddvptteam.helpme.MyTaskActivity.*;
 
 public class MyTaskListFragment extends BaseFragment
 {
+	public static MyApplication myApplication;//生成MyTaskListFragment对象时不一定能getActivity()，所以通过这种方式获得MyApplication实例
 	private List<Mission> missionList;//列表内容
 
 	//google不让搞Fragment的构造函数，我能怎么办，我也很无奈啊
@@ -55,7 +56,7 @@ public class MyTaskListFragment extends BaseFragment
 	public void refreshMissionList()
 	{
 		Log.d(TAG, "refreshMissionList");
-		MyApplication myApplication = (MyApplication)getActivity().getApplication();
+
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
 		List<Mission> myMissions = myApplication.myMissions;
 		if (myMissions == null || personalInformation == null)

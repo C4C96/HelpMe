@@ -6,21 +6,21 @@
 	android:layout_height="match_parent">
 
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/missionlist_toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:background="?attr/colorPrimary"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/missionlist_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-		<TextView
-			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="任务列表" />
-	</android.support.v7.widget.Toolbar>
+        <TextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="任务列表" />
+    </android.support.v7.widget.Toolbar>
 
 	<LinearLayout
 		android:layout_width="match_parent"
