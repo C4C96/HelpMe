@@ -47,23 +47,20 @@ import static com.androiddvptteam.helpme.R.layout.support_simple_spinner_dropdow
 import static com.baidu.mapapi.BMapManager.init;
 import java.io.Serializable;
 
-public class MapFragment extends BaseFragment
-{
-    public LocationClient mLocationClient;//定位客户端
+public class MapFragment extends BaseFragment {
+	public LocationClient mLocationClient;//定位客户端
     public MyLocationListener mMyLocationListener;  //定位监听器
     private MyLocationConfiguration.LocationMode mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;//是否是第一次定位
     private volatile boolean isFristLocation = true;//初始化定位相关代码
     private TextureMapView mapview;
-    private BaiduMap baiduMap;
-    private boolean isFirstLocate = true;
-    private TextView positionText;
+	private BaiduMap baiduMap;
+	private boolean isFirstLocate = true;
+	private TextView positionText;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.coordinate);//图标
     @Nullable
-    @Override
-
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.map_fragment, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.map_fragment, container, false);
         mLocationClient = new LocationClient(getContext().getApplicationContext());//获取全进程有效的context
         mLocationClient.registerLocationListener(new MyLocationListener());
         SDKInitializer.initialize(getContext().getApplicationContext());
@@ -87,22 +84,16 @@ public class MapFragment extends BaseFragment
         }else{
             requestLocation();
         }
-        return view;
-    }
-
-    private void requestLocation()
-    {//获取当前定位
+		return view;
+	}
+    private void requestLocation(){//获取当前定位
         initMyLocation();
         mLocationClient.start();
     }
-
-    private void stopRequestLocation()
-    {
+    private void stopRequestLocation(){
         mLocationClient.stop();
     }
-
-    private void initMyLocation()
-    {
+    private void initMyLocation(){
         mLocationClient = new LocationClient(getContext());
         mMyLocationListener = new MyLocationListener();
         mLocationClient.registerLocationListener(mMyLocationListener);// 设置定位的相关配置
@@ -114,11 +105,8 @@ public class MapFragment extends BaseFragment
         option.setIsNeedAddress(true);//位置
         mLocationClient.setLocOption(option);//使用设置
     }
-
-    private void navigateTo(BDLocation location)
-    {
-        if(isFirstLocate)
-        {//判断是否第一次定位，若是就执行以下代码
+    private void navigateTo(BDLocation location){
+        if(isFirstLocate){//判断是否第一次定位，若是就执行以下代码
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
             baiduMap.animateMapStatus(update);
@@ -132,38 +120,29 @@ public class MapFragment extends BaseFragment
         MyLocationData locationData = locationBuilder.build();
         baiduMap.setMyLocationData(locationData);
     }
-
-    public class MyLocationListener implements BDLocationListener
-    {
+    public class MyLocationListener implements BDLocationListener{
         @Override
-        public void onConnectHotSpotMessage(String s,int i) {}
+        public void onConnectHotSpotMessage(String s,int i){
+        }
         @Override
-        public void onReceiveLocation(BDLocation location)
-        {
-            if(location.getLocType()==BDLocation.TypeNetWorkLocation||location.getLocType()==BDLocation.TypeGpsLocation)
-            {
+        public void onReceiveLocation(BDLocation location){
+            if(location.getLocType()==BDLocation.TypeNetWorkLocation||location.getLocType()==BDLocation.TypeGpsLocation){
                 navigateTo(location);
             }else return;
         }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+	}
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser==true)
-        {
+        if(isVisibleToUser==true){
             requestLocation();
         }
-        else if(isVisibleToUser==false)
-        {
+        else if(isVisibleToUser==false){
             stopRequestLocation();
         }
     }
-
-    @Override
-    public void onResume()
-    {
+	@Override
+    public void onResume(){
         super.onResume();
         mapview.onResume();
         initMyLocation();
@@ -173,24 +152,19 @@ public class MapFragment extends BaseFragment
         super.onPause();
         mapview.onPause();
     }
-
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy(){
         super.onDestroy();
         mLocationClient.stop();
         mapview.onDestroy();
         baiduMap.setMyLocationEnabled(false);
     }
-
-    public void addInfosOverlay(final List<Info> infos)
-    {//加载覆盖物
+    public void addInfosOverlay(final List<Info> infos) {//加载覆盖物
         baiduMap.clear();
         LatLng latLng = null;
         OverlayOptions overlayOptions = null;
         Marker marker = null;//地图覆盖物
-        for (Info info : infos)
-        {//循环的将模拟数据标记
+        for (Info info : infos) {//循环的将模拟数据标记
             latLng = new LatLng(info.getLatitude(), info.getLongitude());//获取经纬度
             overlayOptions = new MarkerOptions().position(latLng).icon(mbitmap).zIndex(5);//设置maker位置，图标，层级
             marker = (Marker) (baiduMap.addOverlay(overlayOptions));
@@ -202,15 +176,11 @@ public class MapFragment extends BaseFragment
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
         baiduMap.setMapStatus(update);
     }
-
-    public void initmapEvent()
-    {//地图长按事件监听回调函数
+    public void initmapEvent(){//地图长按事件监听回调函数
         //baiduMap.setOnMapLongClickListener(mlongclicklistener);
-        BaiduMap.OnMarkerClickListener mMarkerlis=new BaiduMap.OnMarkerClickListener()
-        {
+        BaiduMap.OnMarkerClickListener mMarkerlis=new BaiduMap.OnMarkerClickListener(){
             @Override
-            public boolean onMarkerClick(Marker marker)
-            {
+            public boolean onMarkerClick(Marker marker) {
                 Info Info=(Info) marker.getExtraInfo().get("info");
                 InfoWindow mInfoWindow;//生成一个TextView用户在地图中显示InfoWindow
                 TextView location = new TextView(getActivity().getApplicationContext());
@@ -230,4 +200,37 @@ public class MapFragment extends BaseFragment
         };
         baiduMap.setOnMarkerClickListener(mMarkerlis);
     }
+//    private void search() {//步行线路规划，或许还用不上
+//        RoutePlanSearch routePlanSearch = RoutePlanSearch.newInstance();
+//        WalkingRoutePlanOption walkingOption = new WalkingRoutePlanOption();
+//        PlanNode from = PlanNode.withLocation(hmPos);//创建起点
+//        PlanNode to = PlanNode.withLocation(new LatLng(40.065796,116.349868));// 创建终点
+//        walkingOption.from(from);
+//        walkingOption.to(to);
+//        routePlanSearch.walkingSearch(walkingOption);
+//        routePlanSearch.setOnGetRoutePlanResultListener(new OnGetRoutePlanResultListener() {
+//            @Override
+//            public void onGetWalkingRouteResult(WalkingRouteResult result) {
+//                if (result == null
+//                        || SearchResult.ERRORNO.RESULT_NOT_FOUND == result.error) {
+//                    Toast.makeText(getApplicationContext(), "未搜索到结果", 0).show();
+//                    return;
+//                }
+//                WalkingRouteOverlay overlay = new WalkingRouteOverlay(baiduMap);
+//                baiduMap.setOnMarkerClickListener(overlay);
+//                overlay.setData(result.getRouteLines().get(0));
+//                overlay.addToMap();
+//                overlay.zoomToSpan();
+//            }
+//            @Override
+//            public void onGetTransitRouteResult(TransitRouteResult arg0) {
+//
+//            }
+//            @Override
+//            public void onGetDrivingRouteResult(DrivingRouteResult arg0) {
+//
+//            }
+//        });
+//    }
 }
+
