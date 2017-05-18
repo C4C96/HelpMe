@@ -55,7 +55,7 @@ public class MapFragment extends BaseFragment {
     private TextureMapView mapview;
 	private BaiduMap baiduMap;
 	private boolean isFirstLocate = true;
-	private TextView positionText;
+private TextView positionText;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.coordinate);//图标
     @Nullable
 	@Override
