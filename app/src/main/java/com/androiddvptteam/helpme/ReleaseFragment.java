@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import com.androiddvptteam.helpme.Connection.ReleaseConnection;
 import java.net.URL;
+import java.util.Calendar;
 
 public class ReleaseFragment extends BaseFragment
 {
@@ -37,6 +38,8 @@ public class ReleaseFragment extends BaseFragment
 
 	private ArrayAdapter<String> arr_adapter;
 	private View view;
+	private PersonalInformation publisher=(new MyApplication()).getPersonalInformation();
+	private Calendar createTime;
 
 	private EditText titleEditText;
 	private EditText contentEditText;
@@ -172,6 +175,7 @@ public class ReleaseFragment extends BaseFragment
 					{
 						getEverything();
 						Toast.makeText(getContext(),title,Toast.LENGTH_SHORT).show();
+						createTime= Calendar.getInstance();
 						releaseDialog();
 					}
 				}
@@ -207,6 +211,9 @@ public class ReleaseFragment extends BaseFragment
 			{
 				titleEditText.setText("");
 				contentEditText.setText("");
+
+				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime);
+				(new Mission.MissionManager()).releaseMission(getContext(),newMission);
 
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片

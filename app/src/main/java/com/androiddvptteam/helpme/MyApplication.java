@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -190,36 +191,34 @@ public class MyApplication extends Application
 	{
 		if (id == null || id.equals("") || password == null || password.equals(""))
 			return false;
-//		LoginConnection connection;
-//		boolean result=true;
-//		try
-//		{
-//			connection=new LoginConnection(new URL("http://123.206.125.166:8080/AndroidServlet/LoginServlet"));
-//			connection.setAttributes(id,password);
-//			connection.connect();
-//			if(connection.connectionResult)
-//				result=true;
-//			else
-//			{
-//				result = false;
-//			}
-//			//这句话还没写完。。。写不动了。。。改天写。。。——YB
-//			if(connection.getResult().equals("success"))//连接成功
-//				personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
-//			else
-//				return  false;
-//		}
-//		catch (Exception e)
-//		{
-//			result = false;
-//			e.printStackTrace();
-//		}
-//		return result;
-		else
+		LoginConnection connection;
+		boolean resultForConnection=true;//连接结果
+		boolean resultForLogin=true;//登陆结果
+
+		try
 		{
-			personalInformation = new PersonalInformation("姜宁康", "23333", MissionAttribute.GENDER_MALE, "计软", "114514");
-			return true;
+			connection=new LoginConnection(new URL("http://123.206.125.166:8080/AndroidServlet/LoginServlet"));
+			connection.setAttributes(id,password);
+			connection.connect();
+			//判断登陆结果
+			if(connection.getResult().equals("success"))//连接成功
+			{
+				personalInformation = connection.getPersonalInformation();
+				preferences.edit().putString("UserName", personalInformation.getUserName()).
+						putString("UserSchoolNumber", personalInformation.getSchoolNumber()).
+						putInt("UserGender", personalInformation.getGender()).
+						putString("UserDepartment", personalInformation.getDepartmentName()).
+						putString("UserIntroduction", personalInformation.getIntroduction()).
+						apply();
+			}
+			else
+				resultForLogin=false;
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return resultForLogin;
 	}
 
 	/**
@@ -229,9 +228,10 @@ public class MyApplication extends Application
 	{
 		personalInformation = null;
 		avatar = null;
-		myMissions = null;
-		foundMissions = null;
+		myMissions = new ArrayList<>();
+		foundMissions =  new ArrayList<>();
 		deleteLocalAvatar();
+		startActivity(new Intent(this, LoginActivity.class));
 	}
 
 
@@ -243,12 +243,21 @@ public class MyApplication extends Application
 	public Bitmap getAvatar(){return avatar;}
 
 
-	//set方法
-
+	/**
+	 * 设置头像
+	 * @param 	avatar		新头像
+	 * @return 				上传是否成功
+	 * */
 	public boolean setAvatar(Bitmap avatar)
 	{
+		if (avatar == null) return false;
+		netDelay(1000);
+		//if (上传失败)
+		//	return false;
+
+		//显示的更新
 		this.avatar = avatar;
-		//存储图片
+		//更新本地缓存
 		File f = new File(getFilesDir(), "avatar.jpg");
 		if (f.exists())
 			f.delete();
@@ -262,7 +271,7 @@ public class MyApplication extends Application
 		}
 		catch (Exception e)
 		{
-		   e.printStackTrace();
+			e.printStackTrace();
 		}
 		return true;
 	}

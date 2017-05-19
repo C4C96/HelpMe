@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -16,11 +18,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+        }
+    }
+    productFlavors {
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -29,4 +35,14 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile files('libs/commons-beanutils-1.9.2.jar')
+    compile files('libs/commons-collections-3.2.1.jar')
+    compile files('libs/commons-lang-2.4.jar')
+    compile files('libs/commons-logging-1.1.1.jar')
+    compile files('libs/ezmorph-1.0.6.jar')
+    compile files('libs/json.jar')
+    compile files('libs/json-lib-2.4-jdk15.jar')
+    compile files('libs/jsoup-1.8.1.jar')
+    compile files('libs/mysql-connector-java-5.1.7-bin.jar')
+    compile files('libs/gson-2.7.jar')
 }

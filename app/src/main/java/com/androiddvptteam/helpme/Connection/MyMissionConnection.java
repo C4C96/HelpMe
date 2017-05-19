@@ -2,7 +2,13 @@ package com.androiddvptteam.helpme.Connection;
 
 import com.androiddvptteam.helpme.Mission;
 import com.androiddvptteam.helpme.PersonalInformation;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import net.sf.json.JSONArray;
+
+import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.Calendar;
@@ -11,6 +17,7 @@ import java.util.Map;
 
 /*
 * 读取任务
+* 只用于下载
 * */
 
 public class MyMissionConnection extends URLConnection
@@ -65,12 +72,23 @@ public class MyMissionConnection extends URLConnection
                 }
                 in.close();
                 br.close();
-                JSONArray arr = JSONArray.fromObject(buffer.toString());
-                //missionsList = arr.getJSONArray(0);
 
-                //从JSONArray对象中得到第一个值，里面是List<Map<String,Object>>
-                List<Map<String, Object>> listForMission = (List<Map<String, Object>>) arr.getJSONArray(0);
-                List<Map<String, Object>> listForPerson = (List<Map<String, Object>>) arr.getJSONArray(1);
+                JSONObject rjson = new JSONObject(buffer.toString());
+                String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
+                String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
+
+                Gson gson = new Gson();
+
+                //得到List<Map<String,Object>>
+                List<Map<String, Object>> listForMission = gson.fromJson(s1,
+                        new TypeToken<List<Map<String, Object>>>()
+                        {
+                        }.getType());//返回接收者的信息
+                List<Map<String, Object>> listForPerson = gson.fromJson(s2,
+                        new TypeToken<List<Map<String, Object>>>()
+                        {
+                        }.getType());//返回任务信息
+
                 if (listForMission == null || listForMission.size() < 1)
                 {//判断listForMission中有没有数据，如果没有则返回false
                     listResult = false;

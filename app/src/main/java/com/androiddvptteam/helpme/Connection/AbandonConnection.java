@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 /*
 * 接收者放弃接收任务
+* 只用于上传
 * */
 
 public class AbandonConnection extends URLConnection
@@ -62,8 +63,8 @@ public class AbandonConnection extends URLConnection
             JSONObject json = new JSONObject();//创建json对象
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
-            json.put("ID", URLEncoder.encode(this.ID, "UTF-8"));
-            json.put("schoolNumber", URLEncoder.encode(this.schoolNumber, "UTF-8"));
+            json.put("ID", this.ID);
+            json.put("schoolNumber", this.schoolNumber);
             json.put("year",  this.year);
             json.put("month", this.month);
             json.put("day", this.day);
@@ -75,7 +76,7 @@ public class AbandonConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
