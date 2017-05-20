@@ -49,21 +49,19 @@ public class ListFragment extends BaseFragment
 		loadRangeData();
 		getSpinner();
 
-		initMissions();
-
-        //        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try
-//                {
-//                   initMissions();
-//                }
-//                catch (Exception e)
-//                {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                   initMissions();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 		//任务列表
 		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);

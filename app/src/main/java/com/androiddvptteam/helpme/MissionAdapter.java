@@ -1,6 +1,7 @@
 package com.androiddvptteam.helpme;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -56,13 +57,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
             public void onClick(View v) {
                 int position= holder.getAdapterPosition();
                 Mission mission =myMissionList.get(position);
-
-                Intent intent=new Intent(activity,MissionDetail.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("thisMission", mission);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-
+                actionStart(activity,mission);
             }
         });
         return holder;
@@ -111,5 +106,14 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
     @Override
     public int getItemCount() {
         return myMissionList.size();
+    }
+
+    public static void actionStart(Context context,Mission mission)
+    {
+        Intent intent=new Intent(context,MissionDetail.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("thisMission", mission);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 }
