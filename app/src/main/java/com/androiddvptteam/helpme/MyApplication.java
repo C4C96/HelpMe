@@ -277,4 +277,20 @@ public class MyApplication extends Application
 		}
 		return true;
 	}
+
+	/**
+	 * 设置个人简介
+	 * @param 	introduction		新简介
+	 * @return 						上传是否成功
+	 * */
+	public boolean setIntroduction(String introduction)
+	{
+		if (introduction == null) return false;
+		netDelay(1000);
+		//if (上传失败)
+		//	return false;
+
+		personalInformation.setIntroduction(introduction);
+		return true;
+	}
 }

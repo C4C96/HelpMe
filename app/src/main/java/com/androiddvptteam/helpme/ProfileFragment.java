@@ -1,6 +1,7 @@
 package com.androiddvptteam.helpme;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -89,8 +90,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 			@Override
 			public void run()
 			{
-				Bitmap avatar = Bitmap.createBitmap(1,1, Bitmap.Config.RGB_565);
-				if (Tools.getUserAvatarFromWeb(myApplication.getPersonalInformation().getSchoolNumber(), avatar))
+				Bitmap avatar = Tools.getUserAvatarFromWeb(myApplication.getPersonalInformation().getSchoolNumber());
+				if (avatar != null)
 				{
 					myApplication.setAvatar(avatar);
 					getActivity().runOnUiThread(new Runnable()

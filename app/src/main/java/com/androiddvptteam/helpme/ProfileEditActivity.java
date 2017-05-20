@@ -121,9 +121,16 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 				showChoosePicDialog();
 				break;
 			case R.id.profile_edit_confirm_button:
-				MyApplication myApplication = (MyApplication) getApplication();
-				PersonalInformation personalInformation = myApplication.getPersonalInformation();
-				personalInformation.setIntroduction(introduceTextView.getText().toString());
+				final MyApplication myApplication = (MyApplication) getApplication();
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						myApplication.setIntroduction(introduceTextView.getText().toString());
+					}
+				}).start();
+
 				break;
 		}
 	}

@@ -3,6 +3,7 @@ package com.androiddvptteam.helpme;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 /**
  * 工具类，放各种静态工具函数
@@ -12,15 +13,12 @@ public class Tools
 	/**
 	 * 从后端获取用户头像
 	 * @param id		用户ID
-	 * @param avatar   返回获得的头像
-	 * @return 			是否成功
+	 * @return 			用户头像，失败则为null
 	 * */
-	public static boolean getUserAvatarFromWeb(String id, Bitmap avatar)
+	public static Bitmap getUserAvatarFromWeb(String id)
 	{
 		netDelay(1000);
-		//avatar = XXX		←不要这样赋值
-		//avatar.set****	←这样赋值
-		return false;
+		return null;
 	}
 
 	/**
