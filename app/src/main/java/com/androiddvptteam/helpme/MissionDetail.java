@@ -1,5 +1,6 @@
 package com.androiddvptteam.helpme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class MissionDetail extends AppCompatActivity {
 
@@ -52,9 +55,10 @@ public class MissionDetail extends AppCompatActivity {
         });
 
 
-        MyApplication myApplication = (MyApplication)getApplication();
+        final MyApplication myApplication = (MyApplication)getApplication();
+        final Mission.MissionManager missionManager=new Mission.MissionManager();
 
-        if(mission.getPublisher().getSchoolNumber()==myApplication.getPersonalInformation().getSchoolNumber())
+        if(mission.getPublisher().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
         {//如果当前用户是改任务的发布者
             switch(mission.getState())
             {
@@ -63,8 +67,8 @@ public class MissionDetail extends AppCompatActivity {
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {//需要对数据库进行修改
-                            finish();
+                        public void onClick(View v) {
+                            missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
                         }
                     });
                     break;
@@ -76,7 +80,7 @@ public class MissionDetail extends AppCompatActivity {
                     break;
             }
         }
-        else if(mission.getRecipient().getSchoolNumber()==myApplication.getPersonalInformation().getSchoolNumber())
+        else if(mission.getRecipient().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
         {//如果当前用户是该任务的接收者
             switch(mission.getState())
             {
@@ -85,8 +89,8 @@ public class MissionDetail extends AppCompatActivity {
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {//对数据库进行修改
-                            finish();
+                        public void onClick(View v) {
+                            missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
                         }
                     });
                     break;
@@ -95,8 +99,8 @@ public class MissionDetail extends AppCompatActivity {
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {//需要对数据库进行修改
-                            finish();
+                        public void onClick(View v) {
+                           missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
                         }
                     });
                     break;
@@ -114,14 +118,22 @@ public class MissionDetail extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
-                public void onClick(View v) {//对数据库进行修改
-                    finish();
+                public void onClick(View v) {
+                    missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
                 }
             });
         }
 
     }
 
+    public static void actionStart(Context context, Mission mission)
+    {
+        Intent intent=new Intent(context,MissionDetail.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("thisMission", mission);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
     private void changeMissionInfo()
     {
         String g="";

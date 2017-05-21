@@ -57,7 +57,7 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
             public void onClick(View v) {
                 int position= holder.getAdapterPosition();
                 Mission mission =myMissionList.get(position);
-                actionStart(activity,mission);
+                MissionDetail.actionStart(activity,mission);
             }
         });
         return holder;
@@ -108,12 +108,5 @@ public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHold
         return myMissionList.size();
     }
 
-    public static void actionStart(Context context,Mission mission)
-    {
-        Intent intent=new Intent(context,MissionDetail.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("thisMission", mission);
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
+
 }
