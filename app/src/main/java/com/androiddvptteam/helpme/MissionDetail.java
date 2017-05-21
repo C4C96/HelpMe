@@ -80,7 +80,7 @@ public class MissionDetail extends AppCompatActivity {
                     break;
             }
         }
-        else if(mission.getRecipient().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
+        else if(mission.getRecipient()==null || mission.getRecipient().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
         {//如果当前用户是该任务的接收者
             switch(mission.getState())
             {
