@@ -27,10 +27,10 @@ public class MissionDetail extends AppCompatActivity {
         mission=(Mission)intent.getSerializableExtra("thisMission");
 
         //修改textview的值
-        TextView name=(TextView)findViewById(R.id.name_text);
-        TextView gender=(TextView)findViewById(R.id.gender_text);
-        TextView introduction=(TextView)findViewById(R.id.intro_text);
-        TextView content=(TextView)findViewById(R.id.content_text);
+        name=(TextView)findViewById(R.id.name_text);
+        gender=(TextView)findViewById(R.id.gender_text);
+        introduction=(TextView)findViewById(R.id.intro_text);
+        content=(TextView)findViewById(R.id.content_text);
 
         changeMissionInfo();
 
