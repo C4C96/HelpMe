@@ -1,5 +1,6 @@
 package com.androiddvptteam.helpme;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -38,6 +39,8 @@ public class ListFragment extends BaseFragment
 
     private SwipeRefreshLayout swipeRefresh;
 	private MissionAdapter adapter;
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
@@ -223,15 +226,17 @@ public class ListFragment extends BaseFragment
 					e.printStackTrace();
 				}
 
-				getActivity().runOnUiThread(new
-						Runnable() {
-							@Override
-							public void run() {
-								initMissions();
-								adapter.notifyDataSetChanged();
-								swipeRefresh.setRefreshing(false);
-							}
-						});
+				if(getActivity()!=null) {
+					getActivity().runOnUiThread(new
+														Runnable() {
+															@Override
+															public void run() {
+																initMissions();
+																adapter.notifyDataSetChanged();
+																swipeRefresh.setRefreshing(false);
+															}
+														});
+				}
 
 			}
 		}).start();
