@@ -379,10 +379,16 @@ public class ProfileEditActivity extends BaseActivity implements View.OnClickLis
 							}
 						});
 					else
-						avatarImageView.setImageBitmap(((MyApplication)getApplication()).getAvatar());
+						runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								avatarImageView.setImageBitmap(((MyApplication)getApplication()).getAvatar());
+							}
+						});
 				}
 			}).start();
-
 		}
 	}
 

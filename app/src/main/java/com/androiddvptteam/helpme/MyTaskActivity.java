@@ -22,7 +22,6 @@ public class MyTaskActivity extends BaseActivity
 
 	private MyTaskListFragment allList, releasedList, acceptedList, doingList;
 	private TabLayout tabLayout;
-	private SwipeRefreshLayout swipeRefreshLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -43,19 +42,30 @@ public class MyTaskActivity extends BaseActivity
 		int tabType = intent.getIntExtra("tabType", ALL_TAB);
 		tabLayout.getTabAt(tabType).select();
 
-		//设置下拉刷新
-		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.myTask_swipeRefresh);
-		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+		//初次刷新
+	/*	new Thread(new Runnable()
 		{
 			@Override
-			public void onRefresh()
+			public void run()
 			{
-				refresh();
+				while(allList.swipeRefreshLayout==null ||
+						releasedList.swipeRefreshLayout==null ||
+						acceptedList.swipeRefreshLayout==null ||
+						doingList.swipeRefreshLayout==null);
+				runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						allList.swipeRefreshLayout.setRefreshing(true);
+						releasedList.swipeRefreshLayout.setRefreshing(true);
+						acceptedList.swipeRefreshLayout.setRefreshing(true);
+						doingList.swipeRefreshLayout.setRefreshing(true);
+						refresh();
+					}
+				});
 			}
-		});
-
-		//初次刷新
-		swipeRefreshLayout.setRefreshing(true);
+		}).start();*/
 		refresh();
 	}
 
@@ -71,6 +81,7 @@ public class MyTaskActivity extends BaseActivity
 		MyTaskTabAdapter adapter;
 
 		MyTaskListFragment.myApplication = (MyApplication) getApplication();
+		MyTaskListFragment.myTaskActivity = this;
 
 		allList = new MyTaskListFragment();
 		allList.setTabType(ALL_TAB);
@@ -112,20 +123,24 @@ public class MyTaskActivity extends BaseActivity
 			@Override
 			public void run()
 			{
+
 				MyApplication myApplication = (MyApplication) getApplication();
 				myApplication.refreshMyMissions();
 				allList.refreshMissionList();
 				releasedList.refreshMissionList();
 				acceptedList.refreshMissionList();
 				doingList.refreshMissionList();
-				runOnUiThread(new Runnable()
+			/*	runOnUiThread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
+						allList.swipeRefreshLayout.setRefreshing(false);
+						releasedList.swipeRefreshLayout.setRefreshing(false);
+						acceptedList.swipeRefreshLayout.setRefreshing(false);
+						doingList.swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
 					}
-				});
+				});*/
 				Log.d(TAG, "Refresh my list over.");
 			}
 		}).start();

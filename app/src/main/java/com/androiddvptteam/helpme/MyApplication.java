@@ -120,22 +120,6 @@ public class MyApplication extends Application
 	 * */
 	public boolean refreshMyMissions()
 	{
-		//调试数据
-		myMissions = new ArrayList<>();
-		PersonalInformation tmp = new PersonalInformation("Name", "233", 0, "ABC", "");
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, personalInformation, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, personalInformation, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, personalInformation, Calendar.getInstance()));
-		myMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		if (true)
-		{
-			return true;
-		}
-
 		MyMissionConnection connection;
 		boolean result=true;
 		try
@@ -171,21 +155,6 @@ public class MyApplication extends Application
 	 * */
 	public boolean refreshFoundMissions()
 	{
-		//调试数据
-		foundMissions = new ArrayList<>();
-		PersonalInformation tmp = new PersonalInformation("Name", "233", 0, "ABC", "");
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		foundMissions.add(new Mission("Title1", "Content1", 3, 2, 2, tmp, Calendar.getInstance()));
-		if (true)
-		{
-			return true;
-		}
 		MyMissionConnection connection;
 		boolean result=true;
 		try

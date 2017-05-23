@@ -3,6 +3,7 @@ package com.androiddvptteam.helpme;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +19,9 @@ import static com.androiddvptteam.helpme.MyTaskActivity.*;
 public class MyTaskListFragment extends BaseFragment
 {
 	public static MyApplication myApplication;//生成MyTaskListFragment对象时不一定能getActivity()，所以通过这种方式获得MyApplication实例
+	public static MyTaskActivity myTaskActivity;//同上
 	private List<Mission> missionList;//列表内容
+	public SwipeRefreshLayout swipeRefreshLayout;
 
 	//google不让搞Fragment的构造函数，我能怎么办，我也很无奈啊
 	private int tabType = -1;
@@ -41,12 +44,22 @@ public class MyTaskListFragment extends BaseFragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
+		Log.d(TAG, tabType + ": onCreateView");
 		View view = inflater.inflate(R.layout.my_task_list_fragment, container, false);
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myTask_recyclerView);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
 		MissionAdapter adapter = new MissionAdapter(missionList, this.getActivity());
 		recyclerView.setAdapter(adapter);
+		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.myTask_swipeRefresh);
+		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+		{
+			@Override
+			public void onRefresh()
+			{
+				myTaskActivity.refresh();
+			}
+		});
 		return view;
 	}
 
@@ -92,5 +105,7 @@ public class MyTaskListFragment extends BaseFragment
 						missionList.add(mission);
 				break;
 		}
+		if (swipeRefreshLayout != null)
+			swipeRefreshLayout.setRefreshing(false);
 	}
 }
