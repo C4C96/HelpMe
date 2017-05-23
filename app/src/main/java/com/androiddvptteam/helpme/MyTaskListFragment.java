@@ -72,7 +72,8 @@ public class MyTaskListFragment extends BaseFragment
 			case ACCEPTED_TAB:
 				missionList = new ArrayList<>();
 				for(Mission mission : myMissions)
-					if (mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
+					if (mission.getRecipient() != null
+						&& mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
 						&& (mission.getState() == Mission.STATE_FINISHED || mission.getState() == Mission.STATE_CANCELED))
 						missionList.add(mission);
 			break;
@@ -85,7 +86,8 @@ public class MyTaskListFragment extends BaseFragment
 			case DOING_TAB:
 				missionList = new ArrayList<>();
 				for(Mission mission : myMissions)
-					if (mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
+					if (mission.getRecipient() != null
+						&& mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
 						&& mission.getState() == Mission.STATE_DOING)
 						missionList.add(mission);
 				break;
