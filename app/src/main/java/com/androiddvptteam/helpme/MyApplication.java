@@ -125,7 +125,7 @@ public class MyApplication extends Application
 		try
 		{
 			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
-			connection.setPublisher(personalInformation);
+			connection.setAttributes(personalInformation,1);
 			connection.connect();
 
 			myMissions=connection.getList();
@@ -160,7 +160,7 @@ public class MyApplication extends Application
 		try
 		{
 			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
-			connection.setPublisher(personalInformation);
+			connection.setAttributes(personalInformation,2);
 			connection.connect();
 
 			myMissions=connection.getList();
