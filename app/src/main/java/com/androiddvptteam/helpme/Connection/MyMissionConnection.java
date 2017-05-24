@@ -11,6 +11,9 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.*;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -76,36 +79,36 @@ public class MyMissionConnection extends URLConnection
             bw.close();//使用完关闭
 
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-            {
-                connectionResult = true;
-                InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
-                String str = null;
-                StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
-
-                while ((str = br.readLine()) != null)
                 {
-                    //BufferedReader特有功能，一次读取一行数据
-                    buffer.append(str);
-                }
-                in.close();
-                br.close();
+                    connectionResult = true;
+                    InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
+                    BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
+                    String str = null;
+                    StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
 
-                JSONObject rjson = new JSONObject(buffer.toString());
-                String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
-                String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
+                    while ((str = br.readLine()) != null)
+                    {
+                        //BufferedReader特有功能，一次读取一行数据
+                        buffer.append(str);
+                    }
+                    in.close();
+                    br.close();
 
-                Gson gson = new Gson();
+                    JSONObject rjson = new JSONObject(buffer.toString());
+                    String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
+                    String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
 
-                //得到List<Map<String,Object>>
-                List<Map<String, Object>> listForMission = gson.fromJson(s1,
-                        new TypeToken<List<Map<String, Object>>>()
-                        {
-                        }.getType());//返回接收者的信息
-                List<Map<String, Object>> listForPerson = gson.fromJson(s2,
-                        new TypeToken<List<Map<String, Object>>>()
-                        {
-                        }.getType());//返回任务信息
+                    Gson gson = new Gson();
+
+                    //得到List<Map<String,Object>>
+                    List<Map<String, Object>> listForMission = gson.fromJson(s1,
+                            new TypeToken<List<Map<String, Object>>>()
+                            {
+                            }.getType());//返回接收者的信息
+                    List<Map<String, Object>> listForPerson = gson.fromJson(s2,
+                            new TypeToken<List<Map<String, Object>>>()
+                            {
+                            }.getType());//返回任务信息
 
                 if (listForMission == null || listForMission.size() < 1)
                 {//判断listForMission中有没有数据，如果没有则返回false
@@ -114,6 +117,7 @@ public class MyMissionConnection extends URLConnection
                 else
                 {
                     listResult = true;
+                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     for (int i = 0; i < listForMission.size(); i++)
                     {//对接收的数据进行遍历打印
                         PersonalInformation recipient = new PersonalInformation(
@@ -124,6 +128,18 @@ public class MyMissionConnection extends URLConnection
                                 (String) listForPerson.get(i).get("introduction")
                         );
 
+                        java.util.Date dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());
+                        java.util.Date dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());
+                        java.util.Date dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());
+                        java.util.Date dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());
+                        Calendar cCreate=Calendar.getInstance();
+                        Calendar cReceive=Calendar.getInstance();
+                        Calendar cFinish=Calendar.getInstance();
+                        Calendar cCancel=Calendar.getInstance();
+                        cCreate.setTime(dateCreate);
+                        cReceive.setTime(dateReceive);
+                        cFinish.setTime(dateFinish);
+                        cCancel.setTime(dateCancel);
                         Mission mission = new Mission(
                                 (String) listForMission.get(i).get("missionID"),
                                 (String) listForMission.get(i).get("title"),
@@ -133,10 +149,10 @@ public class MyMissionConnection extends URLConnection
                                 (int) listForMission.get(i).get("gender"),
                                 (int) listForMission.get(i).get("attribute"),
                                 (int) listForMission.get(i).get("range"),
-                                (Calendar) listForMission.get(i).get("createTime"),
-                                (Calendar) listForMission.get(i).get("receiveTime"),
-                                (Calendar) listForMission.get(i).get("finishTime"),
-                                (Calendar) listForMission.get(i).get("cancelTime"),
+                                cCreate,
+                                cReceive,
+                                cFinish,
+                                cCancel,
                                 (int) listForMission.get(i).get("state")
                         );
 
