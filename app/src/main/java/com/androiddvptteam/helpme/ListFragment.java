@@ -39,7 +39,7 @@ public class ListFragment extends BaseFragment
 
     private SwipeRefreshLayout swipeRefresh;
 	private MissionAdapter adapter;
-
+	private RecyclerView recyclerView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -51,6 +51,7 @@ public class ListFragment extends BaseFragment
 		loadAttributeData();
 		loadRangeData();
 		getSpinner();
+		android.util.Log.wtf("AAAAA", "23333");
 
 		new Thread(new Runnable() {
             @Override
@@ -67,7 +68,7 @@ public class ListFragment extends BaseFragment
         }).start();
 
 		//任务列表
-		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
+		recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
 		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
 		adapter=new MissionAdapter(missionList,this.getActivity());
@@ -201,15 +202,18 @@ public class ListFragment extends BaseFragment
                 getActivity().getApplication();
         myApplication.refreshFoundMissions();
         missionList = new ArrayList<>(myApplication.foundMissions);
+		for(Mission m : missionList)
+			android.util.Log.wtf("FuckAgain", m.getTitle());
 
         //删除missionList中的数据
 //		Iterator<Mission> it =
-        missionList.iterator();
+        //missionList.iterator();
 //		while(it.hasNext())
 //		{
 //			Mission x = it.next();
 //				it.remove();
 //		}
+		android.util.Log.wtf("BBBBB", "23333");
 	}
 
 	private void refreshMissions()
@@ -217,25 +221,25 @@ public class ListFragment extends BaseFragment
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try
-				{
-					Thread.sleep(2000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
+
+				android.util.Log.wtf("FuckAgaingain", "23333");
 
 				if(getActivity()!=null) {
-					getActivity().runOnUiThread(new
-														Runnable() {
-															@Override
-															public void run() {
-																initMissions();
-																adapter.notifyDataSetChanged();
-																swipeRefresh.setRefreshing(false);
-															}
-														});
+					initMissions();
+					getActivity().runOnUiThread(
+							new
+									Runnable()
+									{
+										@Override
+										public void run()
+										{
+											android.util.Log.wtf("FuckAgain", "23333");
+											adapter.notifyDataSetChanged();
+											for(Mission m : adapter.myMissionList)
+												android.util.Log.wtf("FuckAgain", m.getTitle());
+											swipeRefresh.setRefreshing(false);
+										}
+									});
 				}
 
 			}

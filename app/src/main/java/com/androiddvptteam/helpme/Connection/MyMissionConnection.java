@@ -1,5 +1,7 @@
 package com.androiddvptteam.helpme.Connection;
 
+import android.util.Log;
+
 import com.androiddvptteam.helpme.Mission;
 import com.androiddvptteam.helpme.PersonalInformation;
 import com.google.gson.Gson;
@@ -12,8 +14,10 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +34,7 @@ public class MyMissionConnection extends URLConnection
 
     private PersonalInformation publisher;
     private int state;
-    public List<Mission> missionsList;//接收任务的list
+    public List<Mission> missionsList=new ArrayList<Mission>();//接收任务的list
 
     public boolean listResult;
     public  boolean connectionResult;//判断连接结果是否正常
@@ -65,8 +69,8 @@ public class MyMissionConnection extends URLConnection
             JSONObject json = new JSONObject();//创建json对象
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
-            json.put("schoolNumber", this.publisher.getSchoolNumber());
-            json.put("state", this.state);
+            json.put("schoolNumber", publisher.getSchoolNumber());
+            json.put("state", state);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 
@@ -79,36 +83,36 @@ public class MyMissionConnection extends URLConnection
             bw.close();//使用完关闭
 
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                connectionResult = true;
+                InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
+                String str = null;
+                StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
+
+                while ((str = br.readLine()) != null)
                 {
-                    connectionResult = true;
-                    InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
-                    String str = null;
-                    StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
+                    //BufferedReader特有功能，一次读取一行数据
+                    buffer.append(str);
+                }
+                in.close();
+                br.close();
 
-                    while ((str = br.readLine()) != null)
-                    {
-                        //BufferedReader特有功能，一次读取一行数据
-                        buffer.append(str);
-                    }
-                    in.close();
-                    br.close();
+                JSONObject rjson = new JSONObject(buffer.toString());
+                String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
+                String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
 
-                    JSONObject rjson = new JSONObject(buffer.toString());
-                    String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
-                    String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
+                Gson gson = new Gson();
 
-                    Gson gson = new Gson();
-
-                    //得到List<Map<String,Object>>
-                    List<Map<String, Object>> listForMission = gson.fromJson(s1,
-                            new TypeToken<List<Map<String, Object>>>()
-                            {
-                            }.getType());//返回接收者的信息
-                    List<Map<String, Object>> listForPerson = gson.fromJson(s2,
-                            new TypeToken<List<Map<String, Object>>>()
-                            {
-                            }.getType());//返回任务信息
+                //得到List<Map<String,Object>>
+                List<Map<String, Object>> listForMission = gson.fromJson(s1,
+                        new TypeToken<List<Map<String, Object>>>()
+                        {
+                        }.getType());//返回接收者的信息
+                List<Map<String, Object>> listForPerson = gson.fromJson(s2,
+                        new TypeToken<List<Map<String, Object>>>()
+                        {
+                        }.getType());//返回任务信息
 
                 if (listForMission == null || listForMission.size() < 1)
                 {//判断listForMission中有没有数据，如果没有则返回false
@@ -120,43 +124,83 @@ public class MyMissionConnection extends URLConnection
                     DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     for (int i = 0; i < listForMission.size(); i++)
                     {//对接收的数据进行遍历打印
-                        PersonalInformation recipient = new PersonalInformation(
-                                (String) listForPerson.get(i).get("name"),
-                                (String) listForPerson.get(i).get("schoolNum"),
-                                (int) listForPerson.get(i).get("gender"),
-                                (String) listForPerson.get(i).get("departmentName"),
-                                (String) listForPerson.get(i).get("introduction")
-                        );
+                        PersonalInformation recipient=null;
+                        if(listForPerson.get(i).get("name")!=null)
+                        {
+                            double d=(double) listForPerson.get(i).get("gender");
+                            System.out.println("性别"+listForMission.get(i).get("gender").getClass());
+                            recipient = new PersonalInformation(
+                                    (String) listForPerson.get(i).get("name"),
+                                    (String) listForPerson.get(i).get("schoolNum"),
+                                    (int) d,
+                                    (String) listForPerson.get(i).get("departmentName"),
+                                    (String) listForPerson.get(i).get("introduction")
+                            );
+                        }
+                        else
+                            recipient=null;
 
-                        java.util.Date dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());
-                        java.util.Date dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());
-                        java.util.Date dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());
-                        java.util.Date dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());
+                        java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
                         Calendar cCreate=Calendar.getInstance();
                         Calendar cReceive=Calendar.getInstance();
                         Calendar cFinish=Calendar.getInstance();
                         Calendar cCancel=Calendar.getInstance();
-                        cCreate.setTime(dateCreate);
-                        cReceive.setTime(dateReceive);
-                        cFinish.setTime(dateFinish);
-                        cCancel.setTime(dateCancel);
+                        if(!listForMission.get(i).get("createTime").equals(""))
+                        {
+                            dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                            cCreate.setTime(dateCreate);
+                        }
+                        else
+                            cCreate=null;
+
+                        if(!listForMission.get(i).get("receiveTime").equals(""))
+                        {
+                            dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                            cReceive.setTime(dateReceive);
+                        }
+                        else
+                            cReceive=null;
+
+                        if(!listForMission.get(i).get("finishTime").equals(""))
+                        {
+                            dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                            cFinish.setTime(dateFinish);
+                        }
+                        else
+                            cFinish=null;
+
+                        if(!listForMission.get(i).get("cancelTime").equals(""))
+                        {
+                            dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                            cCancel.setTime(dateCancel);
+                        }
+                        else
+                            cCancel=null;
+
+                        double d1=(double) listForMission.get(i).get("gender");
+                        double d2=(double) listForMission.get(i).get("attribute");
+                        double d3=(double) listForMission.get(i).get("scope");
+                        double d4=(double) listForMission.get(i).get("state");
                         Mission mission = new Mission(
                                 (String) listForMission.get(i).get("missionID"),
                                 (String) listForMission.get(i).get("title"),
                                 (String) listForMission.get(i).get("content"),
                                 (PersonalInformation) publisher,
                                 (PersonalInformation) recipient,
-                                (int) listForMission.get(i).get("gender"),
-                                (int) listForMission.get(i).get("attribute"),
-                                (int) listForMission.get(i).get("range"),
+                                (int) d1,
+                                (int) d2,
+                                (int) d3,
                                 cCreate,
                                 cReceive,
                                 cFinish,
                                 cCancel,
-                                (int) listForMission.get(i).get("state")
+                                (int) d4
                         );
 
                         missionsList.add(mission);
+                        Log.wtf("Shit", mission.getTitle());
+                        System.out.println(mission.getID());
+                        setList(missionsList);
                     }
                 }
             }
@@ -170,8 +214,12 @@ public class MyMissionConnection extends URLConnection
             e.printStackTrace();
         }
         urlConnection.disconnect();//使用完关闭TCP连接，释放资源
-    }
+}
 
+    public void setList(List<Mission> l)
+    {
+        this.missionsList=l;
+    }
     public List<Mission> getList()
     {
         return this.missionsList;

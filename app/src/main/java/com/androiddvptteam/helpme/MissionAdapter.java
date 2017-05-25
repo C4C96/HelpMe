@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MissionAdapter extends RecyclerView.Adapter<MissionAdapter.ViewHolder> {
 
-    private List<Mission> myMissionList;
+    public List<Mission> myMissionList;
 
     public Activity activity;
 

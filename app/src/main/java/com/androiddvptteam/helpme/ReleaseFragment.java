@@ -38,7 +38,6 @@ public class ReleaseFragment extends BaseFragment
 
 	private ArrayAdapter<String> arr_adapter;
 	private View view;
-	private PersonalInformation publisher=(new MyApplication()).getPersonalInformation();
 	private Calendar createTime;
 
 	private EditText titleEditText;
@@ -212,8 +211,11 @@ public class ReleaseFragment extends BaseFragment
 				titleEditText.setText("");
 				contentEditText.setText("");
 
+				final MyApplication myApplication = (MyApplication) getActivity().getApplication();
+				PersonalInformation publisher=myApplication.getPersonalInformation();
 				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime);
-				(new Mission.MissionManager()).releaseMission(getContext(),newMission);
+				final Mission.MissionManager missionManager=new Mission.MissionManager();
+				missionManager.releaseMission(getContext(),newMission);
 
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片

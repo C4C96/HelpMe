@@ -2,6 +2,7 @@ package com.androiddvptteam.helpme;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.*;
 import android.widget.Toast;
 
 import com.androiddvptteam.helpme.Connection.AbandonConnection;
@@ -115,6 +116,7 @@ public class Mission implements Serializable
 				hour = createTime.get(Calendar.HOUR),
 				minute = createTime.get(Calendar.MINUTE),
 				second = createTime.get(Calendar.SECOND);
+		android.util.Log.d("sss",publisher.getSchoolNumber());
         sb.append(publisher.getSchoolNumber());
         sb.append(year);
         if (month < 10) sb.append(0);
@@ -185,20 +187,21 @@ public class Mission implements Serializable
 			boolean result=true;
 			try
 			{
-				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+				//connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+				connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
 				connection.setAttributes(mission);
 				connection.connect();
-				if(connection.connectionResult)
-					result=true;
+				if (connection.connectionResult)
+					result = true;
 				else
 				{
 					result = false;
 				}
-			}
-			catch (Exception e)
+			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
+
 //			//如果ID撞了（按发布按钮了会关掉窗口的吧，一秒发出两个也蛮厉害的），如下操作：
 //			//Toast.makeText(context, "发布失败", Toast.LENGTH_SHORT).show();
 //			//return false;
@@ -230,6 +233,7 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
+					//connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
 					connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
 					connection.setAttributes(mission,recipient,receivedTime);
 					connection.connect();
@@ -283,6 +287,7 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
+					//connection = new FinishConnection(new URL("http://192.168.0.3:8080/AndroidServlet/FinishServlet"));
 					connection=new FinishConnection(new URL("http://123.206.125.166:8080/AndroidServlet/FinishServlet"));
 					connection.setAttributes(mission,finishTime);
 					connection.connect();
