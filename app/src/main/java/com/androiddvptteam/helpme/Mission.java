@@ -187,8 +187,8 @@ public class Mission implements Serializable
 			boolean result=true;
 			try
 			{
-				//connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
-				connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
+				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+				//connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
 				connection.setAttributes(mission);
 				connection.connect();
 				if (connection.connectionResult)
