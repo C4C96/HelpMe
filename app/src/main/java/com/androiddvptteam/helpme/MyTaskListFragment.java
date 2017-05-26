@@ -20,7 +20,7 @@ public class MyTaskListFragment extends BaseFragment
 {
 	public static MyApplication myApplication;//生成MyTaskListFragment对象时不一定能getActivity()，所以通过这种方式获得MyApplication实例
 	public static MyTaskActivity myTaskActivity;//同上
-	private List<Mission> missionList;//列表内容
+	private MissionAdapter adapter;
 	public SwipeRefreshLayout swipeRefreshLayout;
 
 	//google不让搞Fragment的构造函数，我能怎么办，我也很无奈啊
@@ -30,26 +30,26 @@ public class MyTaskListFragment extends BaseFragment
 		if (this.tabType == -1)
 			this.tabType = tabType;
 		else
-			Log.e(TAG, "Multiple setting tab type.");
+			Log.e(TAG+getTag(), "Multiple setting tab type.");
 	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		refreshMissionList();
+		Log.d(TAG+tabType, "onCreate");
+		adapter = new MissionAdapter(new ArrayList<Mission>(), myTaskActivity);
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
-		Log.d(TAG, tabType + ": onCreateView");
+		Log.d(TAG+tabType, "onCreateView");
 		View view = inflater.inflate(R.layout.my_task_list_fragment, container, false);
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myTask_recyclerView);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		MissionAdapter adapter = new MissionAdapter(missionList, this.getActivity());
 		recyclerView.setAdapter(adapter);
 		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.myTask_swipeRefresh);
 		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
@@ -57,9 +57,25 @@ public class MyTaskListFragment extends BaseFragment
 			@Override
 			public void onRefresh()
 			{
-				myTaskActivity.refresh();
+				new Thread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						myApplication.refreshMyMissions();
+						myTaskActivity.runOnUiThread(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								refreshMissionList();
+							}
+						});
+					}
+				}).start();
 			}
 		});
+		refreshMissionList();
 		return view;
 	}
 
@@ -68,44 +84,52 @@ public class MyTaskListFragment extends BaseFragment
 	 * */
 	public void refreshMissionList()
 	{
-		Log.d(TAG, "refreshMissionList");
+		Log.d(TAG+tabType, "refreshMissionList");
 
 		PersonalInformation personalInformation = myApplication.getPersonalInformation();
 		List<Mission> myMissions = myApplication.myMissions;
 		if (myMissions == null || personalInformation == null)
 		{
-			missionList = new ArrayList<>();
+			adapter.myMissionList = new ArrayList<>();
 			return;
 		}
 		switch (tabType)
 		{
 			case ALL_TAB:
-				missionList = new ArrayList<>(myMissions);
+				adapter.myMissionList.clear();
+				for (Mission mission : myMissions)
+					adapter.myMissionList.add(mission);
 				break;
 			case ACCEPTED_TAB:
-				missionList = new ArrayList<>();
+				adapter.myMissionList.clear();
 				for(Mission mission : myMissions)
 					if (mission.getRecipient() != null
 						&& mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
 						&& (mission.getState() == Mission.STATE_FINISHED || mission.getState() == Mission.STATE_CANCELED))
-						missionList.add(mission);
+						adapter.myMissionList.add(mission);
 			break;
 			case RELEASED_TAB:
-				missionList = new ArrayList<>();
+				adapter.myMissionList.clear();
 				for(Mission mission : myMissions)
 					if (mission.getPublisher().getSchoolNumber().equals(personalInformation.getSchoolNumber()))
-						missionList.add(mission);
+						adapter.myMissionList.add(mission);
 				break;
 			case DOING_TAB:
-				missionList = new ArrayList<>();
+				adapter.myMissionList.clear();
 				for(Mission mission : myMissions)
 					if (mission.getRecipient() != null
 						&& mission.getRecipient().getSchoolNumber().equals(personalInformation.getSchoolNumber())
 						&& mission.getState() == Mission.STATE_DOING)
-						missionList.add(mission);
+						adapter.myMissionList.add(mission);
 				break;
 		}
-		if (swipeRefreshLayout != null)
-			swipeRefreshLayout.setRefreshing(false);
+		myTaskActivity.runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				swipeRefreshLayout.setRefreshing(false);
+			}
+		});
 	}
 }

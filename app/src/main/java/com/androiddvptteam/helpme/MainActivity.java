@@ -30,6 +30,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
         bindView();
         mapFragment = new MapFragment();
         setFragment(mapFragment);
+
+		ListFragment.mainActivity = this;
     }
 
 	@Override

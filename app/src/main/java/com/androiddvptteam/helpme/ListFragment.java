@@ -19,6 +19,8 @@ import java.util.List;
 
 public class ListFragment extends BaseFragment
 {
+	public static MainActivity mainActivity;
+
 	private Spinner spinnerGender;
 	private Spinner spinnerAttribute;
 	private Spinner spinnerRange;
@@ -35,11 +37,18 @@ public class ListFragment extends BaseFragment
 
 	public View view;
 
-	private List<Mission> missionList=new ArrayList<>();
+	//private List<Mission> missionList=new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefresh;
 	private MissionAdapter adapter;
 	private RecyclerView recyclerView;
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		adapter=new MissionAdapter(new ArrayList<Mission>(), mainActivity);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -51,27 +60,11 @@ public class ListFragment extends BaseFragment
 		loadAttributeData();
 		loadRangeData();
 		getSpinner();
-		android.util.Log.wtf("AAAAA", "23333");
-
-		new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try
-                {
-                   initMissions();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
 
 		//任务列表
 		recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
 		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
-		adapter=new MissionAdapter(missionList,this.getActivity());
 		recyclerView.setAdapter(adapter);
 
 		//下拉刷新
@@ -87,7 +80,14 @@ public class ListFragment extends BaseFragment
 					}
 				});
 
-
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				refreshMissions();
+			}
+		}).start();
 
 		return view;
 	}
@@ -196,52 +196,35 @@ public class ListFragment extends BaseFragment
 		);
 	}
 
-	private void initMissions()//从数据库读取任务信息，放到missionList中
+	private void initMissions()//从数据库读取任务信息，放到adapter中
 	{
         MyApplication myApplication = (MyApplication)
-                getActivity().getApplication();
+                mainActivity.getApplication();
         myApplication.refreshFoundMissions();
-        missionList = new ArrayList<>(myApplication.foundMissions);
-		for(Mission m : missionList)
-			android.util.Log.wtf("FuckAgain", m.getTitle());
-
-        //删除missionList中的数据
-//		Iterator<Mission> it =
-        //missionList.iterator();
-//		while(it.hasNext())
-//		{
-//			Mission x = it.next();
-//				it.remove();
-//		}
-		android.util.Log.wtf("BBBBB", "23333");
+     //   missionList = new ArrayList<>(myApplication.foundMissions);
+	//	missionList.clear();
+	//	missionList.addAll(myApplication.foundMissions);
+		adapter.myMissionList.clear();
+		adapter.myMissionList.addAll(myApplication.foundMissions);
 	}
 
 	private void refreshMissions()
 	{
-		new Thread(new Runnable() {
+		new Thread(new Runnable()
+		{
 			@Override
-			public void run() {
-
-				android.util.Log.wtf("FuckAgaingain", "23333");
-
-				if(getActivity()!=null) {
-					initMissions();
-					getActivity().runOnUiThread(
-							new
-									Runnable()
-									{
-										@Override
-										public void run()
-										{
-											android.util.Log.wtf("FuckAgain", "23333");
-											adapter.notifyDataSetChanged();
-											for(Mission m : adapter.myMissionList)
-												android.util.Log.wtf("FuckAgain", m.getTitle());
-											swipeRefresh.setRefreshing(false);
-										}
-									});
-				}
-
+			public void run()
+			{
+				initMissions();
+				mainActivity.runOnUiThread(new	Runnable()
+				{
+					@Override
+					public void run()
+					{
+						adapter.notifyDataSetChanged();
+						swipeRefresh.setRefreshing(false);
+					}
+				});
 			}
 		}).start();
 	}

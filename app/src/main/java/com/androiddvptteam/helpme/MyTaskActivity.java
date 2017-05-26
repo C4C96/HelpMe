@@ -43,30 +43,15 @@ public class MyTaskActivity extends BaseActivity
 		tabLayout.getTabAt(tabType).select();
 
 		//初次刷新
-	/*	new Thread(new Runnable()
+		final MyApplication myApplication = (MyApplication)getApplication();
+		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				while(allList.swipeRefreshLayout==null ||
-						releasedList.swipeRefreshLayout==null ||
-						acceptedList.swipeRefreshLayout==null ||
-						doingList.swipeRefreshLayout==null);
-				runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						allList.swipeRefreshLayout.setRefreshing(true);
-						releasedList.swipeRefreshLayout.setRefreshing(true);
-						acceptedList.swipeRefreshLayout.setRefreshing(true);
-						doingList.swipeRefreshLayout.setRefreshing(true);
-						refresh();
-					}
-				});
+				myApplication.refreshMyMissions();
 			}
-		}).start();*/
-		refresh();
+		}).start();
 	}
 
 
@@ -110,40 +95,6 @@ public class MyTaskActivity extends BaseActivity
 		adapter = new MyTaskTabAdapter(getSupportFragmentManager(), list_fragment, list_title);
 		viewPager.setAdapter(adapter);
 		tabLayout.setupWithViewPager(viewPager);
-	}
-
-	/**
-	 * 刷新内容
-	 * */
-	public void refresh()
-	{
-		//异步刷新
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-
-				MyApplication myApplication = (MyApplication) getApplication();
-				myApplication.refreshMyMissions();
-				allList.refreshMissionList();
-				releasedList.refreshMissionList();
-				acceptedList.refreshMissionList();
-				doingList.refreshMissionList();
-			/*	runOnUiThread(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						allList.swipeRefreshLayout.setRefreshing(false);
-						releasedList.swipeRefreshLayout.setRefreshing(false);
-						acceptedList.swipeRefreshLayout.setRefreshing(false);
-						doingList.swipeRefreshLayout.setRefreshing(false);//关闭刷新的转圈圈的东西
-					}
-				});*/
-				Log.d(TAG, "Refresh my list over.");
-			}
-		}).start();
 	}
 
 	public static void actionStart(Context context, int tabType)
