@@ -32,6 +32,7 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.GroundOverlayOptions;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -78,6 +79,7 @@ public class MapFragment extends BaseFragment
         SDKInitializer.initialize(getContext().getApplicationContext());
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapview.getMap();//获得地图实例
+        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(15).build()));//设置初始缩放比例
         baiduMap.setMyLocationEnabled(true);
         positionText = (TextView)getActivity().findViewById(R.id.position_text_view);
         List<String> permissionList=new ArrayList<>();
@@ -302,10 +304,10 @@ public class MapFragment extends BaseFragment
     private BitmapDescriptor bdGround;
     public void initOverlay() {
         //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
-        LatLng llA = new LatLng(39.963175, 116.400244);
-        LatLng llB = new LatLng(39.942821, 116.369199);
-        LatLng llC = new LatLng(39.939723, 116.425541);
-        LatLng llD = new LatLng(39.906965, 116.401394);
+        LatLng llA = new LatLng(31.2345790211, 121.4129109701);
+        LatLng llB = new LatLng(31.2328212311, 121.4134269199);
+        LatLng llC = new LatLng(31.2397232311, 121.4131125541);
+        LatLng llD = new LatLng(31.2369651233, 121.4143201394);
         //LatLng llText = new LatLng(39.86923, 116.397428);
 
         //这里是将图标转化为对象
@@ -354,8 +356,8 @@ public class MapFragment extends BaseFragment
 //          mMarkerE = (Marker) (mBaiduMap.addOverlay(textOption));
 
         // add ground overlay
-        LatLng southwest = new LatLng(39.92235, 116.380338);
-        LatLng northeast = new LatLng(39.947246, 116.414977);
+        LatLng southwest = new LatLng(31.2345790214,121.4129109706);
+        LatLng northeast = new LatLng(31.2345790221,121.4129109501);
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
                 .include(southwest).build();
 
