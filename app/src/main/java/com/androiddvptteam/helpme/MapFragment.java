@@ -338,13 +338,13 @@ public class MapFragment extends BaseFragment
                 .perspective(false).zIndex(7);
         mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
         //将A,B,C三种坐标添加到list中
-        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
-        giflist.add(bdA);
-        giflist.add(bdB);
-        giflist.add(bdC);
-        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
-                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
-        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
+//        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
+//        giflist.add(bdA);
+//        giflist.add(bdB);
+//        giflist.add(bdC);
+//        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
+//                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
+//        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
         //构建文字Option对象，用于在地图上添加文字
 //          OverlayOptions textOption = new TextOptions()
 //              .bgColor(0xAAFFFF00)
@@ -372,67 +372,67 @@ public class MapFragment extends BaseFragment
 //        //设置地图状态
 //        baiduMap.setMapStatus(u);
     }
-    private void initOverlayListener() {
-        //设置坐标点击事件
-        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+//    private void initOverlayListener() {
+//        //设置坐标点击事件
+//        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+//
+//            @Override
+//            public boolean onMapPoiClick(MapPoi arg0) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onMapClick(LatLng arg0) {
+//                baiduMap.hideInfoWindow();
+//            }
+//        });
+//        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+//            public boolean onMarkerClick(final Marker marker) {
+//                Button button = new Button(getContext().getApplicationContext());
+//                button.setBackgroundResource(R.drawable.dingwei);
+//                InfoWindow.OnInfoWindowClickListener listener = null;
+//                if (marker == mMarkerA || marker == mMarkerD) {
+//                    button.setText("更改位置");
+//                    listener = new InfoWindow.OnInfoWindowClickListener() {
+//                        public void onInfoWindowClick() {
+//                            LatLng ll = marker.getPosition();
+//                            LatLng llNew = new LatLng(ll.latitude + 0.005,
+//                                    ll.longitude + 0.005);//改变坐标的维度和经度
+//                            marker.setPosition(llNew);//设置坐标的位置
+//                            baiduMap.hideInfoWindow();//隐藏消息窗
+//                        }
+//                    };
+//                    LatLng ll = marker.getPosition();
+//                    mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
+//                   baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+//                } else if (marker == mMarkerB) {
+//                    button.setText("更改图标");
+//                    button.setOnClickListener(new View.OnClickListener() {
+//                        public void onClick(View v) {
+//                            marker.setIcon(bd);//改变坐标的图标
+//                            baiduMap.hideInfoWindow();//隐藏消息窗
+//                        }
+//                    });
+//                    LatLng ll = marker.getPosition();
+//                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
+//                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+//                } else if (marker == mMarkerC) {
+//                    button.setText("删除");
+//                    button.setOnClickListener(new View.OnClickListener() {
+//                        public void onClick(View v) {
+//                            marker.remove();//删除坐标
+//                            baiduMap.hideInfoWindow();//隐藏消息窗
+//                        }
+//                    });
+//                    LatLng ll = marker.getPosition();
+//                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
+//                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+//                }
+//                return true;
+//            }
+//        });
+//
+//        //地图点击事件
 
-            @Override
-            public boolean onMapPoiClick(MapPoi arg0) {
-                return false;
-            }
-
-            @Override
-            public void onMapClick(LatLng arg0) {
-                baiduMap.hideInfoWindow();
-            }
-        });
-        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-            public boolean onMarkerClick(final Marker marker) {
-                Button button = new Button(getContext().getApplicationContext());
-                button.setBackgroundResource(R.drawable.dingwei);
-                InfoWindow.OnInfoWindowClickListener listener = null;
-                if (marker == mMarkerA || marker == mMarkerD) {
-                    button.setText("更改位置");
-                    listener = new InfoWindow.OnInfoWindowClickListener() {
-                        public void onInfoWindowClick() {
-                            LatLng ll = marker.getPosition();
-                            LatLng llNew = new LatLng(ll.latitude + 0.005,
-                                    ll.longitude + 0.005);//改变坐标的维度和经度
-                            marker.setPosition(llNew);//设置坐标的位置
-                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    };
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
-                   baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                } else if (marker == mMarkerB) {
-                    button.setText("更改图标");
-                    button.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            marker.setIcon(bd);//改变坐标的图标
-                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    });
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
-                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                } else if (marker == mMarkerC) {
-                    button.setText("删除");
-                    button.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            marker.remove();//删除坐标
-                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    });
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
-                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                }
-                return true;
-            }
-        });
-
-        //地图点击事件
-
-    }
+//    }
 }
