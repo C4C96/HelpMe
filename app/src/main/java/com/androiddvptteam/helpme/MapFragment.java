@@ -373,7 +373,7 @@ public class MapFragment extends BaseFragment
         //设置坐标点击事件
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             public boolean onMarkerClick(final Marker marker) {
-                Button button = new Button(getContext());
+                Button button = new Button(getContext().getApplicationContext());
                 button.setBackgroundResource(R.drawable.dingwei);
                 InfoWindow.OnInfoWindowClickListener listener = null;
                 if (marker == mMarkerA || marker == mMarkerD) {
