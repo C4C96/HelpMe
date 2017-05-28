@@ -79,8 +79,8 @@ public class MapFragment extends BaseFragment
         SDKInitializer.initialize(getContext().getApplicationContext());
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapview.getMap();//获得地图实例
-        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(15).build()));//设置初始缩放比例
-        baiduMap.setMyLocationEnabled(true);
+        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(19).build()));//设置初始缩放比例
+
         positionText = (TextView)getActivity().findViewById(R.id.position_text_view);
         List<String> permissionList=new ArrayList<>();
         if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
@@ -119,11 +119,12 @@ public class MapFragment extends BaseFragment
         mLocationClient.registerLocationListener(mMyLocationListener);// 设置定位的相关配置
         LocationClientOption option = new LocationClientOption();
         option.setCoorType("bd09ll");//返回定位结果是百度经纬度
-        option.setScanSpan(5000);//多长时间进行一次请求
+        option.setScanSpan(1);//多长时间进行一次请求
         option.setOpenGps(true);//打开GPS
         option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
         option.setIsNeedAddress(true);//位置
         mLocationClient.setLocOption(option);//使用设置
+        baiduMap.setMyLocationEnabled(true);
     }
 
 //    private void navigateTo(BDLocation location)
@@ -333,7 +334,7 @@ public class MapFragment extends BaseFragment
                 .zIndex(5);
         mMarkerB = (Marker) (baiduMap.addOverlay(ooB));
         OverlayOptions ooC = new MarkerOptions().position(llC).icon(bdC)
-                .perspective(false).anchor(0.5f, 0.5f).rotate(30).zIndex(7);
+                .perspective(false).zIndex(7);
         mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
         //将A,B,C三种坐标添加到list中
         ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
@@ -356,23 +357,35 @@ public class MapFragment extends BaseFragment
 //          mMarkerE = (Marker) (mBaiduMap.addOverlay(textOption));
 
         // add ground overlay
-        LatLng southwest = new LatLng(31.2345790214,121.4129109706);
-        LatLng northeast = new LatLng(31.2345790221,121.4129109501);
-        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
-                .include(southwest).build();
-
-        OverlayOptions ooGround = new GroundOverlayOptions()
-                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
-        baiduMap.addOverlay(ooGround);
-
-        //生成变化地图状态
-        MapStatusUpdate u = MapStatusUpdateFactory
-                .newLatLng(bounds.getCenter());//newLatLng设置地图新中心点
-        //设置地图状态
-        baiduMap.setMapStatus(u);
+//        LatLng southwest = new LatLng(31.2345790214,121.4129109706);
+//        LatLng northeast = new LatLng(31.2345790221,121.4129109501);
+//        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
+//                .include(southwest).build();
+//
+//        OverlayOptions ooGround = new GroundOverlayOptions()
+//                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
+//        baiduMap.addOverlay(ooGround);
+//
+//        //生成变化地图状态
+//        MapStatusUpdate u = MapStatusUpdateFactory
+//                .newLatLng(bounds.getCenter());//newLatLng设置地图新中心点
+//        //设置地图状态
+//        baiduMap.setMapStatus(u);
     }
     private void initOverlayListener() {
         //设置坐标点击事件
+        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+
+            @Override
+            public boolean onMapPoiClick(MapPoi arg0) {
+                return false;
+            }
+
+            @Override
+            public void onMapClick(LatLng arg0) {
+                baiduMap.hideInfoWindow();
+            }
+        });
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             public boolean onMarkerClick(final Marker marker) {
                 Button button = new Button(getContext().getApplicationContext());
@@ -420,17 +433,6 @@ public class MapFragment extends BaseFragment
         });
 
         //地图点击事件
-        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
 
-            @Override
-            public boolean onMapPoiClick(MapPoi arg0) {
-                return false;
-            }
-
-            @Override
-            public void onMapClick(LatLng arg0) {
-                baiduMap.hideInfoWindow();
-            }
-        });
     }
 }
