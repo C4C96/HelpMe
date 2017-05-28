@@ -124,7 +124,7 @@ public class MapFragment extends BaseFragment
         option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
         option.setIsNeedAddress(true);//位置
         mLocationClient.setLocOption(option);//使用设置
-        baiduMap.setMyLocationEnabled(true);
+
     }
 
 //    private void navigateTo(BDLocation location)
@@ -181,6 +181,7 @@ public class MapFragment extends BaseFragment
                     .build();
             //设置定位数据, 只有先允许定位图层后设置数据才会生效，参见 setMyLocationEnabled(boolean)
             baiduMap.setMyLocationData(data);
+            baiduMap.setMyLocationEnabled(true);
             //配置定位图层显示方式,三个参数的构造器
             /*
             * 1.定位图层显示模式
@@ -344,7 +345,6 @@ public class MapFragment extends BaseFragment
         OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
                 .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
         mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
-
         //构建文字Option对象，用于在地图上添加文字
 //          OverlayOptions textOption = new TextOptions()
 //              .bgColor(0xAAFFFF00)
