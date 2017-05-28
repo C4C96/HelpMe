@@ -302,10 +302,10 @@ public class MapFragment extends BaseFragment
     private BitmapDescriptor bdGround;
     public void initOverlay() {
         //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
-        LatLng llA = new LatLng(39.963175, 116.400244);
-        LatLng llB = new LatLng(39.942821, 116.369199);
-        LatLng llC = new LatLng(39.939723, 116.425541);
-        LatLng llD = new LatLng(39.906965, 116.401394);
+        LatLng llA = new LatLng(31.2345790211, 121.4129109701);
+        LatLng llB = new LatLng(31.2328212311, 121.4134269199);
+        LatLng llC = new LatLng(31.2397232311, 121.4131125541);
+        LatLng llD = new LatLng(31.2369651233, 121.4143201394);
         //LatLng llText = new LatLng(39.86923, 116.397428);
 
         //这里是将图标转化为对象
