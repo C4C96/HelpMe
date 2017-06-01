@@ -1,26 +1,22 @@
 package com.androiddvptteam.helpme;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ListFragment extends BaseFragment
 {
-	public static MainActivity mainActivity;
-
 	private Spinner spinnerGender;
 	private Spinner spinnerAttribute;
 	private Spinner spinnerRange;
@@ -37,19 +33,10 @@ public class ListFragment extends BaseFragment
 
 	public View view;
 
-	//private List<Mission> missionList=new ArrayList<>();
+	private List<Mission> missionList=new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefresh;
 	private MissionAdapter adapter;
-	private RecyclerView recyclerView;
-
-	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		adapter=new MissionAdapter(new ArrayList<Mission>(), mainActivity);
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
@@ -61,10 +48,27 @@ public class ListFragment extends BaseFragment
 		loadRangeData();
 		getSpinner();
 
+		initMissions();
+
+        //new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try
+//                {
+//                   initMissions();
+//                }
+//                catch (Exception e)
+//                {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
 		//任务列表
-		recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
+		RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.list_recycler_view);
 		LinearLayoutManager layoutManager=new LinearLayoutManager(this.getContext());
 		recyclerView.setLayoutManager(layoutManager);
+		adapter=new MissionAdapter(missionList,this.getActivity());
 		recyclerView.setAdapter(adapter);
 
 		//下拉刷新
@@ -80,14 +84,7 @@ public class ListFragment extends BaseFragment
 					}
 				});
 
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				refreshMissions();
-			}
-		}).start();
+
 
 		return view;
 	}
@@ -196,35 +193,47 @@ public class ListFragment extends BaseFragment
 		);
 	}
 
-	private void initMissions()//从数据库读取任务信息，放到adapter中
+	private void initMissions()//从数据库读取任务信息，放到missionList中
 	{
         MyApplication myApplication = (MyApplication)
-                mainActivity.getApplication();
+                getActivity().getApplication();
         myApplication.refreshFoundMissions();
-     //   missionList = new ArrayList<>(myApplication.foundMissions);
-	//	missionList.clear();
-	//	missionList.addAll(myApplication.foundMissions);
-		adapter.myMissionList.clear();
-		adapter.myMissionList.addAll(myApplication.foundMissions);
+        missionList = new ArrayList<>(myApplication.foundMissions);
+
+        //删除missionList中的数据
+//		Iterator<Mission> it =
+        missionList.iterator();
+//		while(it.hasNext())
+//		{
+//			Mission x = it.next();
+//				it.remove();
+//		}
 	}
 
 	private void refreshMissions()
 	{
-		new Thread(new Runnable()
-		{
+		new Thread(new Runnable() {
 			@Override
-			public void run()
-			{
-				initMissions();
-				mainActivity.runOnUiThread(new	Runnable()
+			public void run() {
+				try
 				{
-					@Override
-					public void run()
-					{
-						adapter.notifyDataSetChanged();
-						swipeRefresh.setRefreshing(false);
-					}
-				});
+					Thread.sleep(2000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+
+				getActivity().runOnUiThread(new
+						Runnable() {
+							@Override
+							public void run() {
+								initMissions();
+								adapter.notifyDataSetChanged();
+								swipeRefresh.setRefreshing(false);
+							}
+						});
+
 			}
 		}).start();
 	}

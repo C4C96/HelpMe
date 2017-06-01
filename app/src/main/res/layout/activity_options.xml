@@ -29,7 +29,7 @@
 
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="168dp"
+			android:layout_height="160dp"
 			android:orientation="vertical"
 			android:layout_weight="124.79">
 
@@ -40,7 +40,7 @@
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal">
 
@@ -51,11 +51,13 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:text="推送" />
+					android:text="推送"
+					android:layout_marginTop="20dp"
+					android:textSize="20sp"/>
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal"></LinearLayout>
 			</LinearLayout>
@@ -67,7 +69,7 @@
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal"></LinearLayout>
 
@@ -76,11 +78,13 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:text="声音" />
+					android:text="声音"
+					android:layout_marginTop="30dp"
+					android:textSize="20sp"/>
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal">
 
@@ -94,7 +98,7 @@
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal"></LinearLayout>
 
@@ -103,11 +107,13 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:text="震动" />
+					android:text="震动"
+					android:layout_marginTop="30dp"
+					android:textSize="20sp"/>
 
 				<LinearLayout
 					android:layout_width="150dp"
-					android:layout_height="match_parent"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:orientation="horizontal"></LinearLayout>
 			</LinearLayout>
@@ -138,9 +144,10 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
+						android:background="@color/colorAccent"
 						android:text="关于我们"
-						android:textColor="@android:color/black"
-						android:textSize="14sp" />
+						android:textColor="@android:color/background_light"
+						android:textSize="18sp" />
 
 				</FrameLayout>
 
@@ -163,12 +170,16 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="7.42">
+
 					<Button
 						android:id="@+id/options_check_update_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:text="检查更新" />
+						android:background="@color/colorAccent"
+						android:text="检查更新"
+						android:textColor="@android:color/background_light"
+						android:textSize="18sp"/>
 				</FrameLayout>
 				<LinearLayout
 					android:layout_width="0dp"
@@ -189,13 +200,16 @@
 					android:layout_width="0dp"
 					android:layout_height="match_parent"
 					android:layout_weight="7.42">
+
 					<Button
 						android:id="@+id/options_logout_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:background="#ff0000"
-						android:text="退出登录" />
+						android:background="@color/colorAccent"
+						android:text="退出登录"
+						android:textColor="@android:color/background_light"
+						android:textSize="18sp"/>
 				</FrameLayout>
 				<LinearLayout
 					android:layout_width="0dp"

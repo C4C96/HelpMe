@@ -151,18 +151,22 @@
             <Button
                 android:id="@+id/confirm_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.01"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorAccent"
                 android:text="接受"
-                android:textSize="24sp"/>
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/cancel_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.01"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorAccent"
                 android:text="取消"
-                android:textSize="24sp"/>
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
