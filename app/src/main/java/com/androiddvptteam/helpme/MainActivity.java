@@ -107,7 +107,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener
 
 
 	//get方法
-
 	public MapFragment getMapFragment()
 	{
 		if (mapFragment == null)

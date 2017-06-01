@@ -7,14 +7,18 @@
 
 	<!-- UI记得改输入框样式 -->
 	<!-- 标题、内容输入框 -->
+
 	<EditText
+
 		android:id="@+id/titleEditText"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="20dp"
+		android:background="@layout/editsharp"
 		android:hint="标题"
 		android:gravity="top|left"
 		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
 		android:layout_weight="0.03"/>
 
 	<EditText
@@ -22,19 +26,22 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="30dp"
+		android:background="@layout/editsharp"
 		android:hint="在这儿输入内容吧"
 		android:gravity="top|left"
 		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
 		android:layout_weight="0.42"/>
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="30dp"
 		android:text="为你的任务附加一些属性吧"
 		android:layout_marginLeft="10dp"
 		android:textSize="18dp"/>
 
-	<!-- 性别下拉选择框 -->
+	<!-- 性别下拉框 -->
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -45,7 +52,7 @@
 			android:layout_height="wrap_content"
 			android:text="性别"
 			android:textSize="20dp"
-			android:layout_marginLeft="10dp"/>
+			android:layout_marginLeft="30dp"/>
 
 		<Spinner
 			android:id="@+id/genderSpinner"
@@ -65,7 +72,7 @@
 			android:layout_height="wrap_content"
 			android:text="类型"
 			android:textSize="20dp"
-			android:layout_marginLeft="10dp"/>
+			android:layout_marginLeft="30dp"/>
 
 		<Spinner
 			android:id="@+id/attributeSpinner"
@@ -85,7 +92,7 @@
 			android:layout_height="wrap_content"
 			android:text="范围"
 			android:textSize="20dp"
-			android:layout_marginLeft="10dp"/>
+			android:layout_marginLeft="30dp"/>
 
 		<Spinner
 			android:id="@+id/rangeSpinner"
