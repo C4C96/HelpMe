@@ -68,10 +68,12 @@ public class LoginConnection extends URLConnection
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
             bw.close();//使用完关闭
+            System.out.println("34343  "+urlConnection.getResponseCode());
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
             {
+                System.out.println("Yeah!");
                 InputStream in = urlConnection.getInputStream();//客户端接收服务端返回来的数据是urlConnection.getInputStream()输入流来读取
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));//高效缓冲流包装它，这里用的是字节流来读取数据的
                 String str = null;
@@ -94,6 +96,7 @@ public class LoginConnection extends URLConnection
                         }.getType());//返回登陆成功后的用户信息
 
                 result=(String) listForPerson.get(0).get("result");//从json对象中得到相应key的值
+                System.out.println("2333  "+result);
                 if(result.equals("success"))
                 {
                     String name=(String) listForPerson.get(0).get("name");

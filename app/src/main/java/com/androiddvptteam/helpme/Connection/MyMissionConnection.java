@@ -1,20 +1,13 @@
 package com.androiddvptteam.helpme.Connection;
 
 import android.util.Log;
-
 import com.androiddvptteam.helpme.Mission;
 import com.androiddvptteam.helpme.PersonalInformation;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import net.sf.json.JSONArray;
-
 import org.json.JSONObject;
-
 import java.io.*;
 import java.net.*;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +26,7 @@ public class MyMissionConnection extends URLConnection
     public URL url = null;
 
     private PersonalInformation publisher;
+    private PersonalInformation myself;//我自己的信息
     private int state;
     public List<Mission> missionsList=new ArrayList<Mission>();//接收任务的list
 
@@ -47,7 +41,7 @@ public class MyMissionConnection extends URLConnection
 
     public void setAttributes(PersonalInformation p,int state)
     {
-        this.publisher=p;
+        this.myself=p;
         this.state=state;
     }
 
@@ -69,7 +63,7 @@ public class MyMissionConnection extends URLConnection
             JSONObject json = new JSONObject();//创建json对象
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
-            json.put("schoolNumber", publisher.getSchoolNumber());
+            json.put("schoolNumber", myself.getSchoolNumber());
             json.put("state", state);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
@@ -91,28 +85,28 @@ public class MyMissionConnection extends URLConnection
                 StringBuffer buffer = new StringBuffer();//用来接收数据的StringBuffer对象
 
                 while ((str = br.readLine()) != null)
-                {
-                    //BufferedReader特有功能，一次读取一行数据
                     buffer.append(str);
-                }
                 in.close();
                 br.close();
 
                 JSONObject rjson = new JSONObject(buffer.toString());
                 String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
-                String s2=new String(rjson.getString("listForPerson").getBytes(),"UTF-8");
+                String s2=new String(rjson.getString("listForReceivePerson").getBytes(),"UTF-8");
+                String s3=new String(rjson.getString("listForPublishPerson").getBytes(),"UTF-8");
+                System.out.println("444444444"+s2);
 
                 Gson gson = new Gson();
 
                 //得到List<Map<String,Object>>
-                List<Map<String, Object>> listForMission = gson.fromJson(s1,
-                        new TypeToken<List<Map<String, Object>>>()
-                        {
-                        }.getType());//返回接收者的信息
-                List<Map<String, Object>> listForPerson = gson.fromJson(s2,
-                        new TypeToken<List<Map<String, Object>>>()
-                        {
-                        }.getType());//返回任务信息
+                List<Map<String, Object>> listForMission = gson.fromJson(
+                        s1,
+                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回任务的信息
+                List<Map<String, Object>> listForReceivePerson = gson.fromJson(
+                        s2,
+                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回接收者信息
+                List<Map<String, Object>> listForPublishPerson = gson.fromJson(
+                        s3,
+                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回发布者信息
 
                 if (listForMission == null || listForMission.size() < 1)
                 {//判断listForMission中有没有数据，如果没有则返回false
@@ -125,20 +119,35 @@ public class MyMissionConnection extends URLConnection
                     for (int i = 0; i < listForMission.size(); i++)
                     {//对接收的数据进行遍历打印
                         PersonalInformation recipient=null;
-                        if(listForPerson.get(i).get("name")!=null)
+                        if(listForReceivePerson.get(i).get("name")!=null)
                         {
-                            double d=(double) listForPerson.get(i).get("gender");
+                            double d=(double) listForReceivePerson.get(i).get("gender");
                             System.out.println("性别"+listForMission.get(i).get("gender").getClass());
                             recipient = new PersonalInformation(
-                                    (String) listForPerson.get(i).get("name"),
-                                    (String) listForPerson.get(i).get("schoolNum"),
+                                    (String) listForReceivePerson.get(i).get("name"),
+                                    (String) listForReceivePerson.get(i).get("schoolNum"),
                                     (int) d,
-                                    (String) listForPerson.get(i).get("departmentName"),
-                                    (String) listForPerson.get(i).get("introduction")
+                                    (String) listForReceivePerson.get(i).get("departmentName"),
+                                    (String) listForReceivePerson.get(i).get("introduction")
                             );
+                            System.out.println("嘿嘿嘿嘿嘿："+listForReceivePerson.get(i).get("schoolNum"));
                         }
                         else
                             recipient=null;
+
+                        if(listForPublishPerson.get(i).get("name")!=null)
+                        {
+                            double d=(double) listForPublishPerson.get(i).get("gender");
+                            System.out.println("性别"+listForPublishPerson.get(i).get("gender").getClass());
+                            publisher = new PersonalInformation(
+                                    (String) listForPublishPerson.get(i).get("name"),
+                                    (String) listForPublishPerson.get(i).get("schoolNum"),
+                                    (int) d,
+                                    (String) listForPublishPerson.get(i).get("departmentName"),
+                                    (String) listForPublishPerson.get(i).get("introduction")
+                            );
+                            System.out.println("啦啦啦啦啦："+listForPublishPerson.get(i).get("schoolNum"));
+                        }
 
                         java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
                         Calendar cCreate=Calendar.getInstance();
