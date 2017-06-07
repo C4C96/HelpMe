@@ -338,7 +338,7 @@ public class MyApplication extends Application
 		{
 			connection=new IntroductionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/IntroductionServlet"));
 			//connection=new IntroductionConnection(new URL("http://192.168.0.3:8080/AndroidServlet/IntroductionServlet"));
-			connection.setAttributes(introduction);
+			connection.setAttributes(introduction,personalInformation.getSchoolNumber());
 			connection.connect();
 			//判断登陆结果
 			if(connection.getResult())//连接成功
