@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.androiddvptteam.helpme.Connection.IntroductionConnection;
 import com.androiddvptteam.helpme.Connection.LoginConnection;
 import com.androiddvptteam.helpme.Connection.MyMissionConnection;
 import com.androiddvptteam.helpme.Connection.ReceiveConnection;
@@ -331,12 +332,30 @@ public class MyApplication extends Application
 	 * */
 	public boolean setIntroduction(String introduction)
 	{
-		if (introduction == null) return false;
-		netDelay(1000);
-		//if (上传失败)
-		//	return false;
+		if (introduction == null)
+			return false;
+		IntroductionConnection connection;
+		boolean resultForIntroduction=true;//判断结果
 
-		personalInformation.setIntroduction(introduction);
-		return true;
+		try
+		{
+			connection=new IntroductionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/IntroductionServlet"));
+			//connection=new IntroductionConnection(new URL("http://192.168.0.3:8080/AndroidServlet/IntroductionServlet"));
+			connection.setAttributes(introduction);
+			connection.connect();
+			//判断登陆结果
+			if(connection.getResult())//连接成功
+			{
+				resultForIntroduction=true;
+				personalInformation.setIntroduction(introduction);
+			}
+			else
+				resultForIntroduction=false;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return resultForIntroduction;
 	}
 }
