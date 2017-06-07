@@ -131,6 +131,8 @@ public class MyApplication extends Application
 			connection.connect();
 
 			myMissions=connection.getList();
+			for(Mission m:myMissions)
+				System.out.println(m.getTitle());
 
 			if(connection.connectionResult)
 				result=true;
@@ -166,51 +168,46 @@ public class MyApplication extends Application
 			connection.setAttributes(personalInformation,2);
 			connection.connect();
 
-			List<Mission> tmpMissions,resultMissions1=null,resultMissions2=null,resultMissions3=null;
-			tmpMissions=connection.getList();
+			List<Mission> tmpMissions=new ArrayList<Mission>();
+			List<Mission> resultMissions1=new ArrayList<Mission>();
+			List<Mission> resultMissions2=new ArrayList<Mission>();
+			List<Mission> resultMissions3=new ArrayList<Mission>();
+			tmpMissions.addAll(connection.getList());
+			foundMissions.clear();
 
-			for(Mission m : tmpMissions)
-			{
-				if(gender==0 && attribute==0 && range==0)
-					foundMissions.addAll(tmpMissions);
-				else
-				{
-					if(gender!=0)
-					{
+			if(gender==0 && attribute==0 && range==0)
+				foundMissions.addAll(tmpMissions);
+			else {
+					if (gender != 0) {
 						for (Mission m2 : tmpMissions) {
 							if (m2.getGender() + 1 == gender)
 								resultMissions1.add(m2);
 						}
-					}
-					else
+					} else
 						resultMissions1.addAll(tmpMissions);
 
-					if(attribute!=0)
-					{
-						for (Mission m2 : resultMissions1)
-						{
+					if (attribute != 0) {
+						for (Mission m2 : resultMissions1) {
 							if (m2.getAttribute() + 1 == attribute)
 								resultMissions2.add(m2);
 						}
-					}
-					else
+					} else
 						resultMissions2.addAll(resultMissions1);
 
-					if(range!=0)
-					{
-						for (Mission m2 : resultMissions2)
-						{
-							if (m2.getAttribute() + 1 == attribute)
+					if (range != 0) {
+						for (Mission m2 : resultMissions2) {
+							if (m2.getRange() + 1 == range)
 								resultMissions3.add(m2);
 						}
-					}
-					else
+					} else
 						resultMissions3.addAll(resultMissions2);
 
 					foundMissions.addAll(resultMissions3);
-				}
-
 			}
+
+
+			tmpMissions.clear();
+
 
 			if(connection.connectionResult)
 				result=true;

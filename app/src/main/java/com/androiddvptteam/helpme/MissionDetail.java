@@ -69,9 +69,10 @@ public class MissionDetail extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
+                            finish();
                         }
                     });
-                    finish();
+
                     break;
                 case 2://该任务已经被完成
                     cancelButton.setVisibility(View.GONE);
@@ -92,9 +93,10 @@ public class MissionDetail extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                            finish();
                         }
                     });
-                    finish();
+
                     break;
                 case 1://该任务正在被做
                     confirmButton.setText("放弃任务");
@@ -103,9 +105,10 @@ public class MissionDetail extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                            missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
+                            finish();
                         }
                     });
-                    finish();
+
                     break;
                 case 2://该任务已经被完成
                     cancelButton.setVisibility(View.GONE);
@@ -123,9 +126,10 @@ public class MissionDetail extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                    finish();
                 }
             });
-            finish();
+
         }
 
     }

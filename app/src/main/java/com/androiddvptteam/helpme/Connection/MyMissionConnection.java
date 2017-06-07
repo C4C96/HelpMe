@@ -93,7 +93,6 @@ public class MyMissionConnection extends URLConnection
                 String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
                 String s2=new String(rjson.getString("listForReceivePerson").getBytes(),"UTF-8");
                 String s3=new String(rjson.getString("listForPublishPerson").getBytes(),"UTF-8");
-                System.out.println("444444444"+s2);
 
                 Gson gson = new Gson();
 
@@ -130,7 +129,6 @@ public class MyMissionConnection extends URLConnection
                                     (String) listForReceivePerson.get(i).get("departmentName"),
                                     (String) listForReceivePerson.get(i).get("introduction")
                             );
-                            System.out.println("嘿嘿嘿嘿嘿："+listForReceivePerson.get(i).get("schoolNum"));
                         }
                         else
                             recipient=null;
@@ -146,7 +144,6 @@ public class MyMissionConnection extends URLConnection
                                     (String) listForPublishPerson.get(i).get("departmentName"),
                                     (String) listForPublishPerson.get(i).get("introduction")
                             );
-                            System.out.println("啦啦啦啦啦："+listForPublishPerson.get(i).get("schoolNum"));
                         }
 
                         java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
@@ -207,8 +204,6 @@ public class MyMissionConnection extends URLConnection
                         );
 
                         missionsList.add(mission);
-                        Log.wtf("Shit", mission.getTitle());
-                        System.out.println(mission.getID());
                         setList(missionsList);
                     }
                 }
