@@ -27,9 +27,9 @@ public class ListFragment extends BaseFragment
 
 	private ArrayAdapter<String> arr_adapter;
 
-	public int gender;
-	public int attribute;
-	public int range;
+	public int gender=0;
+	public int attribute=0;
+	public int range=0;
 
 	public View view;
 
@@ -155,6 +155,7 @@ public class ListFragment extends BaseFragment
 					public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 					{
 						gender =  spinnerGender.getSelectedItemPosition();
+						initMissions();
 					}
 					public void onNothingSelected(AdapterView<?> parent)
 					{
@@ -169,6 +170,7 @@ public class ListFragment extends BaseFragment
 					public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 					{
 						attribute =  spinnerAttribute.getSelectedItemPosition();
+						initMissions();
 					}
 					public void onNothingSelected(AdapterView<?> parent)
 					{
@@ -183,6 +185,7 @@ public class ListFragment extends BaseFragment
 					public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 					{
 						range =  spinnerRange.getSelectedItemPosition();
+						initMissions();
 					}
 					public void onNothingSelected(AdapterView<?> parent)
 					{
@@ -196,7 +199,7 @@ public class ListFragment extends BaseFragment
 	{
         MyApplication myApplication = (MyApplication)
                 mainActivity.getApplication();
-        myApplication.refreshFoundMissions();
+        myApplication.refreshFoundMissions(gender,attribute,range);
      //   missionList = new ArrayList<>(myApplication.foundMissions);
 	//	missionList.clear();
 	//	missionList.addAll(myApplication.foundMissions);

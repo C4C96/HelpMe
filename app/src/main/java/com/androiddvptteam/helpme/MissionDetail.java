@@ -13,31 +13,31 @@ import java.util.Calendar;
 
 public class MissionDetail extends AppCompatActivity {
 
-    private Mission mission;
 
-    private TextView name,gender,introduction,content;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mission_detail);
+        private Mission mission;
+
+        private TextView name,gender,introduction,content;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_mission_detail);
 
 
-        //获得mission信息
-        Intent intent = this.getIntent();
-        mission=(Mission)intent.getSerializableExtra("thisMission");
+            //获得mission信息
+            Intent intent = this.getIntent();
+            mission=(Mission)intent.getSerializableExtra("thisMission");
 
-        //修改textview的值
-        name=(TextView)findViewById(R.id.name_text);
-        gender=(TextView)findViewById(R.id.gender_text);
-        introduction=(TextView)findViewById(R.id.intro_text);
-        content=(TextView)findViewById(R.id.content_text);
+            //修改textview的值
+            name=(TextView)findViewById(R.id.name_text);
+            gender=(TextView)findViewById(R.id.gender_text);
+            introduction=(TextView)findViewById(R.id.intro_text);
+            content=(TextView)findViewById(R.id.content_text);
 
-        changeMissionInfo();
+            changeMissionInfo();
 
-        //确认和取消按钮
-        Button cancelButton=(Button)findViewById(R.id.cancel_button);
-        Button confirmButton=(Button)findViewById(R.id.confirm_button);
-
+            //确认和取消按钮
+            Button cancelButton=(Button)findViewById(R.id.cancel_button);
+            Button confirmButton=(Button)findViewById(R.id.confirm_button);
         confirmButton.setText("返回");
         confirmButton.setOnClickListener(new View.OnClickListener()
         {
@@ -71,6 +71,7 @@ public class MissionDetail extends AppCompatActivity {
                             missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
                         }
                     });
+                    finish();
                     break;
                 case 2://该任务已经被完成
                     cancelButton.setVisibility(View.GONE);
@@ -93,6 +94,7 @@ public class MissionDetail extends AppCompatActivity {
                             missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
                         }
                     });
+                    finish();
                     break;
                 case 1://该任务正在被做
                     confirmButton.setText("放弃任务");
@@ -103,6 +105,7 @@ public class MissionDetail extends AppCompatActivity {
                            missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
                         }
                     });
+                    finish();
                     break;
                 case 2://该任务已经被完成
                     cancelButton.setVisibility(View.GONE);
@@ -122,6 +125,7 @@ public class MissionDetail extends AppCompatActivity {
                     missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
                 }
             });
+            finish();
         }
 
     }

@@ -154,7 +154,7 @@ public class MyApplication extends Application
 	 * 若失败则保持foundMissions不变，但不能是null，若是null则给一个空集合
 	 * @return 是否成功
 	 * */
-	public boolean refreshFoundMissions()
+	public boolean refreshFoundMissions(int gender,int attribute,int range)
 	{
 		MyMissionConnection connection;
 		boolean result=true;
@@ -165,9 +165,51 @@ public class MyApplication extends Application
 			connection.setAttributes(personalInformation,2);
 			connection.connect();
 
-			foundMissions=connection.getList();
-			for(Mission m : foundMissions)
-				android.util.Log.wtf("Fuck", m.getTitle());
+			List<Mission> tmpMissions,resultMissions1=null,resultMissions2=null,resultMissions3=null;
+			tmpMissions=connection.getList();
+
+			for(Mission m : tmpMissions)
+			{
+				if(gender==0 && attribute==0 && range==0)
+					foundMissions.addAll(tmpMissions);
+				else
+				{
+					if(gender!=0)
+					{
+						for (Mission m2 : tmpMissions) {
+							if (m2.getGender() + 1 == gender)
+								resultMissions1.add(m2);
+						}
+					}
+					else
+						resultMissions1.addAll(tmpMissions);
+
+					if(attribute!=0)
+					{
+						for (Mission m2 : resultMissions1)
+						{
+							if (m2.getAttribute() + 1 == attribute)
+								resultMissions2.add(m2);
+						}
+					}
+					else
+						resultMissions2.addAll(resultMissions1);
+
+					if(range!=0)
+					{
+						for (Mission m2 : resultMissions2)
+						{
+							if (m2.getAttribute() + 1 == attribute)
+								resultMissions3.add(m2);
+						}
+					}
+					else
+						resultMissions3.addAll(resultMissions2);
+
+					foundMissions.addAll(resultMissions3);
+				}
+
+			}
 
 			if(connection.connectionResult)
 				result=true;
