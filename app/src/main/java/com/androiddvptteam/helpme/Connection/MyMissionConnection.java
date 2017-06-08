@@ -89,122 +89,126 @@ public class MyMissionConnection extends URLConnection
                 in.close();
                 br.close();
 
-                JSONObject rjson = new JSONObject(buffer.toString());
-                String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
-                String s2=new String(rjson.getString("listForReceivePerson").getBytes(),"UTF-8");
-                String s3=new String(rjson.getString("listForPublishPerson").getBytes(),"UTF-8");
-
-                Gson gson = new Gson();
-
-                //得到List<Map<String,Object>>
-                List<Map<String, Object>> listForMission = gson.fromJson(
-                        s1,
-                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回任务的信息
-                List<Map<String, Object>> listForReceivePerson = gson.fromJson(
-                        s2,
-                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回接收者信息
-                List<Map<String, Object>> listForPublishPerson = gson.fromJson(
-                        s3,
-                        new TypeToken<List<Map<String, Object>>>(){}.getType());//返回发布者信息
-
-                if (listForMission == null || listForMission.size() < 1)
-                {//判断listForMission中有没有数据，如果没有则返回false
-                    listResult = false;
-                }
-                else
+                System.out.println("yeah!"+buffer.toString());
+                if(buffer.toString()!=null&&buffer.toString().length()!=0&&!"".equals(buffer.toString()))
                 {
-                    listResult = true;
-                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    for (int i = 0; i < listForMission.size(); i++)
-                    {//对接收的数据进行遍历打印
-                        PersonalInformation recipient=null;
-                        if(listForReceivePerson.get(i).get("name")!=null)
-                        {
-                            double d=(double) listForReceivePerson.get(i).get("gender");
-                            System.out.println("性别"+listForMission.get(i).get("gender").getClass());
-                            recipient = new PersonalInformation(
-                                    (String) listForReceivePerson.get(i).get("name"),
-                                    (String) listForReceivePerson.get(i).get("schoolNum"),
-                                    (int) d,
-                                    (String) listForReceivePerson.get(i).get("departmentName"),
-                                    (String) listForReceivePerson.get(i).get("introduction")
+                    JSONObject rjson = new JSONObject(buffer.toString());
+                    String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
+                    String s2=new String(rjson.getString("listForReceivePerson").getBytes(),"UTF-8");
+                    String s3=new String(rjson.getString("listForPublishPerson").getBytes(),"UTF-8");
+
+                    Gson gson = new Gson();
+
+                    //得到List<Map<String,Object>>
+                    List<Map<String, Object>> listForMission = gson.fromJson(
+                            s1,
+                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回任务的信息
+                    List<Map<String, Object>> listForReceivePerson = gson.fromJson(
+                            s2,
+                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回接收者信息
+                    List<Map<String, Object>> listForPublishPerson = gson.fromJson(
+                            s3,
+                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回发布者信息
+
+                    if (listForMission == null || listForMission.size() < 1)
+                    {//判断listForMission中有没有数据，如果没有则返回false
+                        listResult = false;
+                    }
+                    else
+                    {
+                        listResult = true;
+                        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        for (int i = 0; i < listForMission.size(); i++)
+                        {//对接收的数据进行遍历打印
+                            PersonalInformation recipient=null;
+                            if(listForReceivePerson.get(i).get("name")!=null)
+                            {
+                                double d=(double) listForReceivePerson.get(i).get("gender");
+                                System.out.println("性别"+listForMission.get(i).get("gender").getClass());
+                                recipient = new PersonalInformation(
+                                        (String) listForReceivePerson.get(i).get("name"),
+                                        (String) listForReceivePerson.get(i).get("schoolNum"),
+                                        (int) d,
+                                        (String) listForReceivePerson.get(i).get("departmentName"),
+                                        (String) listForReceivePerson.get(i).get("introduction")
+                                );
+                            }
+                            else
+                                recipient=null;
+
+                            if(listForPublishPerson.get(i).get("name")!=null)
+                            {
+                                double d=(double) listForPublishPerson.get(i).get("gender");
+                                System.out.println("性别"+listForPublishPerson.get(i).get("gender").getClass());
+                                publisher = new PersonalInformation(
+                                        (String) listForPublishPerson.get(i).get("name"),
+                                        (String) listForPublishPerson.get(i).get("schoolNum"),
+                                        (int) d,
+                                        (String) listForPublishPerson.get(i).get("departmentName"),
+                                        (String) listForPublishPerson.get(i).get("introduction")
+                                );
+                            }
+
+                            java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
+                            Calendar cCreate=Calendar.getInstance();
+                            Calendar cReceive=Calendar.getInstance();
+                            Calendar cFinish=Calendar.getInstance();
+                            Calendar cCancel=Calendar.getInstance();
+                            if(!listForMission.get(i).get("createTime").equals(""))
+                            {
+                                dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                cCreate.setTime(dateCreate);
+                            }
+                            else
+                                cCreate=null;
+
+                            if(!listForMission.get(i).get("receiveTime").equals(""))
+                            {
+                                dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                cReceive.setTime(dateReceive);
+                            }
+                            else
+                                cReceive=null;
+
+                            if(!listForMission.get(i).get("finishTime").equals(""))
+                            {
+                                dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                cFinish.setTime(dateFinish);
+                            }
+                            else
+                                cFinish=null;
+
+                            if(!listForMission.get(i).get("cancelTime").equals(""))
+                            {
+                                dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                cCancel.setTime(dateCancel);
+                            }
+                            else
+                                cCancel=null;
+
+                            double d1=(double) listForMission.get(i).get("gender");
+                            double d2=(double) listForMission.get(i).get("attribute");
+                            double d3=(double) listForMission.get(i).get("scope");
+                            double d4=(double) listForMission.get(i).get("state");
+                            Mission mission = new Mission(
+                                    (String) listForMission.get(i).get("missionID"),
+                                    (String) listForMission.get(i).get("title"),
+                                    (String) listForMission.get(i).get("content"),
+                                    (PersonalInformation) publisher,
+                                    (PersonalInformation) recipient,
+                                    (int) d1,
+                                    (int) d2,
+                                    (int) d3,
+                                    cCreate,
+                                    cReceive,
+                                    cFinish,
+                                    cCancel,
+                                    (int) d4
                             );
+
+                            missionsList.add(mission);
+                            setList(missionsList);
                         }
-                        else
-                            recipient=null;
-
-                        if(listForPublishPerson.get(i).get("name")!=null)
-                        {
-                            double d=(double) listForPublishPerson.get(i).get("gender");
-                            System.out.println("性别"+listForPublishPerson.get(i).get("gender").getClass());
-                            publisher = new PersonalInformation(
-                                    (String) listForPublishPerson.get(i).get("name"),
-                                    (String) listForPublishPerson.get(i).get("schoolNum"),
-                                    (int) d,
-                                    (String) listForPublishPerson.get(i).get("departmentName"),
-                                    (String) listForPublishPerson.get(i).get("introduction")
-                            );
-                        }
-
-                        java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
-                        Calendar cCreate=Calendar.getInstance();
-                        Calendar cReceive=Calendar.getInstance();
-                        Calendar cFinish=Calendar.getInstance();
-                        Calendar cCancel=Calendar.getInstance();
-                        if(!listForMission.get(i).get("createTime").equals(""))
-                        {
-                            dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
-                            cCreate.setTime(dateCreate);
-                        }
-                        else
-                            cCreate=null;
-
-                        if(!listForMission.get(i).get("receiveTime").equals(""))
-                        {
-                            dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
-                            cReceive.setTime(dateReceive);
-                        }
-                        else
-                            cReceive=null;
-
-                        if(!listForMission.get(i).get("finishTime").equals(""))
-                        {
-                            dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
-                            cFinish.setTime(dateFinish);
-                        }
-                        else
-                            cFinish=null;
-
-                        if(!listForMission.get(i).get("cancelTime").equals(""))
-                        {
-                            dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
-                            cCancel.setTime(dateCancel);
-                        }
-                        else
-                            cCancel=null;
-
-                        double d1=(double) listForMission.get(i).get("gender");
-                        double d2=(double) listForMission.get(i).get("attribute");
-                        double d3=(double) listForMission.get(i).get("scope");
-                        double d4=(double) listForMission.get(i).get("state");
-                        Mission mission = new Mission(
-                                (String) listForMission.get(i).get("missionID"),
-                                (String) listForMission.get(i).get("title"),
-                                (String) listForMission.get(i).get("content"),
-                                (PersonalInformation) publisher,
-                                (PersonalInformation) recipient,
-                                (int) d1,
-                                (int) d2,
-                                (int) d3,
-                                cCreate,
-                                cReceive,
-                                cFinish,
-                                cCancel,
-                                (int) d4
-                        );
-
-                        missionsList.add(mission);
-                        setList(missionsList);
                     }
                 }
             }
