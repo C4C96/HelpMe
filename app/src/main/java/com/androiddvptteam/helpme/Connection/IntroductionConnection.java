@@ -15,6 +15,7 @@ public class IntroductionConnection extends URLConnection
     public URL url = null;
 
     public String introduction="";
+    public String schoolNumber="";
     public  boolean connectionResult;//判断连接结果是否正常
 
     public IntroductionConnection(URL url)
@@ -23,9 +24,10 @@ public class IntroductionConnection extends URLConnection
         this.url=url;
     }
 
-    public void setAttributes(String n)
+    public void setAttributes(String n,String i)
     {
         this.introduction=n;
+        this.schoolNumber=i;
     }
 
     public void connect() throws IOException
@@ -47,6 +49,7 @@ public class IntroductionConnection extends URLConnection
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
             json.put("introduction", this.introduction);
+            json.put("schoolNumber", this.schoolNumber);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 
