@@ -68,7 +68,15 @@ public class MissionDetail extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(View v) {
-                            missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
+                            new Thread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
+                                }
+                            }).start();
+
                             finish();
                         }
                     });
@@ -92,7 +100,16 @@ public class MissionDetail extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(View v) {
-                            missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                            new Thread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                                }
+                            }).start();
+
+
                             finish();
                         }
                     });
@@ -104,7 +121,15 @@ public class MissionDetail extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(View v) {
-                           missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
+                            new Thread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
+                                }
+                            }).start();
+
                             finish();
                         }
                     });
@@ -125,7 +150,15 @@ public class MissionDetail extends AppCompatActivity {
             {
                 @Override
                 public void onClick(View v) {
-                    missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                    new Thread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                        }
+                    }).start();
+
                     finish();
                 }
             });

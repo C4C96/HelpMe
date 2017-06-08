@@ -223,42 +223,44 @@ public class Mission implements Serializable
 							   @NonNull Calendar            receivedTime)
 		{
 			//只有未被接收的任务才能被接收
-			if (mission.state == STATE_UNRECEIVED)
-			{
-				mission.state = STATE_DOING;
-				mission.recipient = recipient;
-				mission.receiveTime = receivedTime;
-
-				ReceiveConnection connection;
-				boolean result=true;
-				try
-				{
-					//connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
-					connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
-					connection.setAttributes(mission,recipient,receivedTime);
-					connection.connect();
-					if(connection.connectionResult)
-						result=true;
-					else
+					if (mission.state == STATE_UNRECEIVED)
 					{
-						result = false;
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				if (!result)
-				{
-					//对本地信息回滚
-					mission.state = STATE_UNRECEIVED;
-					mission.recipient = null;
-					mission.receiveTime = null;
-					//Toast.***
-					return false;
-				}
-				else
-					return true;
+						mission.state = STATE_DOING;
+						mission.recipient = recipient;
+						mission.receiveTime = receivedTime;
+
+						ReceiveConnection connection;
+						boolean result=true;
+						try
+						{
+							//connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
+							connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
+							connection.setAttributes(mission,recipient,receivedTime);
+
+						connection.connect();
+
+						if(connection.connectionResult)
+							result=true;
+						else
+						{
+							result = false;
+						}
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+						if (!result)
+						{
+							//对本地信息回滚
+							mission.state = STATE_UNRECEIVED;
+							mission.recipient = null;
+							mission.receiveTime = null;
+							//Toast.***
+							return false;
+						}
+						else
+							return true;
 			}
 			else
 			{

@@ -61,6 +61,7 @@ public class ReceiveConnection extends URLConnection
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");//设置消息的类型
             urlConnection.connect();// 连接，从上述至此的配置必须要在connect之前完成，实际上它只是建立了一个与服务器的TCP连接
 
+
             JSONObject json = new JSONObject();//创建json对象
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
@@ -74,6 +75,7 @@ public class ReceiveConnection extends URLConnection
             json.put("second", this.second);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
+
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
