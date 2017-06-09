@@ -33,16 +33,16 @@ public class AbandonConnection extends URLConnection
         this.url=url;
     }
 
-    public void setAttributes(Mission mission,Calendar time)
+    public void setAttributes(Mission mission/*,Calendar time*/)
     {
         this.ID=mission.getID();
-        this.schoolNumber=mission.getRecipient().getSchoolNumber();//接收者学号
-        this.year=time.get(Calendar.YEAR);
-        this.month=time.get(Calendar.MONTH);
-        this.day=time.get(Calendar.DATE);
-        this.hour=time.get(Calendar.HOUR_OF_DAY);
-        this.minute=time.get(Calendar.MINUTE);
-        this.second=time.get(Calendar.SECOND);
+//        this.schoolNumber=mission.getRecipient().getSchoolNumber();//接收者学号
+//        this.year=time.get(Calendar.YEAR);
+//        this.month=time.get(Calendar.MONTH);
+//        this.day=time.get(Calendar.DATE);
+//        this.hour=time.get(Calendar.HOUR_OF_DAY);
+//        this.minute=time.get(Calendar.MINUTE);
+//        this.second=time.get(Calendar.SECOND);
     }
 
     public void connect() throws IOException
@@ -64,13 +64,13 @@ public class AbandonConnection extends URLConnection
             //使用URLEncoder.encode对特殊和不可见字符进行编码
             // 把数据put进json对象中
             json.put("ID", this.ID);
-            json.put("schoolNumber", this.schoolNumber);
-            json.put("year",  this.year);
-            json.put("month", this.month);
-            json.put("day", this.day);
-            json.put("hour", this.hour);
-            json.put("minute", this.minute);
-            json.put("second", this.second);
+//            json.put("schoolNumber", this.schoolNumber);
+//            json.put("year",  this.year);
+//            json.put("month", this.month);
+//            json.put("day", this.day);
+//            json.put("hour", this.hour);
+//            json.put("minute", this.minute);
+//            json.put("second", this.second);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 

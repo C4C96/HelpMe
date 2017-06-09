@@ -126,7 +126,7 @@ public class MissionDetail extends AppCompatActivity {
                                 @Override
                                 public void run()
                                 {
-                                    missionManager.abandon(MissionDetail.this,mission,Calendar.getInstance());
+                                    missionManager.abandon(MissionDetail.this,mission/*,Calendar.getInstance()*/);
                                 }
                             }).start();
 

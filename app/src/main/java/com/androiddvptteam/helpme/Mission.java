@@ -382,8 +382,8 @@ public class Mission implements Serializable
 		 * @return      是否成功，若失败则表明该任务未被接收或已完成或已取消
 		 * */
 		public boolean abandon(@NonNull Context context,
-							   @NonNull Mission mission,
-							   @NonNull Calendar abandonTime)
+							   @NonNull Mission mission
+							   /*@NonNull Calendar abandonTime*/)
 		{
 			PersonalInformation ori_recipient = mission.recipient;
 			Calendar ori_receiveTime = mission.receiveTime;
@@ -398,7 +398,7 @@ public class Mission implements Serializable
 				try
 				{
 					connection=new AbandonConnection(new URL("http://123.206.125.166:8080/AndroidServlet/AbandonServlet"));
-					connection.setAttributes(mission,abandonTime);
+					connection.setAttributes(mission/*,abandonTime*/);
 					connection.connect();
 					if(connection.connectionResult)
 						result=true;
