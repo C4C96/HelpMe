@@ -173,7 +173,6 @@ public class ReleaseFragment extends BaseFragment
 					public void onClick(View v)
 					{
 						getEverything();
-						Toast.makeText(getContext(),title,Toast.LENGTH_SHORT).show();
 						createTime= Calendar.getInstance();
 						releaseDialog();
 					}
@@ -189,7 +188,6 @@ public class ReleaseFragment extends BaseFragment
 					{
 						title=titleEditText.getText().toString();//获取输入的标题
 						content=contentEditText.getText().toString();//获取输入的内容
-
 						cancelDialog();
 					}
 				}
@@ -219,7 +217,6 @@ public class ReleaseFragment extends BaseFragment
 
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片
-				MyTaskActivity.actionStart(mainActivity, MyTaskActivity.RELEASED_TAB);//启动一个新的活动，跳转到已发布过的界面
 			}
 		});
 		builder.create().show();
