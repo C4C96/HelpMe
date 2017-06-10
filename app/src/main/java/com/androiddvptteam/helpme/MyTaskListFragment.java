@@ -128,6 +128,7 @@ public class MyTaskListFragment extends BaseFragment
 			@Override
 			public void run()
 			{
+				adapter.notifyDataSetChanged();
 				swipeRefreshLayout.setRefreshing(false);
 			}
 		});
