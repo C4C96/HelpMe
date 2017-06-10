@@ -1,12 +1,9 @@
 package com.androiddvptteam.helpme;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -15,9 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-import com.androiddvptteam.helpme.Connection.ReleaseConnection;
-import java.net.URL;
 import java.util.Calendar;
 
 public class ReleaseFragment extends BaseFragment
@@ -211,9 +205,12 @@ public class ReleaseFragment extends BaseFragment
 
 				final MyApplication myApplication = (MyApplication) getActivity().getApplication();
 				PersonalInformation publisher=myApplication.getPersonalInformation();
-				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime);
+				//final GetLocation gl=new GetLocation(getContext());
+				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime/*,gl.getLatitude(),gl.getLongitude()*/);
 				final Mission.MissionManager missionManager=new Mission.MissionManager();
 				missionManager.releaseMission(getContext(),newMission);
+
+				new SendMessage(newMission.getID(),newMission.getPublisher().getSchoolNumber(),"","发送成功",newMission.getTitle());
 
 				MainActivity mainActivity = (MainActivity)getActivity();
 				mainActivity.setFragment(mainActivity.getMapFragment());//控制mainactivity当前显示的碎片

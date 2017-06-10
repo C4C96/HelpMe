@@ -41,6 +41,11 @@ public class Mission implements Serializable
     private int attribute = MissionAttribute.ATTRIBUTE_OTHER;    //标签
     private int range = MissionAttribute.RANGE0;                 //范围
 
+	//任务的经纬度
+	//getLatitude(), myApplication.foundMissions.get(i).getLongitude()
+	private double latitude;//纬度
+	private double longitude;//经度
+
     private Calendar createTime;                //任务创建时间
     private Calendar receiveTime;               //任务被接收时间，未被接收则为null
     private Calendar finishTime;                //任务完成的时间，未完成则为null
@@ -56,7 +61,9 @@ public class Mission implements Serializable
 				   @NonNull int                 attribute,
 				   @NonNull int                 range,
                    @NonNull PersonalInformation publisher,
-                   @NonNull Calendar            createTime)
+                   @NonNull Calendar            createTime
+				   /*@NonNull double       		latitude,
+				   @NonNull double       		longitude*/)
     {
         this.title = title;
         this.content = content;
@@ -66,6 +73,8 @@ public class Mission implements Serializable
         this.publisher = publisher;
         this.createTime = createTime;
         this.ID = generateID();
+//		this.latitude=latitude;
+//		this.longitude=longitude;
     }
 
 	/**
@@ -84,7 +93,9 @@ public class Mission implements Serializable
                    Calendar            receiveTime,
                    Calendar            finishTime,
                    Calendar            cancelTime,
-                   int                 state)
+                   int                 state
+				   /*double 			   latitude,
+				   double 			   longitude*/)
     {
         this.ID = ID;
         this.title = title;
@@ -99,6 +110,8 @@ public class Mission implements Serializable
         this.finishTime = finishTime;
         this.cancelTime = cancelTime;
         this.state = state;
+//		this.latitude=latitude;
+//		this.longitude=longitude;
     }
 
     /**
@@ -157,6 +170,10 @@ public class Mission implements Serializable
 
     public Calendar getReceivedTime() { return this.receiveTime; }
 
+	public double getLatitude(){return latitude;}
+
+	public double getLongitude(){return longitude;}
+
 
     //set方法
 
@@ -187,8 +204,8 @@ public class Mission implements Serializable
 			boolean result=true;
 			try
 			{
-				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
-				//connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
+//				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
+				connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
 				connection.setAttributes(mission);
 				connection.connect();
 				if (connection.connectionResult)
@@ -233,8 +250,8 @@ public class Mission implements Serializable
 						boolean result=true;
 						try
 						{
-							//connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
-							connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
+							connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
+//							connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
 							connection.setAttributes(mission,recipient,receivedTime);
 
 						connection.connect();
@@ -289,8 +306,8 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-					//connection = new FinishConnection(new URL("http://192.168.0.3:8080/AndroidServlet/FinishServlet"));
-					connection=new FinishConnection(new URL("http://123.206.125.166:8080/AndroidServlet/FinishServlet"));
+					connection = new FinishConnection(new URL("http://192.168.0.3:8080/AndroidServlet/FinishServlet"));
+//					connection=new FinishConnection(new URL("http://123.206.125.166:8080/AndroidServlet/FinishServlet"));
 					connection.setAttributes(mission,finishTime);
 					connection.connect();
 					if(connection.connectionResult)
@@ -343,7 +360,8 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-					connection=new CancelConnection(new URL("http://123.206.125.166:8080/AndroidServlet/CancelServlet"));
+					connection = new CancelConnection(new URL("http://192.168.0.3:8080/AndroidServlet/CancelServlet"));
+//					connection=new CancelConnection(new URL("http://123.206.125.166:8080/AndroidServlet/CancelServlet"));
 					connection.setAttributes(mission,cancelTime);
 					connection.connect();
 					if(connection.connectionResult)
@@ -397,7 +415,8 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-					connection=new AbandonConnection(new URL("http://123.206.125.166:8080/AndroidServlet/AbandonServlet"));
+					connection=new AbandonConnection(new URL("http://192.168.0.3:8080/AndroidServlet/AbandonServlet"));
+//					connection=new AbandonConnection(new URL("http://123.206.125.166:8080/AndroidServlet/AbandonServlet"));
 					connection.setAttributes(mission/*,abandonTime*/);
 					connection.connect();
 					if(connection.connectionResult)

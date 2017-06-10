@@ -32,12 +32,14 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MapFragment extends BaseFragment {
@@ -52,6 +54,21 @@ public class MapFragment extends BaseFragment {
     private BitmapDescriptor mIconLocation;
     private MyLocationConfiguration.LocationMode locationMode;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.dingwei);//图标
+    private Marker mMarkerA;
+    private Marker mMarkerB;
+    private Marker mMarkerC;
+    private Marker mMarkerD;
+    private Marker mMarker;
+    private InfoWindow mInfoWindow;
+    private BitmapDescriptor bdA;
+    private BitmapDescriptor bdB;
+    private BitmapDescriptor bdC;
+    private BitmapDescriptor bdD;
+    private BitmapDescriptor bd;
+    private BitmapDescriptor bdGround;
+    MyApplication myApplication = new MyApplication();
+    List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
+    List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
 
     @Nullable
     @Override
@@ -64,27 +81,25 @@ public class MapFragment extends BaseFragment {
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapview.getMap();//获得地图实例
         baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(19).build()));//设置初始缩放比例
-
         positionText = (TextView) getActivity().findViewById(R.id.position_text_view);
         List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
             permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        }
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
         if (!permissionList.isEmpty()) {
             String[] permission = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(getActivity(), permission, 1);
         } else {
             requestLocation();
         }
-        initOverlay();
-        initOverlayListener();
-
+        if (null!=myApplication.foundMissions&&myApplication.foundMissions.size()!=0)
+        {
+            initOverlay();
+            initOverlayListener();
+        }
         return view;
     }
 
@@ -226,29 +241,14 @@ public class MapFragment extends BaseFragment {
         baiduMap.setMyLocationEnabled(false);
     }
 
-
-    private Marker mMarkerA;
-    private Marker mMarkerB;
-    private Marker mMarkerC;
-    private Marker mMarkerD;
-    private Marker mMarker;
-
-    private InfoWindow mInfoWindow;
-    private BitmapDescriptor bdA;
-    private BitmapDescriptor bdB;
-    private BitmapDescriptor bdC;
-    private BitmapDescriptor bdD;
-    private BitmapDescriptor bd;
-    private BitmapDescriptor bdGround;
-    MyApplication myApplication = new MyApplication();
-
     public void initOverlay() {
         //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
-//        List<LatLng> points = new ArrayList<>();//将所有有的任务的经纬度加载
-//        for(int i = 0;i<=myApplication.foundMissions.size();i++){
-//            LatLng ll = new LatLng(myApplication.foundMissions.get(i).getLatitude(), myApplication.foundMissions.get(i).getLongitude());
-//            points.add(ll);
-//        }
+        if (myApplication.foundMissions!=null) {
+            for (int i = 0; i <= myApplication.foundMissions.size(); i++) {
+                LatLng ll = new LatLng(myApplication.foundMissions.get(i).getLatitude(), myApplication.foundMissions.get(i).getLongitude());
+                points.add(ll);
+            }
+        }
         LatLng llA = new LatLng(31.2345790211, 121.4129109701);
         LatLng llB = new LatLng(31.2328212311, 121.4134269199);
         LatLng llC = new LatLng(31.2397232311, 121.4131125541);
@@ -267,15 +267,16 @@ public class MapFragment extends BaseFragment {
                 .fromResource(R.drawable.dingwei);
         bdGround = BitmapDescriptorFactory
                 .fromResource(R.drawable.dingwei);
-//        List<OverlayOptions>oo = new ArrayList<>();//定义覆盖物
-//        for(int i = 0 ;i<=points.size();i++){
-//            OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);
-//            oo.add(marker);
-//        }
-//
-//        for(int i = 0;i<=oo.size();i++){//在图层上添加覆盖物
-//            mMarker = (Marker)(baiduMap.addOverlay(oo.get(i)));
-//       }
+        //if (points!=null) {
+        for (int i = 0; i <= points.size(); i++) {
+            OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);//！！！！！！！
+            oo.add(marker);
+        }
+        // }
+
+        for (int i = 0; i <= oo.size(); i++) {//在图层上添加覆盖物
+            mMarker = (Marker) (baiduMap.addOverlay(oo.get(i)));
+        }
 
         //定义四种不同类型的覆盖物
         OverlayOptions ooA = new MarkerOptions().position(llA).icon(bdA)
@@ -328,54 +329,32 @@ public class MapFragment extends BaseFragment {
                 baiduMap.hideInfoWindow();
             }
         });
-        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-            public boolean onMarkerClick(final Marker marker) {
-                Button button = new Button(getContext().getApplicationContext());
-                button.setBackgroundResource(R.drawable.dingwei);
-                InfoWindow.OnInfoWindowClickListener listener = null;
-                if (marker == mMarkerA || marker == mMarkerD) {
-                    button.setText("文史楼");
-                    listener = new InfoWindow.OnInfoWindowClickListener() {
-                        public void onInfoWindowClick() {
+        if (oo != null) {
+            int i = 0;
+            for (i = 0; i <= oo.size(); i++) {
+                final String e = myApplication.foundMissions.get(i).getContent();
+                baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+                    public boolean onMarkerClick(final Marker marker) {
+                        Button button = new Button(getContext().getApplicationContext());
+                        button.setBackgroundResource(R.drawable.dingwei);
+                        InfoWindow.OnInfoWindowClickListener listener = null;
+                        button.setText(e);
+                        listener = new InfoWindow.OnInfoWindowClickListener() {
+                            public void onInfoWindowClick() {
 //                            LatLng ll = marker.getPosition();
-//                            LatLng llNew = new LatLng(ll.latitude + 0.005,
-//                                    ll.longitude + 0.005);//改变坐标的维度和经度
-//                            marker.setPosition(llNew);//设置坐标的位置
 //                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    };
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
-                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                } else if (marker == mMarkerB) {
-                    button.setText("理科大楼");
-                    button.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-//                            marker.setIcon(bd);//改变坐标的图标
-//                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    });
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
-                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                } else if (marker == mMarkerC) {
-                    button.setText("学子驿站");
-                    button.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-//                            marker.remove();//删除坐标
-//                            baiduMap.hideInfoWindow();//隐藏消息窗
-                        }
-                    });
-                    LatLng ll = marker.getPosition();
-                    mInfoWindow = new InfoWindow(button, ll, -47);//设置消息窗
-                    baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
-                }
-                return true;
+                            }
+                        };
+                        LatLng ll = marker.getPosition();
+                        mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
+                        baiduMap.showInfoWindow(mInfoWindow);//显示消息窗
+                        return true;
+                    }
+                });
             }
-        });
-//
+//}
 //        //地图点击事件
 
+        }
     }
 }
-

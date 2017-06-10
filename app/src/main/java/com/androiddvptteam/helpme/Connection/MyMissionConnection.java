@@ -89,7 +89,6 @@ public class MyMissionConnection extends URLConnection
                 in.close();
                 br.close();
 
-                System.out.println("yeah!"+buffer.toString());
                 if(buffer.toString()!=null&&buffer.toString().length()!=0&&!"".equals(buffer.toString()))
                 {
                     JSONObject rjson = new JSONObject(buffer.toString());
@@ -190,6 +189,8 @@ public class MyMissionConnection extends URLConnection
                             double d2=(double) listForMission.get(i).get("attribute");
                             double d3=(double) listForMission.get(i).get("scope");
                             double d4=(double) listForMission.get(i).get("state");
+//                            double la=(double) listForMission.get(i).get("latitude");
+//                            double lo=(double) listForMission.get(i).get("longitude");
                             Mission mission = new Mission(
                                     (String) listForMission.get(i).get("missionID"),
                                     (String) listForMission.get(i).get("title"),
@@ -204,6 +205,8 @@ public class MyMissionConnection extends URLConnection
                                     cFinish,
                                     cCancel,
                                     (int) d4
+//                                    la,
+//                                    lo
                             );
 
                             missionsList.add(mission);

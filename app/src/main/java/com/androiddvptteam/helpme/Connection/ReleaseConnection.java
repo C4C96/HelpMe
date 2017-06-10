@@ -51,7 +51,7 @@ public class ReleaseConnection extends URLConnection
 
         createTime=mission.getCreateTime();
         this.year=createTime.get(Calendar.YEAR);
-        this.month=createTime.get(Calendar.MONTH);
+        this.month=createTime.get(Calendar.MONTH)+1;
         this.day=createTime.get(Calendar.DATE);
         this.hour=createTime.get(Calendar.HOUR_OF_DAY);
         this.minute=createTime.get(Calendar.MINUTE);

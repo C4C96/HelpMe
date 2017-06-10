@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Calendar;
 
+/**
+ * 差取消任务
+ */
 public class MissionDetail extends AppCompatActivity {
 
 
@@ -74,6 +76,7 @@ public class MissionDetail extends AppCompatActivity {
                                 public void run()
                                 {
                                     missionManager.cancel(MissionDetail.this,mission, Calendar.getInstance());
+                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),"","取消",mission.getTitle());
                                 }
                             }).start();
 
@@ -93,6 +96,7 @@ public class MissionDetail extends AppCompatActivity {
                                 public void run()
                                 {
                                     missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
+                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"确认完成",mission.getTitle());
                                 }
                             }).start();
 
@@ -125,6 +129,7 @@ public class MissionDetail extends AppCompatActivity {
                                 public void run()
                                 {
                                     missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"接收",mission.getTitle());
                                 }
                             }).start();
 
@@ -146,6 +151,7 @@ public class MissionDetail extends AppCompatActivity {
                                 public void run()
                                 {
                                     missionManager.abandon(MissionDetail.this,mission/*,Calendar.getInstance()*/);
+                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"放弃",mission.getTitle());
                                 }
                             }).start();
 
@@ -175,6 +181,7 @@ public class MissionDetail extends AppCompatActivity {
                         public void run()
                         {
                             missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
+                            new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"接收",mission.getTitle());
                         }
                     }).start();
 
