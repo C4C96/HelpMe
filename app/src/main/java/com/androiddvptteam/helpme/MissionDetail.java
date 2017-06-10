@@ -62,6 +62,25 @@ public class MissionDetail extends AppCompatActivity {
         {//如果当前用户是改任务的发布者
             switch(mission.getState())
             {
+                case 0://该任务还未被接受
+                    confirmButton.setText("取消任务");
+                    confirmButton.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            new Thread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    missionManager.cancel(MissionDetail.this,mission, Calendar.getInstance());
+                                }
+                            }).start();
+
+                            finish();
+                        }
+                    });
+                    break;
                 case 1://该任务正在被做
                     confirmButton.setText("确认完成");
                     confirmButton.setOnClickListener(new View.OnClickListener()
