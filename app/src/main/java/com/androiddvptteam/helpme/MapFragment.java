@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,26 +50,12 @@ public class MapFragment extends BaseFragment {
     private volatile boolean isFristLocation = true;//初始化定位相关代码
     private TextureMapView mapview;
     private BaiduMap baiduMap;
+    private ImageButton refresh;
     private boolean isFirstLocate = true;
     private TextView positionText;
     private BitmapDescriptor mIconLocation;
     private MyLocationConfiguration.LocationMode locationMode;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.dingwei);//图标
-    private Marker mMarkerA;
-    private Marker mMarkerB;
-    private Marker mMarkerC;
-    private Marker mMarkerD;
-    private Marker mMarker;
-    private InfoWindow mInfoWindow;
-    private BitmapDescriptor bdA;
-    private BitmapDescriptor bdB;
-    private BitmapDescriptor bdC;
-    private BitmapDescriptor bdD;
-    private BitmapDescriptor bd;
-    private BitmapDescriptor bdGround;
-    MyApplication myApplication = new MyApplication();
-    List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
-    List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
 
     @Nullable
     @Override
@@ -81,26 +68,39 @@ public class MapFragment extends BaseFragment {
         mapview = (TextureMapView) view.findViewById(R.id.bmapView);
         baiduMap = mapview.getMap();//获得地图实例
         baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(19).build()));//设置初始缩放比例
+        refresh = (ImageButton)view.findViewById(R.id.refresh);
         positionText = (TextView) getActivity().findViewById(R.id.position_text_view);
         List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
         if (!permissionList.isEmpty()) {
             String[] permission = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(getActivity(), permission, 1);
         } else {
             requestLocation();
         }
-        if (null!=myApplication.foundMissions&&myApplication.foundMissions.size()!=0)
-        {
+        //绑定匿名的监听器，并执行您所要在点击按钮后执行的逻辑代码
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                requestLocation();
+//                Toast.makeText(getActivity().getApplicationContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+            }
+         });
+        if(null!=myApplication.foundMissions&&myApplication.foundMissions.size()!=0) {
             initOverlay();
             initOverlayListener();
         }
         return view;
+
     }
 
     private void requestLocation() {//获取当前定位
@@ -241,6 +241,24 @@ public class MapFragment extends BaseFragment {
         baiduMap.setMyLocationEnabled(false);
     }
 
+
+    private Marker mMarkerA;
+    private Marker mMarkerB;
+    private Marker mMarkerC;
+    private Marker mMarkerD;
+    private Marker mMarker;
+
+    private InfoWindow mInfoWindow;
+    private BitmapDescriptor bdA;
+    private BitmapDescriptor bdB;
+    private BitmapDescriptor bdC;
+    private BitmapDescriptor bdD;
+    private BitmapDescriptor bd;
+    private BitmapDescriptor bdGround;
+    MyApplication myApplication = new MyApplication();
+    List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
+    List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
+
     public void initOverlay() {
         //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
         if (myApplication.foundMissions!=null) {
@@ -268,11 +286,11 @@ public class MapFragment extends BaseFragment {
 //        bdGround = BitmapDescriptorFactory
 //                .fromResource(R.drawable.dingwei);
         //if (points!=null) {
-        for (int i = 0; i <= points.size(); i++) {
-            OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);//！！！！！！！
-            oo.add(marker);
-        }
-        // }
+            for (int i = 0; i <= points.size(); i++) {
+                OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);
+                oo.add(marker);
+            }
+       // }
 
         for (int i = 0; i <= oo.size(); i++) {//在图层上添加覆盖物
             mMarker = (Marker) (baiduMap.addOverlay(oo.get(i)));
