@@ -56,7 +56,7 @@
 				android:textColor="@color/colorAccent"
 				android:textSize="36sp"
 				android:textStyle="bold"
-				android:layout_below="@+id/logo"
+				android:layout_alignParentBottom="true"
 				android:layout_centerHorizontal="true" />
 
 			<ProgressBar
