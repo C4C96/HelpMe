@@ -99,8 +99,9 @@ public class ReleaseConnection extends URLConnection
                             json.put("hour", hour);
                             json.put("minute", minute);
                             json.put("second", second);
-                            json.put("second", latitude);
-                            json.put("second", longitude);
+                            json.put("latitude", latitude);
+                            json.put("longitude", longitude);
+                            System.out.println("纬度："+latitude);
 
                             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 

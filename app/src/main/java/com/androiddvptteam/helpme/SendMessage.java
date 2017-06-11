@@ -41,7 +41,7 @@ public class SendMessage
                     second="0"+String.valueOf(c.get(Calendar.SECOND));
                 try
                 {
-//                    connection = new SendMessageConnection(new URL("http://192.168.0.3:8080/AndroidServlet/SendMessageServlet"));
+//                    connection = new SendMessageConnection(new URL("http://172.30.211.84:8080/AndroidServlet/SendMessageServlet"));
                     connection=new SendMessageConnection(new URL("http://123.206.125.166:8080/AndroidServlet/SendMessageServlet"));
                     connection.setAttributes(id,publisherNumber,recipientNumber,st,title,year,month,day,hour,minute,second);
                     connection.connect();

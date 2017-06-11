@@ -43,6 +43,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class MapFragment extends BaseFragment {
     public LocationClient mLocationClient;//定位客户端
     public MyLocationListener mMyLocationListener;  //定位监听器
@@ -57,10 +59,31 @@ public class MapFragment extends BaseFragment {
     private MyLocationConfiguration.LocationMode locationMode;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.dingwei);//图标
 
+    private Marker mMarkerA;
+    private Marker mMarkerB;
+    private Marker mMarkerC;
+    private Marker mMarkerD;
+    private Marker mMarker;
+
+    private InfoWindow mInfoWindow;
+    private BitmapDescriptor bdA;
+    private BitmapDescriptor bdB;
+    private BitmapDescriptor bdC;
+    private BitmapDescriptor bdD;
+    private BitmapDescriptor bd;
+    private BitmapDescriptor bdGround;
+    List<Mission> mission=new LinkedList<>();
+    List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
+    List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
+
     @Nullable
     @Override
 
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        MyApplication myApplication=(MyApplication)getActivity().getApplication();
+        mission=myApplication.foundMissions;
+        System.out.println("这里是地图");
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         mLocationClient = new LocationClient(getContext().getApplicationContext());//获取全进程有效的context
         mLocationClient.registerLocationListener(new MyLocationListener());
@@ -95,12 +118,13 @@ public class MapFragment extends BaseFragment {
 //                Toast.makeText(getActivity().getApplicationContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
          });
-        if(null!=myApplication.foundMissions&&myApplication.foundMissions.size()!=0) {
-            initOverlay();
-            initOverlayListener();
+
+        if(null!=mission&&mission.size()!=0) {
+            System.out.println("又一个嘿嘿嘿"+mission.size());
+            initOverlay(mission);
+            initOverlayListener(mission);
         }
         return view;
-
     }
 
     private void requestLocation() {//获取当前定位
@@ -123,40 +147,13 @@ public class MapFragment extends BaseFragment {
         option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
         option.setIsNeedAddress(true);//位置
         mLocationClient.setLocOption(option);//使用设置
-
     }
-
-//    private void navigateTo(BDLocation location)
-//    {
-//        if(isFirstLocate)
-//        {//判断是否第一次定位，若是就执行以下代码
-//            LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
-//            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-//            baiduMap.animateMapStatus(update);
-//            update = MapStatusUpdateFactory.zoomTo(16f);
-//            baiduMap.animateMapStatus(update);
-//            isFirstLocate = false;
-//        }
-//        MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
-//        locationBuilder.latitude(location.getLatitude());
-//        locationBuilder.longitude(location.getLongitude());
-//        MyLocationData locationData = locationBuilder.build();
-//        baiduMap.setMyLocationData(locationData);
-//    }
 
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onConnectHotSpotMessage(String s, int i) {
         }
 
-        //        @Override
-//        public void onReceiveLocation(BDLocation location)
-//        {
-//            if(location.getLocType()==BDLocation.TypeNetWorkLocation||location.getLocType()==BDLocation.TypeGpsLocation)
-//            {
-//                navigateTo(location);
-//            }else return;
-//        }
         private boolean isFirstIn = true;
 
         //定位请求回调函数,这里面会得到定位信息
@@ -203,7 +200,7 @@ public class MapFragment extends BaseFragment {
                 //改变地图状态
                 baiduMap.setMapStatus(msu);
                 isFirstIn = false;
-                Toast.makeText(getContext(), bdLocation.getAddrStr(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), bdLocation.getAddrStr(), LENGTH_SHORT).show();
             }
 
 
@@ -239,101 +236,34 @@ public class MapFragment extends BaseFragment {
         mLocationClient.stop();
         mapview.onDestroy();
         baiduMap.setMyLocationEnabled(false);
+        mission.clear();
+        points.clear();
+        oo.clear();
     }
 
-
-    private Marker mMarkerA;
-    private Marker mMarkerB;
-    private Marker mMarkerC;
-    private Marker mMarkerD;
-    private Marker mMarker;
-
-    private InfoWindow mInfoWindow;
-    private BitmapDescriptor bdA;
-    private BitmapDescriptor bdB;
-    private BitmapDescriptor bdC;
-    private BitmapDescriptor bdD;
-    private BitmapDescriptor bd;
-    private BitmapDescriptor bdGround;
-    MyApplication myApplication = new MyApplication();
-    List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
-    List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
-
-    public void initOverlay() {
+    public void initOverlay( List<Mission> mission) {
         //(LatLng表示坐标位置 第一个参数为维度，第一个参数为经度)
-        if (myApplication.foundMissions!=null) {
-            for (int i = 0; i <= myApplication.foundMissions.size(); i++) {
-                LatLng ll = new LatLng(myApplication.foundMissions.get(i).getLatitude(), myApplication.foundMissions.get(i).getLongitude());
-                points.add(ll);
-            }
+        for (int i = 0; i <mission.size(); i++)
+        {
+            System.out.println("嘿嘿嘿"+mission.get(i).getLatitude());
+            LatLng ll = new LatLng(mission.get(i).getLatitude(), mission.get(i).getLongitude());
+            points.add(ll);
         }
-//        LatLng llA = new LatLng(31.2345790211, 121.4129109701);
-//        LatLng llB = new LatLng(31.2328212311, 121.4134269199);
-//        LatLng llC = new LatLng(31.2397232311, 121.4131125541);
-//        LatLng llD = new LatLng(31.2369651233, 121.4143201394);
-//        LatLng llText = new LatLng(39.86923, 116.397428);
-//        //这里是将图标转化为对象
-//        bdA = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-//        bdB = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-//        bdC = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-//        bdD = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-//        bd = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-//        bdGround = BitmapDescriptorFactory
-//                .fromResource(R.drawable.dingwei);
-        //if (points!=null) {
-            for (int i = 0; i <= points.size(); i++) {
+            for (int i = 0; i <points.size(); i++)
+            {
                 OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);
                 oo.add(marker);
             }
-       // }
 
-        for (int i = 0; i <= oo.size(); i++) {//在图层上添加覆盖物
+        for (int i = 0; i <oo.size(); i++) {//在图层上添加覆盖物
             mMarker = (Marker) (baiduMap.addOverlay(oo.get(i)));
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("info",mission.get(i));
+            mMarker.setExtraInfo(bundle);//将bundle值传入marker中，给baiduMap设置监听时可以得到它
         }
-
-        //定义四种不同类型的覆盖物
-//        OverlayOptions ooA = new MarkerOptions().position(llA).icon(bdA)
-//                .zIndex(9).draggable(true);//OverlayOptions 地图覆盖物选型
-//
-//        mMarkerA = (Marker) (baiduMap.addOverlay(ooA));//addOverlay在当前图层添加覆盖物对象
-//        OverlayOptions ooB = new MarkerOptions().position(llB).icon(bdB)
-//                .zIndex(5);
-//        mMarkerB = (Marker) (baiduMap.addOverlay(ooB));
-//        OverlayOptions ooC = new MarkerOptions().position(llC).icon(bdC)
-//                .perspective(false).zIndex(7);
-//        mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
-//        //将A,B,C三种坐标添加到list中
-//        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
-//        giflist.add(bdA);
-//        giflist.add(bdB);
-//        giflist.add(bdC);
-//        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
-//                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
-//        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
-
-//        // add ground overlay
-//        LatLng southwest = new LatLng(31.2345790214, 121.4129109706);
-//        LatLng northeast = new LatLng(31.2345790221, 121.4129109501);
-//        LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
-//                .include(southwest).build();
-//
-//        OverlayOptions ooGround = new GroundOverlayOptions()
-//                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
-//        baiduMap.addOverlay(ooGround);
-//
-////        //生成变化地图状态
-//        MapStatusUpdate u = MapStatusUpdateFactory
-//                .newLatLng(bounds.getCenter());//newLatLng设置地图新中心点
-////        //设置地图状态
-//        baiduMap.setMapStatus(u);
     }
 
-    private void initOverlayListener() {
+    private void initOverlayListener( List<Mission> mission) {
 //        //设置坐标点击事件
         baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
 
@@ -349,23 +279,23 @@ public class MapFragment extends BaseFragment {
         });
         if (oo != null) {
             int i = 0;
-            for (i = 0; i <= oo.size(); i++)
+            for (i = 0; i < oo.size(); i++)
             {
-                final String e = myApplication.foundMissions.get(i).getContent();
-                final int q=i;
                 baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener()
                 {
                     public boolean onMarkerClick(final Marker marker)
                     {
+                        final Mission m=(Mission) marker.getExtraInfo().get("info");
                         Button button = new Button(getContext().getApplicationContext());
                         button.setBackgroundResource(R.drawable.dingwei);
                         InfoWindow.OnInfoWindowClickListener listener = null;
-                        button.setText(e);
+                        button.setText(m.getTitle());
                         listener = new InfoWindow.OnInfoWindowClickListener()
                         {
                             public void onInfoWindowClick()
                             {
-                                MissionDetail.actionStart(getContext(),myApplication.foundMissions.get(q));
+                                MissionDetail.actionStart(getContext(),m);
+                                Toast.makeText(getContext(),"23333333333",LENGTH_SHORT).show();
                             }
                         };
                         LatLng ll = marker.getPosition();
@@ -375,9 +305,6 @@ public class MapFragment extends BaseFragment {
                     }
                 });
             }
-//}
-//        //地图点击事件
-
         }
     }
 }

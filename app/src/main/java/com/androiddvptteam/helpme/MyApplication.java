@@ -125,7 +125,7 @@ public class MyApplication extends Application
 		boolean result=true;
 		try
 		{
-//			connection = new MyMissionConnection(new URL("http://192.168.0.3:8080/AndroidServlet/MyMissionServlet"));
+//			connection = new MyMissionConnection(new URL("http://172.30.211.84:8080/AndroidServlet/MyMissionServlet"));
 			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
 			connection.setAttributes(personalInformation,1);
 			connection.connect();
@@ -163,7 +163,7 @@ public class MyApplication extends Application
 		boolean result=true;
 		try
 		{
-//			connection = new MyMissionConnection(new URL("http://192.168.0.3:8080/AndroidServlet/MyMissionServlet"));
+//			connection = new MyMissionConnection(new URL("http://172.30.211.84:8080/AndroidServlet/MyMissionServlet"));
 			connection=new MyMissionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/MyMissionServlet"));
 			connection.setAttributes(personalInformation,2);
 			connection.connect();
@@ -242,7 +242,7 @@ public class MyApplication extends Application
 		try
 		{
 			android.util.Log.d("ID",id);
-//			connection=new LoginConnection(new URL("http://192.168.0.3:8080/AndroidServlet/LoginServlet"));
+//			connection=new LoginConnection(new URL("http://172.30.211.84:8080/AndroidServlet/LoginServlet"));
 			connection=new LoginConnection(new URL("http://123.206.125.166:8080/AndroidServlet/LoginServlet"));
 			connection.setAttributes(id,password);
 			connection.connect();
@@ -336,7 +336,7 @@ public class MyApplication extends Application
 
 		try
 		{
-//			connection=new IntroductionConnection(new URL("http://192.168.0.3:8080/AndroidServlet/IntroductionServlet"));
+//			connection=new IntroductionConnection(new URL("http://172.30.211.84:8080/AndroidServlet/IntroductionServlet"));
 			connection=new IntroductionConnection(new URL("http://123.206.125.166:8080/AndroidServlet/IntroductionServlet"));
 			connection.setAttributes(introduction,personalInformation.getSchoolNumber());
 			connection.connect();

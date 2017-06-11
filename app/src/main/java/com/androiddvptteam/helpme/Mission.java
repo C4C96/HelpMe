@@ -204,7 +204,7 @@ public class Mission implements Serializable
 			try
 			{
 				connection=new ReleaseConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReleaseServlet"));
-//				connection = new ReleaseConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReleaseServlet"));
+//				connection = new ReleaseConnection(new URL("http://172.30.211.84:8080/AndroidServlet/ReleaseServlet"));
 				connection.setAttributes(mission);
 				connection.connect();
 				if (connection.connectionResult)
@@ -249,7 +249,7 @@ public class Mission implements Serializable
 						boolean result=true;
 						try
 						{
-//							connection = new ReceiveConnection(new URL("http://192.168.0.3:8080/AndroidServlet/ReceiveServlet"));
+//							connection = new ReceiveConnection(new URL("http://172.30.211.84:8080/AndroidServlet/ReceiveServlet"));
 							connection=new ReceiveConnection(new URL("http://123.206.125.166:8080/AndroidServlet/ReceiveServlet"));
 							connection.setAttributes(mission,recipient,receivedTime);
 
@@ -305,7 +305,7 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-//					connection = new FinishConnection(new URL("http://192.168.0.3:8080/AndroidServlet/FinishServlet"));
+//					connection = new FinishConnection(new URL("http://172.30.211.84:8080/AndroidServlet/FinishServlet"));
 					connection=new FinishConnection(new URL("http://123.206.125.166:8080/AndroidServlet/FinishServlet"));
 					connection.setAttributes(mission,finishTime);
 					connection.connect();
@@ -359,7 +359,7 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-//					connection = new CancelConnection(new URL("http://192.168.0.3:8080/AndroidServlet/CancelServlet"));
+//					connection = new CancelConnection(new URL("http://172.30.211.84:8080/AndroidServlet/CancelServlet"));
 					connection=new CancelConnection(new URL("http://123.206.125.166:8080/AndroidServlet/CancelServlet"));
 					connection.setAttributes(mission,cancelTime);
 					connection.connect();
@@ -414,7 +414,7 @@ public class Mission implements Serializable
 				boolean result=true;
 				try
 				{
-//					connection=new AbandonConnection(new URL("http://192.168.0.3:8080/AndroidServlet/AbandonServlet"));
+//					connection=new AbandonConnection(new URL("http://172.30.211.84:8080/AndroidServlet/AbandonServlet"));
 					connection=new AbandonConnection(new URL("http://123.206.125.166:8080/AndroidServlet/AbandonServlet"));
 					connection.setAttributes(mission/*,abandonTime*/);
 					connection.connect();

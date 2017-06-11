@@ -45,7 +45,7 @@ public class MessageFragment extends Fragment
 					final GetMessageConnection connection;
 					try
 					{
-//						connection = new GetMessageConnection(new URL("http://192.168.0.3:8080/AndroidServlet/GetMessageServlet"));
+//						connection = new GetMessageConnection(new URL("http://172.30.211.84:8080/AndroidServlet/GetMessageServlet"));
 						connection=new GetMessageConnection(new URL("http://123.206.125.166:8080/AndroidServlet/GetMessageServlet"));
 						connection.setMyNum(me.getSchoolNumber());
 						connection.connect();
