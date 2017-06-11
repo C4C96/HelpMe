@@ -189,8 +189,8 @@ public class MyMissionConnection extends URLConnection
                             double d2=(double) listForMission.get(i).get("attribute");
                             double d3=(double) listForMission.get(i).get("scope");
                             double d4=(double) listForMission.get(i).get("state");
-//                            double la=(double) listForMission.get(i).get("latitude");
-//                            double lo=(double) listForMission.get(i).get("longitude");
+                            double la=(double) listForMission.get(i).get("latitude");
+                            double lo=(double) listForMission.get(i).get("longitude");
                             Mission mission = new Mission(
                                     (String) listForMission.get(i).get("missionID"),
                                     (String) listForMission.get(i).get("title"),
@@ -204,9 +204,9 @@ public class MyMissionConnection extends URLConnection
                                     cReceive,
                                     cFinish,
                                     cCancel,
-                                    (int) d4
-//                                    la,
-//                                    lo
+                                    (int) d4,
+                                    la,
+                                    lo
                             );
 
                             missionsList.add(mission);

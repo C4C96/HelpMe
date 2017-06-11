@@ -88,43 +88,46 @@ public class GetMessageConnection extends URLConnection
                         listResult = true;
                         for (int i = 0; i < list.size(); i++)
                         {//对接收的数据进行遍历打印
-                            Message m=new Message();
-                            String M="";
-                            if(list.get(i).get("state").equals("确认完成"))
+                            if(list.get(i).get("publisherNum").equals(myNum)||list.get(i).get("recipientNum").equals(myNum))
                             {
-                                if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                    M="您已确认“"+(String) list.get(i).get("title")+"”的任务被完成了";
-                                if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                    M="学号为"+(String) list.get(i).get("publisherNum")+"的同学已确认任务“"+(String) list.get(i).get("title")+"”完成";
+                                Message m=new Message();
+                                String M="";
+                                if(list.get(i).get("state").equals("确认完成"))
+                                {
+                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M="您已确认“"+(String) list.get(i).get("title")+"”的任务被完成了";
+                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M="学号为"+(String) list.get(i).get("publisherNum")+"的同学已确认任务“"+(String) list.get(i).get("title")+"”完成";
+                                }
+                                else if(list.get(i).get("state").equals("接收"))
+                                {
+                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学接收了";
+                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M="您已接受了“"+(String) list.get(i).get("title")+"”这个任务";
+                                }
+                                else if(list.get(i).get("state").equals("放弃"))
+                                {
+                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学放弃了";
+                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M="您已放弃了"+(String) list.get(i).get("title")+"”这个任务";
+                                }
+                                else if(list.get(i).get("state").equals("取消"))
+                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经被您自己取消了";
+                                else if(list.get(i).get("state").equals("发送成功"))
+                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经成功发送";
+                                m=new Message(ic_menu_info_details,
+                                        "任务已发送",
+                                        M,
+                                        (String) list.get(i).get("year"),
+                                        (String) list.get(i).get("month"),
+                                        (String) list.get(i).get("day"),
+                                        (String) list.get(i).get("hour"),
+                                        (String) list.get(i).get("minute"),
+                                        (String) list.get(i).get("second"));
+                                message.add(m);
                             }
-                            else if(list.get(i).get("state").equals("接收"))
-                            {
-                                if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学接收了";
-                                if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                    M="您已接受了“"+(String) list.get(i).get("title")+"”这个任务";
-                            }
-                            else if(list.get(i).get("state").equals("放弃"))
-                            {
-                                if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学放弃了";
-                                if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                    M="您已放弃了"+(String) list.get(i).get("title")+"”这个任务";
-                            }
-                            else if(list.get(i).get("state").equals("取消"))
-                                M="您的“"+(String) list.get(i).get("title")+"”任务已经被您自己取消了";
-                            else if(list.get(i).get("state").equals("发送成功"))
-                                M="您的“"+(String) list.get(i).get("title")+"”任务已经成功发送";
-                            m=new Message(ic_menu_info_details,
-                                    "任务已发送",
-                                    M,
-                                    (String) list.get(i).get("year"),
-                                    (String) list.get(i).get("month"),
-                                    (String) list.get(i).get("day"),
-                                    (String) list.get(i).get("hour"),
-                                    (String) list.get(i).get("minute"),
-                                    (String) list.get(i).get("second"));
-                            message.add(m);
                         }
                     }
                     if(listResult)

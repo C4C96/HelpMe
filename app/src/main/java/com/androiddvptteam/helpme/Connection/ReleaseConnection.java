@@ -23,6 +23,8 @@ public class ReleaseConnection extends URLConnection
     private int gender;       //性别
     private int attribute;    //标签
     private int range;       //范围
+    private double latitude;//纬度
+    private double longitude;//经度
     private Calendar createTime;//任务创建时间
     private int year;//任务创建时间——年份
     private int month;//任务创建时间——月份
@@ -48,6 +50,8 @@ public class ReleaseConnection extends URLConnection
         this.gender=mission.getGender();
         this.attribute=mission.getAttribute();
         this.range=mission.getRange();
+        this.latitude=mission.getLatitude();//纬度
+       this.longitude=mission.getLongitude();//经度
 
         createTime=mission.getCreateTime();
         this.year=createTime.get(Calendar.YEAR);
@@ -95,6 +99,8 @@ public class ReleaseConnection extends URLConnection
                             json.put("hour", hour);
                             json.put("minute", minute);
                             json.put("second", second);
+                            json.put("second", latitude);
+                            json.put("second", longitude);
 
                             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 

@@ -249,24 +249,24 @@ public class MapFragment extends BaseFragment {
                 points.add(ll);
             }
         }
-        LatLng llA = new LatLng(31.2345790211, 121.4129109701);
-        LatLng llB = new LatLng(31.2328212311, 121.4134269199);
-        LatLng llC = new LatLng(31.2397232311, 121.4131125541);
-        LatLng llD = new LatLng(31.2369651233, 121.4143201394);
-        LatLng llText = new LatLng(39.86923, 116.397428);
-        //这里是将图标转化为对象
-        bdA = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
-        bdB = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
-        bdC = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
-        bdD = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
-        bd = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
-        bdGround = BitmapDescriptorFactory
-                .fromResource(R.drawable.dingwei);
+//        LatLng llA = new LatLng(31.2345790211, 121.4129109701);
+//        LatLng llB = new LatLng(31.2328212311, 121.4134269199);
+//        LatLng llC = new LatLng(31.2397232311, 121.4131125541);
+//        LatLng llD = new LatLng(31.2369651233, 121.4143201394);
+//        LatLng llText = new LatLng(39.86923, 116.397428);
+//        //这里是将图标转化为对象
+//        bdA = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
+//        bdB = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
+//        bdC = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
+//        bdD = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
+//        bd = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
+//        bdGround = BitmapDescriptorFactory
+//                .fromResource(R.drawable.dingwei);
         //if (points!=null) {
         for (int i = 0; i <= points.size(); i++) {
             OverlayOptions marker = new MarkerOptions().position(points.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.dingwei)).zIndex(9).draggable(false);//！！！！！！！
@@ -279,24 +279,24 @@ public class MapFragment extends BaseFragment {
         }
 
         //定义四种不同类型的覆盖物
-        OverlayOptions ooA = new MarkerOptions().position(llA).icon(bdA)
-                .zIndex(9).draggable(true);//OverlayOptions 地图覆盖物选型
-
-        mMarkerA = (Marker) (baiduMap.addOverlay(ooA));//addOverlay在当前图层添加覆盖物对象
-        OverlayOptions ooB = new MarkerOptions().position(llB).icon(bdB)
-                .zIndex(5);
-        mMarkerB = (Marker) (baiduMap.addOverlay(ooB));
-        OverlayOptions ooC = new MarkerOptions().position(llC).icon(bdC)
-                .perspective(false).zIndex(7);
-        mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
-        //将A,B,C三种坐标添加到list中
-        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
-        giflist.add(bdA);
-        giflist.add(bdB);
-        giflist.add(bdC);
-        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
-                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
-        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
+//        OverlayOptions ooA = new MarkerOptions().position(llA).icon(bdA)
+//                .zIndex(9).draggable(true);//OverlayOptions 地图覆盖物选型
+//
+//        mMarkerA = (Marker) (baiduMap.addOverlay(ooA));//addOverlay在当前图层添加覆盖物对象
+//        OverlayOptions ooB = new MarkerOptions().position(llB).icon(bdB)
+//                .zIndex(5);
+//        mMarkerB = (Marker) (baiduMap.addOverlay(ooB));
+//        OverlayOptions ooC = new MarkerOptions().position(llC).icon(bdC)
+//                .perspective(false).zIndex(7);
+//        mMarkerC = (Marker) (baiduMap.addOverlay(ooC));
+//        //将A,B,C三种坐标添加到list中
+//        ArrayList<BitmapDescriptor> giflist = new ArrayList<BitmapDescriptor>();
+//        giflist.add(bdA);
+//        giflist.add(bdB);
+//        giflist.add(bdC);
+//        OverlayOptions ooD = new MarkerOptions().position(llD).icons(giflist)
+//                .zIndex(0).period(10);//每隔10毫秒变动下标记(自v3.3.0版本起，SDK提供了给Marker增加动画的能力)
+//        mMarkerD = (Marker) (baiduMap.addOverlay(ooD));
 
 //        // add ground overlay
 //        LatLng southwest = new LatLng(31.2345790214, 121.4129109706);
@@ -331,18 +331,23 @@ public class MapFragment extends BaseFragment {
         });
         if (oo != null) {
             int i = 0;
-            for (i = 0; i <= oo.size(); i++) {
+            for (i = 0; i <= oo.size(); i++)
+            {
                 final String e = myApplication.foundMissions.get(i).getContent();
-                baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-                    public boolean onMarkerClick(final Marker marker) {
+                final int q=i;
+                baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener()
+                {
+                    public boolean onMarkerClick(final Marker marker)
+                    {
                         Button button = new Button(getContext().getApplicationContext());
                         button.setBackgroundResource(R.drawable.dingwei);
                         InfoWindow.OnInfoWindowClickListener listener = null;
                         button.setText(e);
-                        listener = new InfoWindow.OnInfoWindowClickListener() {
-                            public void onInfoWindowClick() {
-//                            LatLng ll = marker.getPosition();
-//                            baiduMap.hideInfoWindow();//隐藏消息窗
+                        listener = new InfoWindow.OnInfoWindowClickListener()
+                        {
+                            public void onInfoWindowClick()
+                            {
+                                MissionDetail.actionStart(getContext(),myApplication.foundMissions.get(q));
                             }
                         };
                         LatLng ll = marker.getPosition();

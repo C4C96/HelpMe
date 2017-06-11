@@ -60,9 +60,9 @@ public class Mission implements Serializable
 				   @NonNull int                 attribute,
 				   @NonNull int                 range,
                    @NonNull PersonalInformation publisher,
-                   @NonNull Calendar            createTime
-				   /*@NonNull double       		latitude,
-				   @NonNull double       		longitude*/)
+                   @NonNull Calendar            createTime,
+				   @NonNull double       		latitude,
+				   @NonNull double       		longitude)
     {
         this.title = title;
         this.content = content;
@@ -72,8 +72,8 @@ public class Mission implements Serializable
         this.publisher = publisher;
         this.createTime = createTime;
         this.ID = generateID();
-//		this.latitude=latitude;
-//		this.longitude=longitude;
+		this.latitude=latitude;
+		this.longitude=longitude;
     }
 
 	/**
@@ -92,9 +92,9 @@ public class Mission implements Serializable
                    Calendar            receiveTime,
                    Calendar            finishTime,
                    Calendar            cancelTime,
-                   int                 state
-				   /*double 			   latitude,
-				   double 			   longitude*/)
+                   int                 state,
+				   double 			   latitude,
+				   double 			   longitude)
     {
         this.ID = ID;
         this.title = title;
@@ -109,8 +109,8 @@ public class Mission implements Serializable
         this.finishTime = finishTime;
         this.cancelTime = cancelTime;
         this.state = state;
-//		this.latitude=latitude;
-//		this.longitude=longitude;
+		this.latitude=latitude;
+		this.longitude=longitude;
     }
 
     /**

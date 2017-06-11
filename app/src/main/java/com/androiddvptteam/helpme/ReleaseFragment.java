@@ -205,8 +205,8 @@ public class ReleaseFragment extends BaseFragment
 
 				final MyApplication myApplication = (MyApplication) getActivity().getApplication();
 				PersonalInformation publisher=myApplication.getPersonalInformation();
-				//final GetLocation gl=new GetLocation(getContext());
-				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime/*,gl.getLatitude(),gl.getLongitude()*/);
+				final GetLocation gl=new GetLocation(getContext());
+				Mission newMission=new Mission(title,content,gender,attribute,range,publisher,createTime,gl.getLatitude(),gl.getLongitude());
 				final Mission.MissionManager missionManager=new Mission.MissionManager();
 				missionManager.releaseMission(getContext(),newMission);
 
