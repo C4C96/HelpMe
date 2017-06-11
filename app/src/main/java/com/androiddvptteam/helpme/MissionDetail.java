@@ -150,8 +150,9 @@ public class MissionDetail extends AppCompatActivity {
                                 @Override
                                 public void run()
                                 {
-                                    missionManager.abandon(MissionDetail.this,mission/*,Calendar.getInstance()*/);
                                     new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"放弃",mission.getTitle());
+                                    missionManager.abandon(MissionDetail.this,mission/*,Calendar.getInstance()*/);
+
                                 }
                             }).start();
 
