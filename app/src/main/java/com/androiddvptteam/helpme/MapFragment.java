@@ -58,11 +58,6 @@ public class MapFragment extends BaseFragment {
     private BitmapDescriptor mIconLocation;
     private MyLocationConfiguration.LocationMode locationMode;
     private BitmapDescriptor mbitmap = BitmapDescriptorFactory.fromResource(R.drawable.dingwei);//图标
-
-    private Marker mMarkerA;
-    private Marker mMarkerB;
-    private Marker mMarkerC;
-    private Marker mMarkerD;
     private Marker mMarker;
 
     private InfoWindow mInfoWindow;
@@ -106,7 +101,9 @@ public class MapFragment extends BaseFragment {
         if (!permissionList.isEmpty()) {
             String[] permission = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(getActivity(), permission, 1);
-        } else {
+        }
+        else
+            {
             requestLocation();
         }
         //绑定匿名的监听器，并执行您所要在点击按钮后执行的逻辑代码
@@ -119,8 +116,8 @@ public class MapFragment extends BaseFragment {
             }
          });
 
-        if(null!=mission&&mission.size()!=0) {
-            System.out.println("又一个嘿嘿嘿"+mission.size());
+        if(null!=mission&&mission.size()!=0)
+        {
             initOverlay(mission);
             initOverlayListener(mission);
         }
@@ -149,7 +146,8 @@ public class MapFragment extends BaseFragment {
         mLocationClient.setLocOption(option);//使用设置
     }
 
-    public class MyLocationListener implements BDLocationListener {
+    public class MyLocationListener implements BDLocationListener
+    {
         @Override
         public void onConnectHotSpotMessage(String s, int i) {
         }
@@ -202,8 +200,6 @@ public class MapFragment extends BaseFragment {
                 isFirstIn = false;
                 Toast.makeText(getContext(), bdLocation.getAddrStr(), LENGTH_SHORT).show();
             }
-
-
         }
     }
 
