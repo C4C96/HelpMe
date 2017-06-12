@@ -3,7 +3,6 @@ package com.androiddvptteam.helpme;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -39,7 +38,6 @@ import com.baidu.mapapi.model.LatLng;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -61,12 +59,7 @@ public class MapFragment extends BaseFragment {
     private Marker mMarker;
 
     private InfoWindow mInfoWindow;
-    private BitmapDescriptor bdA;
-    private BitmapDescriptor bdB;
-    private BitmapDescriptor bdC;
-    private BitmapDescriptor bdD;
-    private BitmapDescriptor bd;
-    private BitmapDescriptor bdGround;
+
     List<Mission> mission=new LinkedList<>();
     List<LatLng> points = new LinkedList<>();//将所有有的任务的经纬度加载
     List<OverlayOptions> oo = new LinkedList<>();//定义覆盖物
@@ -283,7 +276,7 @@ public class MapFragment extends BaseFragment {
                     {
                         final Mission m=(Mission) marker.getExtraInfo().get("info");
                         Button button = new Button(getContext().getApplicationContext());
-                        button.setBackgroundResource(R.drawable.dingwei);
+                        button.setBackgroundResource(R.drawable.kuang1);
                         InfoWindow.OnInfoWindowClickListener listener = null;
                         button.setText(m.getTitle());
                         listener = new InfoWindow.OnInfoWindowClickListener()

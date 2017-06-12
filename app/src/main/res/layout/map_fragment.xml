@@ -26,7 +26,7 @@
 		android:layout_marginLeft="8dp"
 		android:layout_toEndOf="@+id/position_text_view"
 		android:layout_toRightOf="@+id/position_text_view"
-		android:background="@android:color/transparent"
-		app:srcCompat="@drawable/location" />
+		android:background="@android:color/background_light"
+		app:srcCompat="@drawable/location1" />
 
 </RelativeLayout>
