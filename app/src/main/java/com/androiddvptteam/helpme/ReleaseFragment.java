@@ -155,8 +155,6 @@ public class ReleaseFragment extends BaseFragment
 					}
 				}
 		);
-
-
 	}
 
 	private void buttonListener()//处理两个按钮的事件

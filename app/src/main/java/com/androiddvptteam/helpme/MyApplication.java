@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.androiddvptteam.helpme.Connection.GetMessageConnection;
 import com.androiddvptteam.helpme.Connection.IntroductionConnection;
 import com.androiddvptteam.helpme.Connection.LoginConnection;
 import com.androiddvptteam.helpme.Connection.MyMissionConnection;
@@ -30,7 +31,9 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static android.content.ContentValues.TAG;
 import static com.androiddvptteam.helpme.Tools.netDelay;
@@ -47,6 +50,7 @@ public class MyApplication extends Application
 
 	public List<Mission> myMissions;					//我的任务（全部种类）
 	public List<Mission> foundMissions;					//发现的任务
+	public List<Message> message;	//消息集合
 
 	//百度地图需要
 	private MapView mapview;
@@ -78,6 +82,7 @@ public class MyApplication extends Application
 		loadLocalAvatar();
 		myMissions = new ArrayList<>();
 		foundMissions = new ArrayList<>();
+		message=new LinkedList<>();
 	}
 
 	/**
@@ -280,7 +285,38 @@ public class MyApplication extends Application
 		startActivity(new Intent(this, LoginActivity.class));
 	}
 
-
+	public List<Message> getMessage()
+	{
+		int threadNumber = 1;
+		final CountDownLatch countDownLatch = new CountDownLatch(threadNumber);
+		try
+		{
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					final GetMessageConnection connection;
+					try
+					{
+//						connection = new GetMessageConnection(new URL("http://172.30.211.84:8080/AndroidServlet/GetMessageServlet"));
+						connection=new GetMessageConnection(new URL("http://123.206.125.166:8080/AndroidServlet/GetMessageServlet"));
+						connection.setMyNum(personalInformation.getSchoolNumber());
+						connection.connect();
+						message = connection.getMessage();
+						countDownLatch.countDown();
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+			).start();
+			countDownLatch.await();
+		}
+		catch (Exception e){}
+		return message;
+	}
 
 	//get方法
 

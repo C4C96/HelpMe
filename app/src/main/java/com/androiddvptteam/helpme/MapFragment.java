@@ -284,7 +284,6 @@ public class MapFragment extends BaseFragment {
                             public void onInfoWindowClick()
                             {
                                 MissionDetail.actionStart(getContext(),m);
-                                Toast.makeText(getContext(),"23333333333",LENGTH_SHORT).show();
                             }
                         };
                         LatLng ll = marker.getPosition();

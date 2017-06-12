@@ -118,7 +118,7 @@ public class GetMessageConnection extends URLConnection
                                 else if(list.get(i).get("state").equals("发送成功"))
                                     M="您的“"+(String) list.get(i).get("title")+"”任务已经成功发送";
                                 m=new Message(ic_menu_info_details,
-                                        "任务已发送",
+                                        "新消息",
                                         M,
                                         (String) list.get(i).get("year"),
                                         (String) list.get(i).get("month"),
