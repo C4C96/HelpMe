@@ -1,18 +1,21 @@
 package com.androiddvptteam.helpme.Connection;
 
 import com.androiddvptteam.helpme.PersonalInformation;
+
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
 import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /*
-* 发布者发布任务
-* 上传用户输入的数据，下载用户的登录信息
-* */
+ * 发布者发布任务
+ * 上传用户输入的数据，下载用户的登录信息
+ * */
 
 public class LoginConnection extends URLConnection
 {
@@ -24,18 +27,18 @@ public class LoginConnection extends URLConnection
     public String result;
     public PersonalInformation person;
 
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public LoginConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
     public void setAttributes(String id, String password)
     {
-        this.ID=id;
-        this.password=password;
+        this.ID = id;
+        this.password = password;
     }
 
     public void connect() throws IOException
@@ -63,12 +66,12 @@ public class LoginConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
             bw.close();//使用完关闭
-            System.out.println("34343  "+urlConnection.getResponseCode());
+            System.out.println("34343  " + urlConnection.getResponseCode());
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
@@ -86,7 +89,7 @@ public class LoginConnection extends URLConnection
                 in.close();
                 br.close();
                 JSONObject rjson = new JSONObject(buffer.toString());
-                String s=new String(rjson.getString("loginResult").getBytes(),"UTF-8");
+                String s = new String(rjson.getString("loginResult").getBytes(), "UTF-8");
 
                 Gson gson = new Gson();
                 //得到List<Map<String,Object>>
@@ -95,23 +98,22 @@ public class LoginConnection extends URLConnection
                         {
                         }.getType());//返回登陆成功后的用户信息
 
-                result=(String) listForPerson.get(0).get("result");//从json对象中得到相应key的值
-                System.out.println("2333  "+result);
-                if(result.equals("success"))
+                result = (String) listForPerson.get(0).get("result");//从json对象中得到相应key的值
+                System.out.println("2333  " + result);
+                if (result.equals("success"))
                 {
-                    String name=(String) listForPerson.get(0).get("name");
-                    String schoolNum=(String) listForPerson.get(0).get("schoolNum");
-                    double gender= (double) listForPerson.get(0).get("gender");
-                    String departmentName= (String) listForPerson.get(0).get("departmentName");
-                    String introduction= (String) listForPerson.get(0).get("introduction");
+                    String name = (String) listForPerson.get(0).get("name");
+                    String schoolNum = (String) listForPerson.get(0).get("schoolNum");
+                    double gender = (double) listForPerson.get(0).get("gender");
+                    String departmentName = (String) listForPerson.get(0).get("departmentName");
+                    String introduction = (String) listForPerson.get(0).get("introduction");
 
-                    PersonalInformation person = new PersonalInformation(name,schoolNum,(int)gender,departmentName,introduction);
+                    PersonalInformation person = new PersonalInformation(name, schoolNum, (int) gender, departmentName, introduction);
                     setPersonalInformation(person);
                 }
             }
-                setResult(result);
-        }
-        catch (Exception e)
+            setResult(result);
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -120,8 +122,9 @@ public class LoginConnection extends URLConnection
 
     private void setResult(String s)
     {
-        this.result=s;
+        this.result = s;
     }
+
     public String getResult()
     {
         return this.result;
@@ -129,8 +132,9 @@ public class LoginConnection extends URLConnection
 
     private void setPersonalInformation(PersonalInformation p)
     {
-        this.person=p;
+        this.person = p;
     }
+
     public PersonalInformation getPersonalInformation()
     {
         return this.person;

@@ -13,70 +13,76 @@ import java.util.Calendar;
 /**
  * 差取消任务
  */
-public class MissionDetail extends AppCompatActivity {
+public class MissionDetail extends AppCompatActivity
+{
 
 
-        private Mission mission;
+    private Mission mission;
 
-        private TextView name,gender,introduction,content;
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_mission_detail);
+    private TextView name, gender, introduction, content;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mission_detail);
 
 
-            //获得mission信息
-            Intent intent = this.getIntent();
-            mission=(Mission)intent.getSerializableExtra("thisMission");
+        //获得mission信息
+        Intent intent = this.getIntent();
+        mission = (Mission) intent.getSerializableExtra("thisMission");
 
-            //修改textview的值
-            name=(TextView)findViewById(R.id.name_text);
-            gender=(TextView)findViewById(R.id.gender_text);
-            introduction=(TextView)findViewById(R.id.intro_text);
-            content=(TextView)findViewById(R.id.content_text);
+        //修改textview的值
+        name = (TextView) findViewById(R.id.name_text);
+        gender = (TextView) findViewById(R.id.gender_text);
+        introduction = (TextView) findViewById(R.id.intro_text);
+        content = (TextView) findViewById(R.id.content_text);
 
-            changeMissionInfo();
+        changeMissionInfo();
 
-            //确认和取消按钮
-            Button cancelButton=(Button)findViewById(R.id.cancel_button);
-            Button confirmButton=(Button)findViewById(R.id.confirm_button);
+        //确认和取消按钮
+        Button cancelButton = (Button) findViewById(R.id.cancel_button);
+        Button confirmButton = (Button) findViewById(R.id.confirm_button);
         confirmButton.setText("返回");
         confirmButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 finish();
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 finish();
             }
         });
 
 
-        final MyApplication myApplication = (MyApplication)getApplication();
-        final Mission.MissionManager missionManager=new Mission.MissionManager();
+        final MyApplication myApplication = (MyApplication) getApplication();
+        final Mission.MissionManager missionManager = new Mission.MissionManager();
 
-        if(mission.getPublisher().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
+        if (mission.getPublisher().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
         {//如果当前用户是改任务的发布者
-            switch(mission.getState())
+            switch (mission.getState())
             {
                 case 0://该任务还未被接受
                     confirmButton.setText("取消任务");
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
                             new Thread(new Runnable()
                             {
                                 @Override
                                 public void run()
                                 {
-                                    missionManager.cancel(MissionDetail.this,mission, Calendar.getInstance());
-                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),"","取消",mission.getTitle());
+                                    missionManager.cancel(MissionDetail.this, mission, Calendar.getInstance());
+                                    new SendMessage(mission.getID(), mission.getPublisher().getSchoolNumber(), "", "取消", mission.getTitle());
                                 }
                             }).start();
 
@@ -89,14 +95,15 @@ public class MissionDetail extends AppCompatActivity {
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
                             new Thread(new Runnable()
                             {
                                 @Override
                                 public void run()
                                 {
-                                    missionManager.finish(MissionDetail.this,mission, Calendar.getInstance());
-                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"确认完成",mission.getTitle());
+                                    missionManager.finish(MissionDetail.this, mission, Calendar.getInstance());
+                                    new SendMessage(mission.getID(), mission.getPublisher().getSchoolNumber(), mission.getRecipient().getSchoolNumber(), "确认完成", mission.getTitle());
                                 }
                             }).start();
 
@@ -112,24 +119,24 @@ public class MissionDetail extends AppCompatActivity {
                     cancelButton.setVisibility(View.GONE);
                     break;
             }
-        }
-        else if(mission.getRecipient()==null || mission.getRecipient().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
+        } else if (mission.getRecipient() == null || mission.getRecipient().getSchoolNumber().equals(myApplication.getPersonalInformation().getSchoolNumber()))
         {//如果当前用户是该任务的接收者
-            switch(mission.getState())
+            switch (mission.getState())
             {
                 case 0://该任务未被接受
                     confirmButton.setText("接收");
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
                             new Thread(new Runnable()
                             {
                                 @Override
                                 public void run()
                                 {
-                                    missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
-                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"接收",mission.getTitle());
+                                    missionManager.receive(MissionDetail.this, mission, myApplication.getPersonalInformation(), Calendar.getInstance());
+                                    new SendMessage(mission.getID(), mission.getPublisher().getSchoolNumber(), mission.getRecipient().getSchoolNumber(), "接收", mission.getTitle());
                                 }
                             }).start();
 
@@ -144,14 +151,15 @@ public class MissionDetail extends AppCompatActivity {
                     confirmButton.setOnClickListener(new View.OnClickListener()
                     {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
                             new Thread(new Runnable()
                             {
                                 @Override
                                 public void run()
                                 {
-                                    new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"放弃",mission.getTitle());
-                                    missionManager.abandon(MissionDetail.this,mission/*,Calendar.getInstance()*/);
+                                    new SendMessage(mission.getID(), mission.getPublisher().getSchoolNumber(), mission.getRecipient().getSchoolNumber(), "放弃", mission.getTitle());
+                                    missionManager.abandon(MissionDetail.this, mission/*,Calendar.getInstance()*/);
 
                                 }
                             }).start();
@@ -168,21 +176,21 @@ public class MissionDetail extends AppCompatActivity {
                     cancelButton.setVisibility(View.GONE);
                     break;
             }
-        }
-        else
+        } else
         {//既不是发布者也不是接收者
             confirmButton.setText("接收");
             confirmButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     new Thread(new Runnable()
                     {
                         @Override
                         public void run()
                         {
-                            missionManager.receive(MissionDetail.this,mission,myApplication.getPersonalInformation(),Calendar.getInstance());
-                            new SendMessage(mission.getID(),mission.getPublisher().getSchoolNumber(),mission.getRecipient().getSchoolNumber(),"接收",mission.getTitle());
+                            missionManager.receive(MissionDetail.this, mission, myApplication.getPersonalInformation(), Calendar.getInstance());
+                            new SendMessage(mission.getID(), mission.getPublisher().getSchoolNumber(), mission.getRecipient().getSchoolNumber(), "接收", mission.getTitle());
                         }
                     }).start();
 
@@ -196,24 +204,29 @@ public class MissionDetail extends AppCompatActivity {
 
     public static void actionStart(Context context, Mission mission)
     {
-        Intent intent=new Intent(context,MissionDetail.class);
+        Intent intent = new Intent(context, MissionDetail.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("thisMission", mission);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
+
     private void changeMissionInfo()
     {
-        String g="";
-        switch(mission.getGender())
+        String g = "";
+        switch (mission.getGender())
         {
-            case 0:g="男";
+            case 0:
+                g = "男";
                 break;
-            case 1:g="女";
+            case 1:
+                g = "女";
                 break;
-            case 2:g="其他";
+            case 2:
+                g = "其他";
                 break;
-            case 3:g="无所谓";
+            case 3:
+                g = "无所谓";
         }
 
         name.setText(mission.getPublisher().getUserName());

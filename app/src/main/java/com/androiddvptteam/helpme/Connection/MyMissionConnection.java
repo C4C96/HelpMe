@@ -1,11 +1,14 @@
 package com.androiddvptteam.helpme.Connection;
 
 import android.util.Log;
+
 import com.androiddvptteam.helpme.Mission;
 import com.androiddvptteam.helpme.PersonalInformation;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.text.DateFormat;
@@ -16,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 /*
-* 读取任务
-* 只用于下载
-* */
+ * 读取任务
+ * 只用于下载
+ * */
 
 public class MyMissionConnection extends URLConnection
 {
@@ -28,21 +31,21 @@ public class MyMissionConnection extends URLConnection
     private PersonalInformation publisher;
     private PersonalInformation myself;//我自己的信息
     private int state;
-    public List<Mission> missionsList=new ArrayList<Mission>();//接收任务的list
+    public List<Mission> missionsList = new ArrayList<Mission>();//接收任务的list
 
     public boolean listResult;
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public MyMissionConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
-    public void setAttributes(PersonalInformation p,int state)
+    public void setAttributes(PersonalInformation p, int state)
     {
-        this.myself=p;
-        this.state=state;
+        this.myself = p;
+        this.state = state;
     }
 
     public void connect() throws IOException
@@ -70,7 +73,7 @@ public class MyMissionConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
@@ -89,41 +92,46 @@ public class MyMissionConnection extends URLConnection
                 in.close();
                 br.close();
 
-                if(buffer.toString()!=null&&buffer.toString().length()!=0&&!"".equals(buffer.toString()))
+                if (buffer.toString() != null && buffer.toString().length() != 0 && !"".equals(buffer.toString()))
                 {
                     JSONObject rjson = new JSONObject(buffer.toString());
-                    String s1=new String(rjson.getString("listForMission").getBytes(),"UTF-8");
-                    String s2=new String(rjson.getString("listForReceivePerson").getBytes(),"UTF-8");
-                    String s3=new String(rjson.getString("listForPublishPerson").getBytes(),"UTF-8");
+                    String s1 = new String(rjson.getString("listForMission").getBytes(), "UTF-8");
+                    String s2 = new String(rjson.getString("listForReceivePerson").getBytes(), "UTF-8");
+                    String s3 = new String(rjson.getString("listForPublishPerson").getBytes(), "UTF-8");
 
                     Gson gson = new Gson();
 
                     //得到List<Map<String,Object>>
                     List<Map<String, Object>> listForMission = gson.fromJson(
                             s1,
-                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回任务的信息
+                            new TypeToken<List<Map<String, Object>>>()
+                            {
+                            }.getType());//返回任务的信息
                     List<Map<String, Object>> listForReceivePerson = gson.fromJson(
                             s2,
-                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回接收者信息
+                            new TypeToken<List<Map<String, Object>>>()
+                            {
+                            }.getType());//返回接收者信息
                     List<Map<String, Object>> listForPublishPerson = gson.fromJson(
                             s3,
-                            new TypeToken<List<Map<String, Object>>>(){}.getType());//返回发布者信息
+                            new TypeToken<List<Map<String, Object>>>()
+                            {
+                            }.getType());//返回发布者信息
 
                     if (listForMission == null || listForMission.size() < 1)
                     {//判断listForMission中有没有数据，如果没有则返回false
                         listResult = false;
-                    }
-                    else
+                    } else
                     {
                         listResult = true;
                         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         for (int i = 0; i < listForMission.size(); i++)
                         {//对接收的数据进行遍历打印
-                            PersonalInformation recipient=null;
-                            if(listForReceivePerson.get(i).get("name")!=null)
+                            PersonalInformation recipient = null;
+                            if (listForReceivePerson.get(i).get("name") != null)
                             {
-                                double d=(double) listForReceivePerson.get(i).get("gender");
-                                System.out.println("性别"+listForMission.get(i).get("gender").getClass());
+                                double d = (double) listForReceivePerson.get(i).get("gender");
+                                System.out.println("性别" + listForMission.get(i).get("gender").getClass());
                                 recipient = new PersonalInformation(
                                         (String) listForReceivePerson.get(i).get("name"),
                                         (String) listForReceivePerson.get(i).get("schoolNum"),
@@ -131,14 +139,13 @@ public class MyMissionConnection extends URLConnection
                                         (String) listForReceivePerson.get(i).get("departmentName"),
                                         (String) listForReceivePerson.get(i).get("introduction")
                                 );
-                            }
-                            else
-                                recipient=null;
+                            } else
+                                recipient = null;
 
-                            if(listForPublishPerson.get(i).get("name")!=null)
+                            if (listForPublishPerson.get(i).get("name") != null)
                             {
-                                double d=(double) listForPublishPerson.get(i).get("gender");
-                                System.out.println("性别"+listForPublishPerson.get(i).get("gender").getClass());
+                                double d = (double) listForPublishPerson.get(i).get("gender");
+                                System.out.println("性别" + listForPublishPerson.get(i).get("gender").getClass());
                                 publisher = new PersonalInformation(
                                         (String) listForPublishPerson.get(i).get("name"),
                                         (String) listForPublishPerson.get(i).get("schoolNum"),
@@ -148,49 +155,45 @@ public class MyMissionConnection extends URLConnection
                                 );
                             }
 
-                            java.util.Date dateCreate,dateReceive,dateFinish,dateCancel;
-                            Calendar cCreate=Calendar.getInstance();
-                            Calendar cReceive=Calendar.getInstance();
-                            Calendar cFinish=Calendar.getInstance();
-                            Calendar cCancel=Calendar.getInstance();
-                            if(!listForMission.get(i).get("createTime").equals(""))
+                            java.util.Date dateCreate, dateReceive, dateFinish, dateCancel;
+                            Calendar cCreate = Calendar.getInstance();
+                            Calendar cReceive = Calendar.getInstance();
+                            Calendar cFinish = Calendar.getInstance();
+                            Calendar cCancel = Calendar.getInstance();
+                            if (!listForMission.get(i).get("createTime").equals(""))
                             {
-                                dateCreate=sdf.parse(listForMission.get(i).get("createTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                dateCreate = sdf.parse(listForMission.get(i).get("createTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
                                 cCreate.setTime(dateCreate);
-                            }
-                            else
-                                cCreate=null;
+                            } else
+                                cCreate = null;
 
-                            if(!listForMission.get(i).get("receiveTime").equals(""))
+                            if (!listForMission.get(i).get("receiveTime").equals(""))
                             {
-                                dateReceive=sdf.parse(listForMission.get(i).get("receiveTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                dateReceive = sdf.parse(listForMission.get(i).get("receiveTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
                                 cReceive.setTime(dateReceive);
-                            }
-                            else
-                                cReceive=null;
+                            } else
+                                cReceive = null;
 
-                            if(!listForMission.get(i).get("finishTime").equals(""))
+                            if (!listForMission.get(i).get("finishTime").equals(""))
                             {
-                                dateFinish=sdf.parse(listForMission.get(i).get("finishTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                dateFinish = sdf.parse(listForMission.get(i).get("finishTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
                                 cFinish.setTime(dateFinish);
-                            }
-                            else
-                                cFinish=null;
+                            } else
+                                cFinish = null;
 
-                            if(!listForMission.get(i).get("cancelTime").equals(""))
+                            if (!listForMission.get(i).get("cancelTime").equals(""))
                             {
-                                dateCancel=sdf.parse(listForMission.get(i).get("cancelTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
+                                dateCancel = sdf.parse(listForMission.get(i).get("cancelTime").toString());//sdf.parse(listForMission.get(i).get("createTime").toString());
                                 cCancel.setTime(dateCancel);
-                            }
-                            else
-                                cCancel=null;
+                            } else
+                                cCancel = null;
 
-                            double d1=(double) listForMission.get(i).get("gender");
-                            double d2=(double) listForMission.get(i).get("attribute");
-                            double d3=(double) listForMission.get(i).get("scope");
-                            double d4=(double) listForMission.get(i).get("state");
-                            double la=(double) listForMission.get(i).get("latitude");
-                            double lo=(double) listForMission.get(i).get("longitude");
+                            double d1 = (double) listForMission.get(i).get("gender");
+                            double d2 = (double) listForMission.get(i).get("attribute");
+                            double d3 = (double) listForMission.get(i).get("scope");
+                            double d4 = (double) listForMission.get(i).get("state");
+                            double la = (double) listForMission.get(i).get("latitude");
+                            double lo = (double) listForMission.get(i).get("longitude");
                             Mission mission = new Mission(
                                     (String) listForMission.get(i).get("missionID"),
                                     (String) listForMission.get(i).get("title"),
@@ -214,23 +217,22 @@ public class MyMissionConnection extends URLConnection
                         }
                     }
                 }
-            }
-            else
+            } else
                 connectionResult = false;
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             listResult = false;
             connectionResult = false;
             e.printStackTrace();
         }
         urlConnection.disconnect();//使用完关闭TCP连接，释放资源
-}
+    }
 
     public void setList(List<Mission> l)
     {
-        this.missionsList=l;
+        this.missionsList = l;
     }
+
     public List<Mission> getList()
     {
         return this.missionsList;

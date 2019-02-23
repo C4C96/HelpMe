@@ -1,33 +1,34 @@
 package com.androiddvptteam.helpme.Connection;
 
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 
 /*
-* 修改个人简介
-* 只用于上传
-* */
+ * 修改个人简介
+ * 只用于上传
+ * */
 
 public class IntroductionConnection extends URLConnection
 {
     public HttpURLConnection urlConnection = null;
     public URL url = null;
 
-    public String introduction="";
-    public String schoolNumber="";
-    public  boolean connectionResult;//判断连接结果是否正常
+    public String introduction = "";
+    public String schoolNumber = "";
+    public boolean connectionResult;//判断连接结果是否正常
 
     public IntroductionConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
-    public void setAttributes(String n,String i)
+    public void setAttributes(String n, String i)
     {
-        this.introduction=n;
-        this.schoolNumber=i;
+        this.introduction = n;
+        this.schoolNumber = i;
     }
 
     public void connect() throws IOException
@@ -55,7 +56,7 @@ public class IntroductionConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
@@ -63,12 +64,11 @@ public class IntroductionConnection extends URLConnection
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-                connectionResult=true;
+                connectionResult = true;
             else
-                connectionResult=false;
+                connectionResult = false;
             setResult(connectionResult);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -77,10 +77,11 @@ public class IntroductionConnection extends URLConnection
 
     public void setResult(boolean b)
     {
-        this.connectionResult=b;
+        this.connectionResult = b;
     }
+
     public boolean getResult()
     {
-        return  connectionResult;
+        return connectionResult;
     }
 }

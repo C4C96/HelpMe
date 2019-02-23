@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,19 +26,19 @@ public class GetMessageConnection extends URLConnection
     public HttpURLConnection urlConnection = null;
     public URL url = null;
 
-    public String myNum="";
-    public List<Message> message=new LinkedList<>();
-    public boolean listResult=false;
+    public String myNum = "";
+    public List<Message> message = new LinkedList<>();
+    public boolean listResult = false;
 
     public GetMessageConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
     public void setMyNum(String s)
     {
-        this.myNum=s;
+        this.myNum = s;
     }
 
     public void connect() throws IOException
@@ -68,56 +69,54 @@ public class GetMessageConnection extends URLConnection
                 in.close();
                 br.close();
 
-                if(buffer.toString()!=null&&buffer.toString().length()!=0&&!"".equals(buffer.toString()))
+                if (buffer.toString() != null && buffer.toString().length() != 0 && !"".equals(buffer.toString()))
                 {
                     JSONObject rjson = new JSONObject(buffer.toString());
-                    String s1=new String(rjson.getString("list").getBytes(),"UTF-8");
+                    String s1 = new String(rjson.getString("list").getBytes(), "UTF-8");
 
                     Gson gson = new Gson();
 
                     //得到List<Map<String,Object>>
-                    List<Map<String,Object>> list = gson.fromJson( s1, new TypeToken<List<Map<String,Object>>>(){}.getType());//返回任务的信息
-                    System.out.println("消息列表："+list);
+                    List<Map<String, Object>> list = gson.fromJson(s1, new TypeToken<List<Map<String, Object>>>()
+                    {
+                    }.getType());//返回任务的信息
+                    System.out.println("消息列表：" + list);
 
                     if (list == null || list.size() < 1)
                     {//判断listForMission中有没有数据，如果没有则返回false
                         listResult = false;
-                    }
-                    else
+                    } else
                     {
                         listResult = true;
                         for (int i = 0; i < list.size(); i++)
                         {//对接收的数据进行遍历打印
-                            if(list.get(i).get("publisherNum").equals(myNum)||list.get(i).get("recipientNum").equals(myNum))
+                            if (list.get(i).get("publisherNum").equals(myNum) || list.get(i).get("recipientNum").equals(myNum))
                             {
-                                Message m=new Message();
-                                String M="";
-                                if(list.get(i).get("state").equals("确认完成"))
+                                Message m = new Message();
+                                String M = "";
+                                if (list.get(i).get("state").equals("确认完成"))
                                 {
-                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                        M="您已确认“"+(String) list.get(i).get("title")+"”的任务被完成了";
-                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                        M="学号为"+(String) list.get(i).get("publisherNum")+"的同学已确认任务“"+(String) list.get(i).get("title")+"”完成";
-                                }
-                                else if(list.get(i).get("state").equals("接收"))
+                                    if (list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M = "您已确认“" + (String) list.get(i).get("title") + "”的任务被完成了";
+                                    if (list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M = "学号为" + (String) list.get(i).get("publisherNum") + "的同学已确认任务“" + (String) list.get(i).get("title") + "”完成";
+                                } else if (list.get(i).get("state").equals("接收"))
                                 {
-                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                        M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学接收了";
-                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                        M="您已接受了“"+(String) list.get(i).get("title")+"”这个任务";
-                                }
-                                else if(list.get(i).get("state").equals("放弃"))
+                                    if (list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M = "您的“" + (String) list.get(i).get("title") + "”任务已经被学号为" + (String) list.get(i).get("recipienNum") + "的同学接收了";
+                                    if (list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M = "您已接受了“" + (String) list.get(i).get("title") + "”这个任务";
+                                } else if (list.get(i).get("state").equals("放弃"))
                                 {
-                                    if(list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
-                                        M="您的“"+(String) list.get(i).get("title")+"”任务已经被学号为"+(String) list.get(i).get("recipienNum")+"的同学放弃了";
-                                    if(list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
-                                        M="您已放弃了"+(String) list.get(i).get("title")+"”这个任务";
-                                }
-                                else if(list.get(i).get("state").equals("取消"))
-                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经被您自己取消了";
-                                else if(list.get(i).get("state").equals("发送成功"))
-                                    M="您的“"+(String) list.get(i).get("title")+"”任务已经成功发送";
-                                m=new Message(ic_menu_info_details,
+                                    if (list.get(i).get("publisherNum").equals(myNum))//当前用户是发布者
+                                        M = "您的“" + (String) list.get(i).get("title") + "”任务已经被学号为" + (String) list.get(i).get("recipienNum") + "的同学放弃了";
+                                    if (list.get(i).get("recipientNum").equals(myNum))//当前用户是接收者
+                                        M = "您已放弃了" + (String) list.get(i).get("title") + "”这个任务";
+                                } else if (list.get(i).get("state").equals("取消"))
+                                    M = "您的“" + (String) list.get(i).get("title") + "”任务已经被您自己取消了";
+                                else if (list.get(i).get("state").equals("发送成功"))
+                                    M = "您的“" + (String) list.get(i).get("title") + "”任务已经成功发送";
+                                m = new Message(ic_menu_info_details,
                                         "新消息",
                                         M,
                                         (String) list.get(i).get("year"),
@@ -130,18 +129,18 @@ public class GetMessageConnection extends URLConnection
                             }
                         }
                     }
-                    if(listResult)
+                    if (listResult)
                         setMessage(message);
-                    System.out.println("get!"+message.get(0).getMessageTitle());
+                    System.out.println("get!" + message.get(0).getMessageTitle());
                 }
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
         urlConnection.disconnect();//使用完关闭TCP连接，释放资源
     }
+
     public List<Message> getMessage()
     {
         return message;

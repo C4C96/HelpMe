@@ -1,224 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  xmlns:app="http://schemas.android.com/apk/res-auto"
-		      android:orientation="vertical"
-			  android:layout_height="match_parent"
-			  android:layout_width="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/options_toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:background="@color/colorAccent"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/options_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-		<TextView
-			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="设置" />
-	</android.support.v7.widget.Toolbar>
+        <TextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="设置" />
+    </android.support.v7.widget.Toolbar>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical"
-		android:weightSum="100">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="160dp"
-			android:orientation="vertical"
-			android:layout_weight="124.79">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:orientation="vertical"
+            android:layout_weight="124.79">
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-				</LinearLayout>
+                </LinearLayout>
 
-				<Switch
-					android:id="@+id/options_notification_switch"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:text="推送"
-					android:layout_marginTop="20dp"
-					android:textSize="20sp"/>
+                <Switch
+                    android:id="@+id/options_notification_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="推送"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp" />
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal"></LinearLayout>
-			</LinearLayout>
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal"></LinearLayout>
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
 
-				<Switch
-					android:id="@+id/options_sound_switch"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:text="声音"
-					android:layout_marginTop="30dp"
-					android:textSize="20sp"/>
+                <Switch
+                    android:id="@+id/options_sound_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="声音"
+                    android:layout_marginTop="30dp"
+                    android:textSize="20sp" />
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-				</LinearLayout>
-			</LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal"></LinearLayout>
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
 
-				<Switch
-					android:id="@+id/options_vibration_switch"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:text="震动"
-					android:layout_marginTop="30dp"
-					android:textSize="20sp"/>
+                <Switch
+                    android:id="@+id/options_vibration_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="震动"
+                    android:layout_marginTop="30dp"
+                    android:textSize="20sp" />
 
-				<LinearLayout
-					android:layout_width="150dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="horizontal"></LinearLayout>
-			</LinearLayout>
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+            </LinearLayout>
 
-		</LinearLayout>
+        </LinearLayout>
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="222dp"
-			android:orientation="vertical"
-			android:layout_weight="19.56">
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="0.84"
-				android:weightSum="10">
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="58dp"
-					android:layout_weight="1.46"/>
-				<FrameLayout
-					android:layout_width="0dp"
-					android:layout_height="match_parent"
-					android:layout_weight="7.42">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="222dp"
+            android:orientation="vertical"
+            android:layout_weight="19.56">
 
-					<Button
-						android:id="@+id/options_about_button"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:background="@color/colorAccent"
-						android:text="关于我们"
-						android:textColor="@android:color/background_light"
-						android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.84"
+                android:weightSum="10">
 
-				</FrameLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="58dp"
+                    android:layout_weight="1.46" />
 
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="56dp"
-					android:layout_weight="1.27"/>
-			</LinearLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7.42">
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="0.80"
-				android:weightSum="10">
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="59dp"
-					android:layout_weight="1.46"/>
-				<FrameLayout
-					android:layout_width="0dp"
-					android:layout_height="match_parent"
-					android:layout_weight="7.42">
+                    <Button
+                        android:id="@+id/options_about_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorAccent"
+                        android:text="关于我们"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="18sp" />
 
-					<Button
-						android:id="@+id/options_check_update_button"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:background="@color/colorAccent"
-						android:text="检查更新"
-						android:textColor="@android:color/background_light"
-						android:textSize="18sp"/>
-				</FrameLayout>
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="54dp"
-					android:layout_weight="1.27"/>
-			</LinearLayout>
+                </FrameLayout>
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1.54"
-				android:weightSum="10">
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="45dp"
-					android:layout_weight="1.46"/>
-				<FrameLayout
-					android:layout_width="0dp"
-					android:layout_height="match_parent"
-					android:layout_weight="7.42">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1.27" />
+            </LinearLayout>
 
-					<Button
-						android:id="@+id/options_logout_button"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-						android:background="@color/colorAccent"
-						android:text="退出登录"
-						android:textColor="@android:color/background_light"
-						android:textSize="18sp"/>
-				</FrameLayout>
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="56dp"
-					android:layout_weight="1.27"/>
-			</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.80"
+                android:weightSum="10">
 
-		</LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_weight="1.46" />
 
-	</LinearLayout>
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7.42">
+
+                    <Button
+                        android:id="@+id/options_check_update_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorAccent"
+                        android:text="检查更新"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="54dp"
+                    android:layout_weight="1.27" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.54"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1.46" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7.42">
+
+                    <Button
+                        android:id="@+id/options_logout_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorAccent"
+                        android:text="退出登录"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1.27" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

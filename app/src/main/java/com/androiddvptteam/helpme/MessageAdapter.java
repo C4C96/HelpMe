@@ -17,14 +17,14 @@ import java.util.List;
 public class MessageAdapter extends ArrayAdapter<Message>
 {
     private int resourceId;
-    public List<Message> M=new LinkedList<>();
+    public List<Message> M = new LinkedList<>();
     public Activity A;
 
-    public MessageAdapter(Context context, int textViewResourceId, List<Message> objects,Activity a)
+    public MessageAdapter(Context context, int textViewResourceId, List<Message> objects, Activity a)
     {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
-        A=a;
+        A = a;
     }
 
     @Override
@@ -37,26 +37,25 @@ public class MessageAdapter extends ArrayAdapter<Message>
         {
             view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.messageImage = (ImageView) view.findViewById (R.id.message_image);
-            viewHolder.messageName = (TextView) view.findViewById (R.id.message_name);
-            viewHolder.messageTime = (TextView) view.findViewById (R.id.message_time);
-            viewHolder.messageText = (TextView) view.findViewById (R.id.message_text);
+            viewHolder.messageImage = (ImageView) view.findViewById(R.id.message_image);
+            viewHolder.messageName = (TextView) view.findViewById(R.id.message_name);
+            viewHolder.messageTime = (TextView) view.findViewById(R.id.message_time);
+            viewHolder.messageText = (TextView) view.findViewById(R.id.message_text);
             view.setTag(viewHolder); // 将ViewHolder存储在View中
-        }
-        else
+        } else
         {
-                view = convertView;
-                viewHolder = (ViewHolder) view.getTag(); // 重新获取ViewHolder
+            view = convertView;
+            viewHolder = (ViewHolder) view.getTag(); // 重新获取ViewHolder
         }
-        System.out.println("执行到这里"+message.getImageId());
+        System.out.println("执行到这里" + message.getImageId());
         viewHolder.messageImage.setImageResource(message.getImageId());
         viewHolder.messageName.setText(message.getMessageTitle());
         viewHolder.messageTime.setText(message.getMessageTime());
         viewHolder.messageText.setText(message.getMessageContent());
 
-        final List<Integer> po=new ArrayList<>();
+        final List<Integer> po = new ArrayList<>();
         po.add(position);
-        ImageButton img=(ImageButton) view.findViewById(R.id.imageButton2);
+        ImageButton img = (ImageButton) view.findViewById(R.id.imageButton2);
         img.setOnClickListener(
                 new View.OnClickListener()
                 {

@@ -1,15 +1,17 @@
 package com.androiddvptteam.helpme.Connection;
 
 import com.androiddvptteam.helpme.Mission;
+
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.Calendar;
 
 /*
-* 接收者放弃接收任务
-* 只用于上传
-* */
+ * 接收者放弃接收任务
+ * 只用于上传
+ * */
 
 public class AbandonConnection extends URLConnection
 {
@@ -25,17 +27,17 @@ public class AbandonConnection extends URLConnection
     private int minute;//任务完成时间——分
     private int second;//任务完成时间——秒
 
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public AbandonConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
     public void setAttributes(Mission mission/*,Calendar time*/)
     {
-        this.ID=mission.getID();
+        this.ID = mission.getID();
 //        this.schoolNumber=mission.getRecipient().getSchoolNumber();//接收者学号
 //        this.year=time.get(Calendar.YEAR);
 //        this.month=time.get(Calendar.MONTH);
@@ -76,7 +78,7 @@ public class AbandonConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
@@ -84,11 +86,10 @@ public class AbandonConnection extends URLConnection
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-                connectionResult=true;
+                connectionResult = true;
             else
-                connectionResult=false;
-        }
-        catch (Exception e)
+                connectionResult = false;
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

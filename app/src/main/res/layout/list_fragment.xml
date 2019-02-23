@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/missionlist_toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:background="#FFF17A65"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/missionlist_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF17A65"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-		<TextView
-			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="任务列表" />
-	</android.support.v7.widget.Toolbar>
+        <TextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="任务列表" />
+    </android.support.v7.widget.Toolbar>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
-		android:orientation="horizontal"
-		android:weightSum="1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-		<Spinner
-			android:id="@+id/gender_Spinner"
-			android:layout_width="120dp"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="5dp"
-			android:layout_weight="0.63" />
+        <Spinner
+            android:id="@+id/gender_Spinner"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.63" />
 
-		<Spinner
-			android:id="@+id/attribute_Spinner"
-			android:layout_width="120dp"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="5dp" />
+        <Spinner
+            android:id="@+id/attribute_Spinner"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
 
-		<Spinner
-			android:id="@+id/range_Spinner"
-			android:layout_width="120dp"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="5dp" />
+        <Spinner
+            android:id="@+id/range_Spinner"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
 
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:orientation="vertical"></LinearLayout>
-	</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
+    </LinearLayout>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical"
-		android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
-		<android.support.v4.widget.SwipeRefreshLayout
-			android:id="@+id/swipe_refresh"
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<android.support.v7.widget.RecyclerView
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			android:id="@+id/list_recycler_view"/>
-		</android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:id="@+id/list_recycler_view" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

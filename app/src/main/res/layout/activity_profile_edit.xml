@@ -1,184 +1,184 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  xmlns:app="http://schemas.android.com/apk/res-auto"
-			  android:orientation="vertical"
-			  android:layout_height="match_parent"
-			  android:layout_width="match_parent"
-			  android:focusable="true"
-			  android:focusableInTouchMode="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/options_toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:background="@color/colorAccent"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-		app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/options_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-		<TextView
-			style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="编辑个人信息" />
-	</android.support.v7.widget.Toolbar>
+        <TextView
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="编辑个人信息" />
+    </android.support.v7.widget.Toolbar>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="8dp"
-		android:orientation="horizontal"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:orientation="horizontal"></LinearLayout>
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-		<LinearLayout
-			android:layout_width="160dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:orientation="horizontal"></LinearLayout>
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
 
-		<ImageView
-			android:id="@+id/profile_edit_avatar_image"
-			android:layout_width="50dp"
-			android:layout_height="50dp"
-			android:layout_weight="1"
-			app:srcCompat="@drawable/default_avatar" />
+        <ImageView
+            android:id="@+id/profile_edit_avatar_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/default_avatar" />
 
-		<LinearLayout
-			android:layout_width="160dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:orientation="horizontal"></LinearLayout>
-	</LinearLayout>
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+    </LinearLayout>
 
-	<!--头像-->
+    <!--头像-->
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center_vertical"
-		android:layout_marginBottom="10dp">
-		<!--名字-->
-		<LinearLayout
-			android:layout_width="120dp"
-			android:layout_height="match_parent"
-			android:orientation="horizontal"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp">
+        <!--名字-->
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"></LinearLayout>
 
-		<EditText
-			android:id="@+id/profile_edit_name_text"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:enabled="false"
-			android:text="default name"
-			android:textSize="20sp"/>
-		<!--性别-->
-		<ImageView
-			android:id="@+id/profile_edit_gender_image"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="10dp"
-			android:src="@drawable/gender_male"/>
+        <EditText
+            android:id="@+id/profile_edit_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="default name"
+            android:textSize="20sp" />
+        <!--性别-->
+        <ImageView
+            android:id="@+id/profile_edit_gender_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/gender_male" />
 
-		<LinearLayout
-			android:layout_width="120dp"
-			android:layout_height="match_parent"
-			android:orientation="horizontal"></LinearLayout>
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"></LinearLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<!--学号-->
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:weightSum="100">
+    <!--学号-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
 
-		<LinearLayout
-			android:layout_width="99dp"
-			android:layout_height="match_parent"
-			android:orientation="vertical"></LinearLayout>
+        <LinearLayout
+            android:layout_width="99dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
 
-		<LinearLayout
-			android:layout_width="226dp"
-			android:layout_height="match_parent"
-			android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="226dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-			<EditText
-				android:id="@+id/profile_edit_schoolNum_text"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:enabled="false"
-				android:text="default school number" />
+            <EditText
+                android:id="@+id/profile_edit_schoolNum_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="default school number" />
 
-			<EditText
-				android:id="@+id/profile_edit_department_text"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:enabled="false"
-				android:text="default department" />
+            <EditText
+                android:id="@+id/profile_edit_department_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="default department" />
 
-			<EditText
-				android:id="@+id/profile_edit_introduce_editText"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:maxLines="1"
-				android:selectAllOnFocus="true"
-				android:text="default introduce" />
-		</LinearLayout>
+            <EditText
+                android:id="@+id/profile_edit_introduce_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:text="default introduce" />
+        </LinearLayout>
 
-		<LinearLayout
-			android:layout_width="94dp"
-			android:layout_height="match_parent"
-			android:orientation="vertical"></LinearLayout>
+        <LinearLayout
+            android:layout_width="94dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<!--院系-->
+    <!--院系-->
 
-	<!--个人简介-->
+    <!--个人简介-->
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="194dp"
-			android:orientation="vertical"></LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="194dp"
+            android:orientation="vertical"></LinearLayout>
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:orientation="vertical"></LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"></LinearLayout>
 
-			<Button
-				android:id="@+id/profile_edit_confirm_button"
-				android:layout_width="250dp"
-				android:layout_height="wrap_content"
-				android:background="@color/colorAccent"
-				android:text="确认"
-				android:textColor="@android:color/background_light"
-				android:textSize="18sp" />
+            <Button
+                android:id="@+id/profile_edit_confirm_button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:text="确认"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp" />
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:orientation="vertical"></LinearLayout>
-		</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"></LinearLayout>
+        </LinearLayout>
 
-	</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

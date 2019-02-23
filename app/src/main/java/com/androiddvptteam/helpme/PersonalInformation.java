@@ -1,4 +1,5 @@
 package com.androiddvptteam.helpme;
+
 import java.io.Serializable;
 
 public class PersonalInformation implements Serializable
@@ -47,8 +48,11 @@ public class PersonalInformation implements Serializable
     }
 
 
-	//set方法
+    //set方法
 
-    public void setIntroduction(String introduction) { this.introduction=introduction; }
+    public void setIntroduction(String introduction)
+    {
+        this.introduction = introduction;
+    }
 
 }

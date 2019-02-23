@@ -2,15 +2,17 @@ package com.androiddvptteam.helpme.Connection;
 
 import com.androiddvptteam.helpme.Mission;
 import com.androiddvptteam.helpme.PersonalInformation;
+
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.Calendar;
 
 /*
-* 接收者接收任务
-* 只用于上传
-* */
+ * 接收者接收任务
+ * 只用于上传
+ * */
 
 public class ReceiveConnection extends URLConnection
 {
@@ -26,24 +28,24 @@ public class ReceiveConnection extends URLConnection
     private int minute;//任务接收时间——分
     private int second;//任务接收时间——秒
 
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public ReceiveConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
-    public void setAttributes(Mission mission,PersonalInformation person,Calendar time)
+    public void setAttributes(Mission mission, PersonalInformation person, Calendar time)
     {
-        this.ID=mission.getID();
-        this.schoolNumber=person.getSchoolNumber();
-        this.year=time.get(Calendar.YEAR);
-        this.month=time.get(Calendar.MONTH);
-        this.day=time.get(Calendar.DATE);
-        this.hour=time.get(Calendar.HOUR_OF_DAY);
-        this.minute=time.get(Calendar.MINUTE);
-        this.second=time.get(Calendar.SECOND);
+        this.ID = mission.getID();
+        this.schoolNumber = person.getSchoolNumber();
+        this.year = time.get(Calendar.YEAR);
+        this.month = time.get(Calendar.MONTH);
+        this.day = time.get(Calendar.DATE);
+        this.hour = time.get(Calendar.HOUR_OF_DAY);
+        this.minute = time.get(Calendar.MINUTE);
+        this.second = time.get(Calendar.SECOND);
     }
 
     public void connect() throws IOException
@@ -67,7 +69,7 @@ public class ReceiveConnection extends URLConnection
             // 把数据put进json对象中
             json.put("ID", this.ID);
             json.put("schoolNumber", this.schoolNumber);
-            json.put("year",  this.year);
+            json.put("year", this.year);
             json.put("month", this.month);
             json.put("day", this.day);
             json.put("hour", this.hour);
@@ -79,7 +81,7 @@ public class ReceiveConnection extends URLConnection
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
@@ -87,11 +89,10 @@ public class ReceiveConnection extends URLConnection
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-                connectionResult=true;
+                connectionResult = true;
             else
-                connectionResult=false;
-        }
-        catch (Exception e)
+                connectionResult = false;
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

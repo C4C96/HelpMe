@@ -34,12 +34,12 @@ public class SendMessageConnection extends URLConnection
     private String minute;
     private String second;
 
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public SendMessageConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
     public void setAttributes(String ID,
@@ -54,17 +54,17 @@ public class SendMessageConnection extends URLConnection
                               String minute,
                               String second)
     {
-        this.ID=ID;
-        this.publisherNumber=pn;
-        this.recipientNumber=rn;
-        this.state=state;
-        this.title=title;
-        this.year=year;
-        this.month=month;
-        this.day=day;
-        this.hour=hour;
-        this.minute=minute;
-        this.second=second;
+        this.ID = ID;
+        this.publisherNumber = pn;
+        this.recipientNumber = rn;
+        this.state = state;
+        this.title = title;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.hour = hour;
+        this.minute = minute;
+        this.second = second;
     }
 
     public void connect() throws IOException
@@ -87,23 +87,23 @@ public class SendMessageConnection extends URLConnection
             // 把数据put进json对象中
             json.put("ID", this.ID);
             json.put("publisherNumber", this.publisherNumber);
-            json.put("recipientNumber",  this.recipientNumber);
-            json.put("state",  this.state);
-            json.put("title",  this.title);
-            json.put("year",  this.year);
-            json.put("month",  this.month);
-            json.put("day",  this.day);
-            json.put("hour",  this.hour);
-            json.put("minute",  this.minute);
-            json.put("second",  this.second);
+            json.put("recipientNumber", this.recipientNumber);
+            json.put("state", this.state);
+            json.put("title", this.title);
+            json.put("year", this.year);
+            json.put("month", this.month);
+            json.put("day", this.day);
+            json.put("hour", this.hour);
+            json.put("minute", this.minute);
+            json.put("second", this.second);
 
-            System.out.println("send!"+this.title);
+            System.out.println("send!" + this.title);
 
             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 
             //字符流写入数据
             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
             bw.write(jsonToString);//把json字符串写入缓冲区中
             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
             out.close();
@@ -111,11 +111,10 @@ public class SendMessageConnection extends URLConnection
 
             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
-                connectionResult=true;
+                connectionResult = true;
             else
-                connectionResult=false;
-        }
-        catch (Exception e)
+                connectionResult = false;
+        } catch (Exception e)
         {
             e.printStackTrace();
         }

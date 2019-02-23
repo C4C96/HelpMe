@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:id="@+id/position_text_view"
-		android:visibility="gone"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/position_text_view"
+        android:visibility="gone" />
 
-	<com.baidu.mapapi.map.TextureMapView
-		android:id="@+id/bmapView"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:clickable="true" />
+    <com.baidu.mapapi.map.TextureMapView
+        android:id="@+id/bmapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true" />
 
-	<ImageButton
-		android:id="@+id/refresh"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_marginBottom="56dp"
-		android:layout_marginLeft="8dp"
-		android:layout_toEndOf="@+id/position_text_view"
-		android:layout_toRightOf="@+id/position_text_view"
-		android:background="@android:color/background_light"
-		app:srcCompat="@drawable/location1" />
+    <ImageButton
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="56dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/position_text_view"
+        android:layout_toRightOf="@+id/position_text_view"
+        android:background="@android:color/background_light"
+        app:srcCompat="@drawable/location1" />
 
 </RelativeLayout>

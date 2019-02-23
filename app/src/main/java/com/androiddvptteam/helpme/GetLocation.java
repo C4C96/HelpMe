@@ -1,6 +1,7 @@
 package com.androiddvptteam.helpme;
 
 import android.content.Context;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -20,6 +21,7 @@ public class GetLocation
         mLocationClient.registerLocationListener(mBDLocationListener);
         getLocation();
     }
+
     public void getLocation()
     {
         LocationClientOption option = new LocationClientOption();
@@ -32,26 +34,45 @@ public class GetLocation
         mLocationClient.setLocOption(option);
         // 启动定位
         mLocationClient.start();
-        BDLocation bd=mLocationClient.getLastKnownLocation();
-        while(bd==null)
-            bd=mLocationClient.getLastKnownLocation();
+        BDLocation bd = mLocationClient.getLastKnownLocation();
+        while (bd == null)
+            bd = mLocationClient.getLastKnownLocation();
         setLatitude(bd.getLatitude());
         setLongitude(bd.getLongitude());
     }
 
-    public double getLatitude(){return latitude;}
-    public double getLongitude() {return longitude;}
-    public void setLatitude(double latitude){this.latitude = latitude;}
-    public void setLongitude(double longitude) {this.longitude = longitude;}
+    public double getLatitude()
+    {
+        return latitude;
+    }
 
-   public class MyBDLocationListener implements BDLocationListener
+    public double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public class MyBDLocationListener implements BDLocationListener
     {
         private double latitude = 0.0;
         private double longitude = 0.0;
 
-        public MyBDLocationListener(){}
+        public MyBDLocationListener()
+        {
+        }
 
-        public void onConnectHotSpotMessage(String s, int i) {}
+        public void onConnectHotSpotMessage(String s, int i)
+        {
+        }
 
         public void onReceiveLocation(BDLocation location)
         {

@@ -9,18 +9,18 @@ package com.androiddvptteam.helpme.MissionAttribute;
 // 接收者选择任务的时候，如果筛选男性，就把gender==GENDER_MALE的人筛选出来
 public class MissionAttribute
 {
-    public static final int GENDER_MALE=0;
-    public static final int GENDER_FEMALE=1;
-    public static final int GENDER_OTHER=2;
-    public static final int GENDER_IDONTCARE=3;
+    public static final int GENDER_MALE = 0;
+    public static final int GENDER_FEMALE = 1;
+    public static final int GENDER_OTHER = 2;
+    public static final int GENDER_IDONTCARE = 3;
 
-    public static final int ATTRIBUTE_BRING=0;
-    public static final int ATTRIBUTE_TAKE=1;
-    public static final int ATTRIBUTE_BUY=2;
-    public static final int ATTRIBUTE_OTHER=3;
+    public static final int ATTRIBUTE_BRING = 0;
+    public static final int ATTRIBUTE_TAKE = 1;
+    public static final int ATTRIBUTE_BUY = 2;
+    public static final int ATTRIBUTE_OTHER = 3;
 
-    public static final int RANGE0=0;
-    public static final int RANGE1=1;
-    public static final int RANGE2=2;
-    public static final int RANGE3=3;
+    public static final int RANGE0 = 0;
+    public static final int RANGE1 = 1;
+    public static final int RANGE2 = 2;
+    public static final int RANGE3 = 3;
 }

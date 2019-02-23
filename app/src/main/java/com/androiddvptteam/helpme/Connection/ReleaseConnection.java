@@ -1,15 +1,17 @@
 package com.androiddvptteam.helpme.Connection;
 
 import com.androiddvptteam.helpme.Mission;
+
 import org.json.JSONObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.Calendar;
 
 /*
-* 发布者发布任务
-* 只用于上传
-* */
+ * 发布者发布任务
+ * 只用于上传
+ * */
 
 public class ReleaseConnection extends URLConnection
 {
@@ -33,33 +35,33 @@ public class ReleaseConnection extends URLConnection
     private int minute;//任务创建时间——分
     private int second;//任务创建时间——秒
 
-    public  boolean connectionResult;//判断连接结果是否正常
+    public boolean connectionResult;//判断连接结果是否正常
 
     public ReleaseConnection(URL url)
     {
         super(url);
-        this.url=url;
+        this.url = url;
     }
 
     public void setAttributes(Mission mission)
     {
-        this.ID=mission.getID();
-        this.title=mission.getTitle();
-        this.content=mission.getContent();
-        this.publisherSchoolNumber=mission.getPublisher().getSchoolNumber();
-        this.gender=mission.getGender();
-        this.attribute=mission.getAttribute();
-        this.range=mission.getRange();
-        this.latitude=mission.getLatitude();//纬度
-       this.longitude=mission.getLongitude();//经度
+        this.ID = mission.getID();
+        this.title = mission.getTitle();
+        this.content = mission.getContent();
+        this.publisherSchoolNumber = mission.getPublisher().getSchoolNumber();
+        this.gender = mission.getGender();
+        this.attribute = mission.getAttribute();
+        this.range = mission.getRange();
+        this.latitude = mission.getLatitude();//纬度
+        this.longitude = mission.getLongitude();//经度
 
-        createTime=mission.getCreateTime();
-        this.year=createTime.get(Calendar.YEAR);
-        this.month=createTime.get(Calendar.MONTH)+1;
-        this.day=createTime.get(Calendar.DATE);
-        this.hour=createTime.get(Calendar.HOUR_OF_DAY);
-        this.minute=createTime.get(Calendar.MINUTE);
-        this.second=createTime.get(Calendar.SECOND);
+        createTime = mission.getCreateTime();
+        this.year = createTime.get(Calendar.YEAR);
+        this.month = createTime.get(Calendar.MONTH) + 1;
+        this.day = createTime.get(Calendar.DATE);
+        this.hour = createTime.get(Calendar.HOUR_OF_DAY);
+        this.minute = createTime.get(Calendar.MINUTE);
+        this.second = createTime.get(Calendar.SECOND);
     }
 
     public void connect() throws IOException
@@ -89,11 +91,11 @@ public class ReleaseConnection extends URLConnection
                             json.put("ID", ID);
                             json.put("title", title);
                             json.put("content", content);
-                            json.put("publisherSchoolNumber",publisherSchoolNumber);
+                            json.put("publisherSchoolNumber", publisherSchoolNumber);
                             json.put("gender", gender);
                             json.put("attribute", attribute);
                             json.put("range", range);
-                            json.put("year",  year);
+                            json.put("year", year);
                             json.put("month", month);
                             json.put("day", day);
                             json.put("hour", hour);
@@ -101,13 +103,13 @@ public class ReleaseConnection extends URLConnection
                             json.put("second", second);
                             json.put("latitude", latitude);
                             json.put("longitude", longitude);
-                            System.out.println("纬度："+latitude);
+                            System.out.println("纬度：" + latitude);
 
                             String jsonToString = json.toString();//把JSON对象按JSON的编码格式转换为字符串
 
                             //字符流写入数据
                             OutputStream out = urlConnection.getOutputStream();//输出流，用来发送请求，http请求实际上直到这个函数里面才正式发送出去
-                            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out,"UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
+                            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));//创建字符流对象并用高效缓冲流包装它，便获得最高的效率,发送的是字符串推荐用字符流，其它数据就用字节流
                             bw.write(jsonToString);//把json字符串写入缓冲区中
                             bw.flush();//刷新缓冲区，把数据发送出去，这步很重要
                             out.close();
@@ -116,12 +118,10 @@ public class ReleaseConnection extends URLConnection
                             //得到服务端的返回码是否连接成功，然后接收服务器返回的数据
                             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
                             {
-                                connectionResult=true;
-                            }
-                            else
-                                connectionResult=false;
-                        }
-                        catch (Exception e)
+                                connectionResult = true;
+                            } else
+                                connectionResult = false;
+                        } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
